@@ -11,7 +11,7 @@ the unusual, and provide some instructions for creating your own Iroha
 We assume that you know how to create a new package and have basic
 understanding of the fundamental Kotlin code. Specifically, we shall assume
 that you know how to build and deploy your program on the target platforms.
-To clone Iroha 2 JVM compatible SDKs, you can use [Iroha Java](https://github.com/hyperledger/iroha-java).
+To clone Iroha 2 JVM compatible SDKs, you can use [Iroha Java](https://github.com/hyperledger-iroha/iroha-java).
 
 Without further ado, here's a part of an example `build.gradle.kts` file,
 specifically, the `plugins`, `repositories` and `dependencies` sections:
@@ -51,14 +51,14 @@ latest `iroha-java` snapshot.
 
 Snapshot versions match the Git commits. To get the latest snapshot, simply
 visit the
-[`iroha-java`](https://github.com/hyperledger/iroha-java/tree/iroha2-dev)
+[`iroha-java`](https://github.com/hyperledger-iroha/iroha-java/tree/iroha2-dev)
 repository on the `iroha-2-dev` branch and copy the short hash of the last
 commit on the main page.
 
 ![](/img/iroha_java_hash.png)
 
 You can also check the
-[commit history](https://github.com/hyperledger/iroha-java/commits/iroha2-dev)
+[commit history](https://github.com/hyperledger-iroha/iroha-java/commits/iroha2-dev)
 and copy the commit hash of a previous commit.
 
 ![](/img/iroha_java_commits.png)

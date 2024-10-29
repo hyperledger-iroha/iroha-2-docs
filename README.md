@@ -1,18 +1,18 @@
 # Hyperledger Iroha 2 Tutorial
 
-This repository contains the source files for [Hyperledger Iroha 2 Documentation](https://hyperledger.github.io/iroha-2-docs/).
+This repository contains the source files for [Hyperledger Iroha 2 Documentation](https://docs.iroha.tech/).
 
 The tutorial is suitable for both experienced and novice users. It explains Iroha 2 concepts and features, and also offers language-specific step-by-step guides for these programming languages:
 
-- [CLI](https://hyperledger.github.io/iroha-2-docs/guide/operate-iroha-2-via-cli.html)
-- [Python](https://hyperledger.github.io/iroha-2-docs/guide/python.html)
-- [Rust](https://hyperledger.github.io/iroha-2-docs/guide/rust.html)
-- [Kotlin/Java](https://hyperledger.github.io/iroha-2-docs/guide/kotlin-java.html)
-- [Javascript (TypeScript)](https://hyperledger.github.io/iroha-2-docs/guide/javascript.html)
+- [CLI](https://docs.iroha.tech/get-started/operate-iroha-2-via-cli.html)
+- [Python](https://docs.iroha.tech/guide/tutorials/python.html)
+- [Rust](https://docs.iroha.tech/guide/tutorials/rust.html)
+- [Kotlin/Java](https://docs.iroha.tech/guide/tutorials/kotlin-java.html)
+- [Javascript (TypeScript)](https://docs.iroha.tech/guide/tutorials/javascript.html)
 
-If you are already familiar with Hyperledger Iroha, we invite you to read about [how Iroha 2 is different](https://hyperledger.github.io/iroha-2-docs/get-started/iroha-2.html) from its previous version.
+If you are already familiar with Hyperledger Iroha, we invite you to read about [how Iroha 2 is different](https://docs.iroha.tech/get-started/iroha-2.html) from its previous version.
 
-Check the [Hyperledger Iroha](https://github.com/hyperledger/iroha/) repository for more detailed information about API and available features.
+Check the [Hyperledger Iroha](https://github.com/hyperledger-iroha/iroha/) repository for more detailed information about API and available features.
 
 ## Contribution
 

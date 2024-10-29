@@ -55,9 +55,9 @@ Finally, while the first client _could_ use the genesis account to register new 
 
 If you plan on creating a private blockchain, you should consider writing your own client based on the `client` Rust crate, or any of the provided client libraries:
 
-- [iroha-python](https://github.com/hyperledger/iroha-python)
-- [iroha-iOS](https://github.com/hyperledger/iroha-ios)
-- [iroha-java](https://github.com/hyperledger/iroha-java)
-- [iroha-javascript](https://github.com/hyperledger/iroha-javascript)
+- [iroha-python](https://github.com/hyperledger-iroha/iroha-python)
+- [iroha-iOS](https://github.com/hyperledger-iroha/iroha-ios)
+- [iroha-java](https://github.com/hyperledger-iroha/iroha-java)
+- [iroha-javascript](https://github.com/hyperledger-iroha/iroha-javascript)
 
 :::

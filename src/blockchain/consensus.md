@@ -32,5 +32,5 @@ fail. The same thing happens if the peers have different instructions.
 
 [^1]:
     For prospective wizards, the
-    [Iroha 2 Whitepaper](https://github.com/hyperledger/iroha/blob/main/docs/source/iroha_2_whitepaper.md)
+    [Iroha 2 Whitepaper](https://github.com/hyperledger-iroha/iroha/blob/main/docs/source/iroha_2_whitepaper.md)
     is a good start.

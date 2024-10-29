@@ -58,7 +58,7 @@ first.
 ::: info
 
 You could also make use of our `test_network` crate, which is available via
-[GitHub](https://github.com/hyperledger/iroha/tree/main/core/test_network)
+[GitHub](https://github.com/hyperledger-iroha/iroha/tree/main/core/test_network)
 but not via crates.io.
 
 :::

@@ -16,7 +16,7 @@ Among other changes, cryptography and account structures are implemented differe
 
 ## Fault Tolerance
 
-Iroha 2 learned a great deal from the development of the original Iroha. Of particular importance is the new and improved Byzantine-fault-tolerant consensus algorithm—[_Sumeragi_](https://github.com/hyperledger/iroha/tree/main/docs/source/iroha_2_whitepaper.md#28-consensus)—that allowed us to expand what could be done on a blockchain without any security risks.
+Iroha 2 learned a great deal from the development of the original Iroha. Of particular importance is the new and improved Byzantine-fault-tolerant consensus algorithm—[_Sumeragi_](https://github.com/hyperledger-iroha/iroha/tree/main/docs/source/iroha_2_whitepaper.md#28-consensus)—that allowed us to expand what could be done on a blockchain without any security risks.
 
 ::: info
 
