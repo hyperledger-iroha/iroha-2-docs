@@ -6,13 +6,13 @@ Messages for certain `TORII` operations are encoded with the Parity <abbr title=
 
 For more information on `SCALE`, see the [Substrate Documentation: Type encoding (SCALE)](https://docs.substrate.io/reference/scale-codec/) article and its [official GitHub repository](https://github.com/paritytech/parity-scale-codec).
 
-<!-- TODO: link to our own article about SCALE, once it is written; Issue: https://github.com/hyperledger/iroha-2-docs/issues/367 -->
+<!-- TODO: link to our own article about SCALE, once it is written; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/367 -->
 
 :::
 
 Torii (Japanese: 鳥居 — Shinto shrine gateway) is the Iroha 2 module in charge of handling `HTTP` and `WebSocket` requests. It is the main <abbr title="Application Programming Interface">API</abbr> for interacting with Iroha 2. Such interactions include sending transactions, making queries, listening for blocks stream, etc.
 
-<!-- TODO: Update the following as part of PR #397: https://github.com/hyperledger/iroha-2-docs/pull/397
+<!-- TODO: Update the following as part of PR #397: https://github.com/hyperledger-iroha/iroha-2-docs/pull/397
 
 To establish two-way communication with the `TORII` endpoints, the following addresses must be specified in the Iroha 2 configuration files:
 
@@ -46,7 +46,7 @@ To establish two-way communication with the `TORII` endpoints, the following add
 
 This operation requires the specific Iroha node being requested to be compiled with the `telemetry` feature enabled.
 
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger/iroha-2-docs/issues/465 -->
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
 :::
 
@@ -142,7 +142,7 @@ The list of all accepted values is currently unavailable and will be a part of t
 Until then, to get assistance with the acceptable values and their definitions, consult [Receive Support](/help/) for ways to contact us.
 
 The progress on the configuration reference can be tracked in the following GitHub issue:\
-[iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger/iroha-2-docs/issues/392).
+[iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger-iroha/iroha-2-docs/issues/392).
 
 :::
 
@@ -223,7 +223,7 @@ A `GET` request to the endpoint.
 
 This operation requires the Iroha 2 network to be established with the `telemetry` feature enabled.
 
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger/iroha-2-docs/issues/465 -->
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
 :::
 
@@ -381,7 +381,7 @@ Whether each prerequisite object was found and [`FindError`](/reference/data-mod
 
 This operation requires the Iroha 2 network to be established with the `schema` feature enabled.
 
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger/iroha-2-docs/issues/465 -->
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
 :::
 
@@ -406,7 +406,7 @@ A `GET` request to the endpoint.
 
 This operation requires the Iroha 2 network to be established with the `telemetry` feature enabled.
 
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger/iroha-2-docs/issues/465 -->
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
 :::
 
@@ -491,7 +491,7 @@ The following examples represent the same data:
 
 Almost all fields in the `Status` structure are 64-bit integers, and they are encoded in JSON as-is. Since native JSON's number type according to the specification effectively is `f64`, the precision might be lost on deserialization, for example, in [JavaScript's `JSON.parse`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse).
 
-For more details, see the related [GitHub issue](https://github.com/hyperledger/iroha/issues/3964).
+For more details, see the related [GitHub issue](https://github.com/hyperledger-iroha/iroha/issues/3964).
 
 :::
 

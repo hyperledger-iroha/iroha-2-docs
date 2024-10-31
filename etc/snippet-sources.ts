@@ -94,7 +94,7 @@ const javascriptSnippets = [
     local: '9-blocks-stream.ts',
   },
 ].map<SnippetSourceDefinition>(({ src, local }) => ({
-  src: `https://raw.githubusercontent.com/hyperledger/iroha-javascript/${IROHA_JS_REV}/${src}`,
+  src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha-javascript/${IROHA_JS_REV}/${src}`,
   filename: `js-sdk-${local}`,
 }))
 
@@ -102,11 +102,11 @@ const javascriptSnippets = [
 
 export default [
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha/${IROHA_REV_DEV}/MAINTAINERS.md`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/MAINTAINERS.md`,
     filename: 'iroha-maintainers.md',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha/${IROHA_REV_DEV}/docs/source/references/schema.json`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/docs/source/references/schema.json`,
     filename: `data-model-schema.md`,
     transform: (source) => {
       return renderDataModelSchema(JSON.parse(source))
@@ -116,31 +116,31 @@ export default [
     src: './src/example_code/lorem.rs',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha/${IROHA_REV_DEV}/configs/client.template.toml`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/client.template.toml`,
     filename: 'client-cli-config-template.toml',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha/${IROHA_REV_DEV}/configs/peer.template.toml`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/peer.template.toml`,
     filename: 'peer-config-template.toml',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha/${IROHA_REV_DEV}/configs/swarm/genesis.json`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/swarm/genesis.json`,
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha/${IROHA_REV_DEV}/client/examples/tutorial.rs`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/client/examples/tutorial.rs`,
     filename: 'tutorial-snippets.rs',
   },
 
   ...javascriptSnippets,
 
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha-java/${IROHA_JAVA_REV_DEV}/modules/test-tools/src/main/kotlin/jp/co/soramitsu/iroha2/testengine/IrohaConfig.kt`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha-java/${IROHA_JAVA_REV_DEV}/modules/test-tools/src/main/kotlin/jp/co/soramitsu/iroha2/testengine/IrohaConfig.kt`,
     filename: 'IrohaConfig.kotlin',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha-java/${IROHA_JAVA_REV_DEV}/modules/client/src/test/kotlin/jp/co/soramitsu/iroha2/InstructionsTest.kt`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha-java/${IROHA_JAVA_REV_DEV}/modules/client/src/test/kotlin/jp/co/soramitsu/iroha2/InstructionsTest.kt`,
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger/iroha-java/${IROHA_JAVA_REV_DEV}/modules/client/src/test/java/jp/co/soramitsu/iroha2/JavaTest.java`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha-java/${IROHA_JAVA_REV_DEV}/modules/client/src/test/java/jp/co/soramitsu/iroha2/JavaTest.java`,
   },
 ] satisfies SnippetSourceDefinition[]

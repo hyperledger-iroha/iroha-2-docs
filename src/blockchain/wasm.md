@@ -70,7 +70,7 @@ edition = "2021"
 crate-type = ['cdylib']
 
 [dependencies]
-iroha_wasm = { git = "https://github.com/hyperledger/iroha/"}
+iroha_wasm = { git = "https://github.com/hyperledger-iroha/iroha/"}
 ```
 
 Note that the crate type is `cdylib`. Most Rust code is linked in a

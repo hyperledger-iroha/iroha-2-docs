@@ -11,7 +11,7 @@ correct software and waiting until your node gets discovered.
 ::: info
 
 Peer discovery is
-[under construction](https://github.com/hyperledger/iroha/issues/1375 '#1375').
+[under construction](https://github.com/hyperledger-iroha/iroha/issues/1375 '#1375').
 
 <!-- Check: a reference about future releases or work in progress -->
 
@@ -59,7 +59,7 @@ After a new peer was granted permissions, it must be set up.
 It's a good idea to request information about the peers' configuration in
 the network. Your best friend is the `configuration` endpoint of the API
 socket. Thus far querying is done manually. Until the
-[bootstrapping procedure](https://github.com/hyperledger/iroha/issues/1184 '#1184')
+[bootstrapping procedure](https://github.com/hyperledger-iroha/iroha/issues/1184 '#1184')
 is implemented, you'll have to manually check that the timeouts and batch
 sizes match.
 

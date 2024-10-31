@@ -9,13 +9,13 @@ located in other repositories, where they are built, run, and tested.
 ### Snippet Sources
 
 Snippet sources are defined in
-[`snippet_sources.ts`](https://github.com/hyperledger/iroha-2-docs/blob/main/etc/snippet-sources.ts).
+[`snippet_sources.ts`](https://github.com/hyperledger-iroha/iroha-2-docs/blob/main/etc/snippet-sources.ts).
 The `snippet_sources.ts` file is located in the documentation repository and has the following format:
 
 ```ts
 export default [
   {
-    src: 'https://raw.githubusercontent.com/hyperledger/iroha/main/MAINTAINERS.md',
+    src: 'https://raw.githubusercontent.com/hyperledger-iroha/iroha/main/MAINTAINERS.md',
     filename: 'iroha-maintainers-at-stable.md',
   },
   {
@@ -72,11 +72,11 @@ files into the documentation.
 ## Example
 
 Let's add a code snippet from Iroha JavaScript SDK. For example, this one:
-[`/packages/docs-recipes/src/1.client-install.ts`](https://github.com/hyperledger/iroha-javascript/blob/e300886e76c777776efad1e2f5cb245bfb8ed02e/packages/docs-recipes/src/1.client-install.ts).
+[`/packages/docs-recipes/src/1.client-install.ts`](https://github.com/hyperledger-iroha/iroha-javascript/blob/e300886e76c777776efad1e2f5cb245bfb8ed02e/packages/docs-recipes/src/1.client-install.ts).
 
 1. First, get a permalink to the file. Open the file on GitHub and click
    `Raw` button to get the link. For example:
-   https://raw.githubusercontent.com/hyperledger/iroha-javascript/e300886e76c777776efad1e2f5cb245bfb8ed02e/packages/docs-recipes/src/1.client-install.ts
+   https://raw.githubusercontent.com/hyperledger-iroha/iroha-javascript/e300886e76c777776efad1e2f5cb245bfb8ed02e/packages/docs-recipes/src/1.client-install.ts
 
 2. Define the new snippet in the [Snippet Sources](#snippet-sources):
 
@@ -85,7 +85,7 @@ Let's add a code snippet from Iroha JavaScript SDK. For example, this one:
      /// ...
 
      {
-       src: 'https://raw.githubusercontent.com/hyperledger/iroha-javascript/e300886e76c777776efad1e2f5cb245bfb8ed02e/packages/docs-recipes/src/1.client-install.ts',
+       src: 'https://raw.githubusercontent.com/hyperledger-iroha/iroha-javascript/e300886e76c777776efad1e2f5cb245bfb8ed02e/packages/docs-recipes/src/1.client-install.ts',
        filename: 'js-sdk-1-client-install.ts',
      },
    ]
@@ -117,7 +117,7 @@ Let's add a code snippet from Iroha JavaScript SDK. For example, this one:
      // ...
 
      {
-       src: `https://raw.githubusercontent.com/hyperledger/iroha/${IROHA_REV_STABLE}/MAINTAINERS.md`,
+       src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_STABLE}/MAINTAINERS.md`,
        //                                                        ^^^^^^^^^^^^^^^^^^^
        filename: 'iroha-maintainers-at-stable.md',
      },

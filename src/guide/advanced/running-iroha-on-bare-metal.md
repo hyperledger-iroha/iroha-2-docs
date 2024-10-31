@@ -23,8 +23,8 @@ You can always check
 [peer configuration options](/guide/configure/peer-configuration.md) for
 more details.
 
-<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger/iroha-2-docs/issues/392
-The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
+<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/392
+The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger-iroha/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
 
 :::
 

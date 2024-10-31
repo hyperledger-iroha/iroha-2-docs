@@ -10,7 +10,7 @@ To launch an instance of the Iroha 2 network, install the following first:
 
 ## 2. Launch Iroha Network
 
-1. In your terminal, navigate to the root directory of your local [`iroha`](https://github.com/hyperledger/iroha) repository:
+1. In your terminal, navigate to the root directory of your local [`iroha`](https://github.com/hyperledger-iroha/iroha) repository:
 
    ```bash
    $ cd ~/Git/iroha
@@ -45,7 +45,7 @@ The following options are also available for local compilation:
 
 ::: tip Note
 
-There is ongoing work to make our configurations for Docker even more customizable with the help of [Swarm](https://github.com/hyperledger/iroha/tree/main/tools/swarm).
+There is ongoing work to make our configurations for Docker even more customizable with the help of [Swarm](https://github.com/hyperledger-iroha/iroha/tree/main/crates/iroha_swarm).
 
 <!-- Check: a reference about future releases or work in progress -->
 

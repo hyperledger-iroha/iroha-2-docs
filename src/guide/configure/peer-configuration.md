@@ -29,8 +29,8 @@ following:
 - [Public and private keys for the genesis account](#genesis)
   (`ACCOUNT_PUBLIC_KEY` and `ACCOUNT_PRIVATE_KEY`)
 
-  <!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger/iroha-2-docs/issues/392
-  The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
+  <!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/392
+  The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger-iroha/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
 
 ::: info
 
@@ -88,8 +88,8 @@ trusted peers:
 `TORII` is the module in charge of handling incoming and outgoing
 connections.
 
-<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger/iroha-2-docs/issues/392
-The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
+<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/392
+The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger-iroha/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
 
 ### `API_URL`
 
@@ -151,8 +151,8 @@ configurations, such as:
 - `GENESIS_SUBMISSION_DELAY_MS`: the delay before the genesis block
   submission after the minimum number of peers were discovered.
 
-<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger/iroha-2-docs/issues/392
-The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
+<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/392
+The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger-iroha/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
 
 ## Logger
 
@@ -200,5 +200,5 @@ _warehouse_). The `BLOCK_STORE_PATH` specifies where the blocks are stored.
 You can change it to a custom location if for some reason the default
 location (`./storage`) is not available or desirable.
 
-<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger/iroha-2-docs/issues/392
-The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
+<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/392
+The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger-iroha/iroha/blob/iroha2-dev/docs/source/references/config.md). -->

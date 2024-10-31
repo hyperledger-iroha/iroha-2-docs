@@ -38,13 +38,13 @@ Once you have learned the basics, we suggest exploring the following sections:
 ## Learn More
 
 For more information on Iroha, see the following:
-- [Iroha 2 Whitepaper](https://github.com/hyperledger/iroha/tree/main/docs/source/iroha_2_whitepaper.md)
+- [Iroha 2 Whitepaper](https://github.com/hyperledger-iroha/iroha/tree/main/docs/source/iroha_2_whitepaper.md)
 - [Hyperledger Foundation Wiki: Hyperledger Iroha > Iroha 2](https://wiki.hyperledger.org/display/iroha/Iroha+2)
 
 For more information on Iroha 1, see the official [Hyperledger Iroha documentation](https://iroha.readthedocs.io/en/develop/index.html).
 
 ::: tip
 
-If you want to contribute to Hyperledger Iroha, see the [Contributing Guide](https://github.com/hyperledger/iroha/blob/main/CONTRIBUTING.md).
+If you want to contribute to Hyperledger Iroha, see the [Contributing Guide](https://github.com/hyperledger-iroha/iroha/blob/main/CONTRIBUTING.md).
 
 :::

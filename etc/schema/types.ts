@@ -1,5 +1,5 @@
 // FIXME: this file reflects types from `@iroha2/data-model-schema` package which isn't published yet
-//        https://github.com/hyperledger/iroha-javascript/pull/170
+//        https://github.com/hyperledger-iroha/iroha-javascript/pull/170
 
 export interface Schema {
   [type: string]: SchemaTypeDefinition

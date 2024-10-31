@@ -10,14 +10,14 @@ See [Reference > Torii Endpoints: Metrics](../../reference/torii-endpoints.md#me
 
 ## How to use metrics
 
-<!-- TODO: Update this subtopic as part of PR #397: https://github.com/hyperledger/iroha-2-docs/pull/397 -->
+<!-- TODO: Update this subtopic as part of PR #397: https://github.com/hyperledger-iroha/iroha-2-docs/pull/397 -->
 
 Work in Progress.
 
 This topic will be updated as part of the new configuration reference.
 
 The progress on the configuration reference can be tracked in the following GitHub issue:\
-[iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger/iroha-2-docs/issues/392).
+[iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger-iroha/iroha-2-docs/issues/392).
 
 ::: note
 

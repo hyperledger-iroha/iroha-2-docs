@@ -151,7 +151,7 @@ To do this, an account have to be granted the
 Refer to an example on how to
 transfer assets with [CLI](/get-started/operate-iroha-2-via-cli.md#_7-transfer-assets) or [Rust](/guide/tutorials/rust.md#_6-transferring-assets).
 
-<!--TODO: add links to transferring assets example in which guide after https://github.com/hyperledger/iroha-2-docs/issues/81 is addressed -->
+<!--TODO: add links to transferring assets example in which guide after https://github.com/hyperledger-iroha/iroha-2-docs/issues/81 is addressed -->
 
 ## Grant/Revoke
 

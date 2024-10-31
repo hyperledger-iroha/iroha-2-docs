@@ -14,7 +14,7 @@ repository into it:
 
 ```bash
 $ cd ~/Git/
-$ git clone https://github.com/hyperledger/iroha-python/ --branch iroha2
+$ git clone https://github.com/hyperledger-iroha/iroha-python/ --branch iroha2
 $ cd iroha-python
 ```
 

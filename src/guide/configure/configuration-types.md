@@ -8,8 +8,8 @@ In this section we explain the difference between `Option<..>` and
 `Option<Option<..>>` used for configuration types. You can find more about
 available configuration options in the [Peer Configuration](peer-configuration.md) topic.
 
-<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger/iroha-2-docs/issues/392
-The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
+<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/392
+The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger-iroha/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
 
 ## `Option<..>`
 
