@@ -1,0 +1,20 @@
+:root {
+  --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.vp-doc {
+  div[class*='language-'] {
+    pre {
+      font-size: 14px;
+      font-variant-ligatures: none;
+    }
+  }
+
+  code {
+    font-variant-ligatures: none;
+  }
+
+  sup {
+    line-height: 0;
+  }
+}

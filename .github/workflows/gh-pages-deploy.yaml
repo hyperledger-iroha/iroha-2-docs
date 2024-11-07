@@ -1,0 +1,68 @@
+name: Deploy at GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # --- Install with caching
+      # https://github.com/pnpm/action-setup#use-cache-to-reduce-installation-time
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install packages
+        run: pnpm install
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Run linter
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Build VitePress
+        run: |
+          pnpm build
+          pnpm cli validate-links .vitepress/dist --public-path $PUBLIC_PATH
+        env:
+          PUBLIC_PATH: /iroha-2-docs/
+          # chalk has a color detection bug
+          FORCE_COLOR: 2
+
+      - name: Push static content into master:gh-pages
+        working-directory: .vitepress/dist
+        run: |
+          git config --global user.email "${GITHUB_ACTOR}@https://users.noreply.github.com/"
+          git config --global user.name "${GITHUB_ACTOR}"
+          git init
+          git add --all
+          git commit -m "Auto update pages on $(date +'%Y-%m-%d %H:%M:%S')"
+          git push -f -q https://git:${{ secrets.github_token }}@github.com/${{ github.repository }} master:gh-pages
