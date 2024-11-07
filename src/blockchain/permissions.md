@@ -76,7 +76,7 @@ Before granting a role to an account, the role should be registered first.
 ### Register a new role
 
 Let's register a new role that, when granted, will allow another account
-access to the [metadata](/guide/blockchain/metadata.md) in Mouse's account:
+access to the [metadata](/blockchain/metadata.md) in Mouse's account:
 
 ```rust
 let role_id = RoleId::from_str("ACCESS_TO_MOUSE_METADATA")?;

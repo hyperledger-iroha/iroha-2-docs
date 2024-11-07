@@ -2,9 +2,9 @@
 
 Let's look at the client configuration options.
 
-::: details Client configuration example
+::: details Client configuration template
 
-<<< @/snippets/client-cli-config.json
+<<< @/snippets/client-cli-config-template.toml
 
 :::
 
@@ -18,7 +18,7 @@ $ kagami config client > client-config.json
 
 ## Public and Private Keys
 
-The `configs/client_cli/config.json` client configuration file should contain a pair of the user's public `PUBLIC_KEY` and private `PRIVATE_KEY` cryptographic keys for their account's `ACCOUNT_ID`.
+The `defaults/client.toml` client configuration file should contain the user's `domain` and a pair of their cryptographic keys: `public_key` and `private_key`.
 
 For details on cryptographic keys, see [Public Key Cryptography](../security/public-key-cryptography.md).
 
@@ -26,7 +26,7 @@ For details on cryptographic keys, see [Public Key Cryptography](../security/pub
 
 The `ACCOUNT_ID` should be self-explanatory. The only thing you need to worry about is that the account must already
 exist in the blockchain. In other words, the account you provide here should already be
-[registered](/guide/blockchain/instructions.md#un-register).
+[registered](/blockchain/instructions.md#un-register).
 
 ::: info Note
 

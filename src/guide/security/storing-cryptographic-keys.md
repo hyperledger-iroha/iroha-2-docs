@@ -47,7 +47,7 @@ KeePassXC offers enhanced security, flexibility, and control. It not only stores
 
 ::: tip
 
-Theoretically, any of the KeePass ports [listed on the official website](https://keepass.info/download.html) can be utilized for the key storage purposes.
+Theoretically, any of the KeePass ports [listed on the official website](https://keepass.info/download.html) can be utilized for key storage purposes.
 We recommend any of the following: [KeePassX](https://www.keepassx.org/) or [KeePassXC](https://keepassxc.org/).
 
 :::
@@ -114,11 +114,11 @@ For those who seek the highest level of offline security, the option of storing 
 
 ### Using a Hardware Key
 
-Our team considers hardware keys to be one of the best safety measures. A hardware key—a compact device that connects via a USB port and has a size of a typical flash drive—only processes security-related events when it is connected to a machine. This allows you to easily disconnect the device in case of a security breach, or simply reconnect it to a different machine whenever it is required.
+Our team considers hardware keys to be one of the best safety measures. A hardware key—a compact device that connects via a USB port and has the size of a typical flash drive—only processes security-related events when it is connected to a machine. This allows you to easily disconnect the device in case of a security breach, or simply reconnect it to a different machine whenever it is required.
 
 However, since there are many brands of hardware keys—each with their unique APIs—it is important to research the market to find the key that best suits your needs.
 
-So far, our team has enternally tested the [YubiKey 5C](https://www.yubico.com/il/product/yubikey-5c/) hardware key that proved to have many positive features, including versatile API functionality.
+So far, our team has internally tested the [YubiKey 5C](https://www.yubico.com/il/product/yubikey-5c/) hardware key which proved to have many positive features, including versatile API functionality.
 
 However, there's a potential drawback to consider. Implementing the [HMAC challenge-response authentication](https://en.wikipedia.org/wiki/Challenge%E2%80%93response_authentication) and storing a corresponding _private_ key for this response could create a vulnerability. This setup might inadvertently enable attackers to make educated guesses about the information stored within the YubiKey 5C's memory, thereby compromising the overall security.
 
@@ -134,4 +134,4 @@ To read more about _the method above_, see the answer by one of the KeePassXC de
 
 ### Using a Mnemonic Phrase
 
-Alternatively, you can memorize a private key as a series of words, known as a _mnemonic phrase_. This method, used in many wallets, requires remembering around 25 specific words. You can generate these words using the [XKCD password generator](https://xkpasswd.net/s/).
+Alternatively, you can memorize a private key as a series of words, known as a _mnemonic phrase_. This method, used in many wallets, requires remembering around 25 specific words. Most password managers, including the previously discussed KeePassXC, offer mnemonic passphrase generation.

@@ -33,12 +33,12 @@ constants.
 
 If you add `iroha_client` to the other two crates, you get the minimum
 number of dependencies to start your own client, similar to
-`iroha_client_cli`.
+`iroha` binary.
 
 Once the initial `v2.0.0` release is complete, we plan to create a package
 on [crates.io](https://crates.io/) with all the documentation. In the
 meantime, you could use the local copy that you've just created in the
-[previous step](/guide/get-started/build) as a local installation in your client's
+[previous step](/get-started/install-iroha-2) as a local installation in your client's
 `Cargo.toml`:
 
 ```toml
@@ -58,7 +58,7 @@ first.
 ::: info
 
 You could also make use of our `test_network` crate, which is available via
-[GitHub](https://github.com/hyperledger/iroha/tree/iroha2/core/test_network)
+[GitHub](https://github.com/hyperledger-iroha/iroha/tree/main/crates/iroha_test_network)
 but not via crates.io.
 
 :::
@@ -136,7 +136,7 @@ Note that the keys in
 [client configuration](/guide/configure/client-configuration.md) are given
 in [multi-hash format](https://github.com/multiformats/multihash). If you
 are experiencing issues parsing the keys in this format,
-[check the troubleshooting section](/guide/troubleshooting/configuration-issues#multihash-format-of-private-and-public-keys).
+[check the troubleshooting section](/help/configuration-issues#multihash-format-of-private-and-public-keys).
 
 :::
 
@@ -251,7 +251,7 @@ Which is then **wrapped in a transaction** and **submitted to the peer** as
 ## 5. Registering and minting assets
 
 Iroha has been built with few
-[underlying assumptions](/guide/blockchain/assets.md) about what the assets need
+[underlying assumptions](/blockchain/assets.md) about what the assets need
 to be in terms of their value type and characteristics (fungible or
 non-fungible, mintable or non-mintable).
 
@@ -317,7 +317,41 @@ in that transaction?_
 
 :::
 
-## 6. Burning assets
+## 6. Transferring assets
+
+Transferring assets is a bit more involved than minting them. First, you
+need to know the account ID of the account that you're transferring from
+and the account ID of the account that you're transferring to.
+
+```rust
+let from_account_id: AccountId = "alice@wonderland".parse().unwrap();
+let to_id: AccountId = "bob@wonderland".parse().unwrap();
+```
+
+You also need to know the asset ID of the asset that you're transferring:
+
+```rust
+let asset_definition_id: AssetDefinitionId = "time#looking_glass".parse().unwrap();
+let from_asset_id = AssetId::new(asset_definition_id, from_account_id);
+```
+
+Then you need to specify the amount that you're transferring:
+
+```rust
+let amount = 1 as u32;
+let value: Value = amount.into();
+```
+
+Then you can create a transfer instruction and submit it:
+
+```rust
+let from_id_box = IdBox::AssetId(from_asset_id);
+let to_id_box = IdBox::AccountId(to_id);
+let transfer_expr = TransferExpr::new(from_id_box, value, to_id_box);
+client.submit(transfer_expr);
+```
+
+## 7. Burning assets
 
 Burning assets is quite similar to minting. First, you create the burn
 instruction indicating which asset to burn and its quantity.
@@ -330,7 +364,7 @@ Then submit this instruction:
 iroha_client.submit(burn_roses)?;
 ```
 
-## 7. Visualising outputs
+## 8. Visualising outputs
 
 Finally, we should talk about visualising data. The Rust API is currently
 the most complete in terms of available queries and instructions. After
@@ -369,4 +403,4 @@ for event in iroha_client.listen_for_events(filter)? {
 
 Needless to say, an synchronous infinite blocking loop is bad UX for
 anything but a command-line program, but for illustration purposes, this
-would create a nice printout, just like in `iroha_client_cli`.
+would create a nice printout, just like in `iroha` binary.

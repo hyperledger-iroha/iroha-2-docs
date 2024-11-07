@@ -13,7 +13,7 @@ For more information on `SCALE`, see the
 article and its
 [official GitHub repository](https://github.com/paritytech/parity-scale-codec).
 
-<!-- TODO: link to our own article about SCALE, once it is written; Issue: https://github.com/hyperledger/iroha-2-docs/issues/367 -->
+<!-- TODO: link to our own article about SCALE, once it is written; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/367 -->
 
 :::
 
@@ -23,7 +23,7 @@ charge of handling `HTTP` and `WebSocket` requests. It is the main
 with Iroha 2. Such interactions include sending transactions, making
 queries, listening for blocks stream, etc.
 
-<!-- TODO: Update the following as part of PR #397: https://github.com/hyperledger/iroha-2-docs/pull/397
+<!-- TODO: Update the following as part of PR #397: https://github.com/hyperledger-iroha/iroha-2-docs/pull/397
 
 To establish two-way communication with the `TORII` endpoints, the following addresses must be specified in the Iroha 2 configuration files:
 
@@ -58,7 +58,7 @@ To establish two-way communication with the `TORII` endpoints, the following add
 This operation requires the specific Iroha node being requested to be
 compiled with the `telemetry` feature enabled.
 
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger/iroha-2-docs/issues/465 -->
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
 :::
 
@@ -177,12 +177,12 @@ of the configuration reference that is still
 <abbr title="Work in Progress">WIP</abbr>.
 
 Until then, to get assistance with the acceptable values and their
-definitions, consult [Receive Support](../guide/support.md) for ways to
+definitions, consult [Receive Support](/help/) for ways to
 contact us.
 
 The progress on the configuration reference can be tracked in the following
 GitHub issue:\
-[iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger/iroha-2-docs/issues/392).
+[iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger-iroha/iroha-2-docs/issues/392).
 
 :::
 
@@ -281,7 +281,7 @@ A `GET` request to the endpoint.
 This operation requires the Iroha 2 network to be established with the
 `telemetry` feature enabled.
 
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger/iroha-2-docs/issues/465 -->
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
 :::
 
@@ -377,35 +377,39 @@ A `GET` request to the endpoint.
 
 #### Requests
 
-This endpoint expects the following data:
+This endpoint expects requests with two shapes:
+
+Start a query:
 
 - **Body**:
-  [`VersionedSignedQuery`](/reference/data-model-schema#versionedsignedquery)
-- **Parameters** (optional):
-  - `start` — Specifies the `id` of a starting entry. A successful response
-    will contain all entries newer than and including the `id`specified .\
-  - `limit` — Specifies the exact number of retrieved `id` entries.\
-  - `sort_by_metadata_key` — Specifies the metadata keyof the `id` entries
-    that will be returned.\
-  - `fetch_size` — Specifies the maximum number of results that a response
-    can contain.
+  [`SignedQuery`](/reference/data-model-schema#signedquery)
+OR
+  Get the next batch of a previously started query:
+  
+  - **Parameters**:
+    - `cursor` - specifies a cursor previously returned as part of query response
+    Request
 
 #### Responses
 
-| Code | Response         | Body                                                                                             |
-| :--: | ---------------- | ------------------------------------------------------------------------------------------------ |
-| 200  | Success          | [`VersionedBatchedResponse<Value>`](/reference/data-model-schema#versionedbatchedresponse-value) |
-| 400  | Conversion Error | [`QueryExecutionFail::Conversion(String)`](/reference/data-model-schema#queryexecutionfail)      |
-| 400  | Evaluate Error   | [`QueryExecutionFail::Evaluate(String)`](/reference/data-model-schema#queryexecutionfail)        |
-| 401  | Signature Error  | [`QueryExecutionFail::Signature(String)`](/reference/data-model-schema#queryexecutionfail)       |
-| 403  | Permission Error | [`QueryExecutionFail::Permission(String)`](/reference/data-model-schema#queryexecutionfail)      |
-| 404  | Find Error       | [`QueryExecutionFail::Find(FindError)`](/reference/data-model-schema#queryexecutionfail)         |
+| Code | Response                        | Body                                                                                               | Description                                                                |
+|:----:|---------------------------------|----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| 200  | Success                         | [`BatchedResponse<QueryOutputBox>`](/reference/data-model-schema#batchedresponse-queryoutputbox)   | Successful query request                                                   |
+| 400  | Conversion Error                | [`QueryExecutionFail::Conversion(String)`](/reference/data-model-schema#queryexecutionfail)        | Invalid asset query for the actual asset type                              |
+| 400  | Cursor Error                    | [`QueryExecutionFail::UnknownCursor`](/reference/data-model-schema#queryexecutionfail)             | An invalid cursor was provided in the batch request                        |
+| 400  | FetchSizeTooBig Error           | [`QueryExecutionFail::FetchSizeTooBig`](/reference/data-model-schema#queryexecutionfail)           | Fetch size specified in the query request is too large                     |
+| 400  | InvalidSingularParameters Error | [`QueryExecutionFail::InvalidSingularParameters`](/reference/data-model-schema#queryexecutionfail) | Specified query parameters are not applicable to the (singular) query type |
+| 401  | Signature Error                 | [`QueryExecutionFail::Signature(String)`](/reference/data-model-schema#queryexecutionfail)         | The signature on the query is incorrect                                    |
+| 403  | Permission Error                | [`QueryExecutionFail::Permission(String)`](/reference/data-model-schema#queryexecutionfail)        | The user does not have permission to execute this query                    |
+| 404  | Find Error                      | [`QueryExecutionFail::Find(FindError)`](/reference/data-model-schema#queryexecutionfail)           | The queried object was not found                                           |
 
 ::: info
 
 The `200 Success` response returns results that are ordered by `id`, which
-use Rust's
-[PartialOrd](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html) and
+use
+Rust's
+[PartialOrd](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html)
+and
 [Ord](https://doc.rust-lang.org/std/cmp/trait.Ord.html) traits.
 
 :::
@@ -446,7 +450,7 @@ Whether each prerequisite object was found and
 This operation requires the Iroha 2 network to be established with the
 `schema` feature enabled.
 
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger/iroha-2-docs/issues/465 -->
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
 :::
 
@@ -472,7 +476,7 @@ A `GET` request to the endpoint.
 This operation requires the Iroha 2 network to be established with the
 `telemetry` feature enabled.
 
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger/iroha-2-docs/issues/465 -->
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
 :::
 
@@ -578,7 +582,7 @@ deserialization, for example, in
 [JavaScript's `JSON.parse`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse).
 
 For more details, see the related
-[GitHub issue](https://github.com/hyperledger/iroha/issues/3964).
+[GitHub issue](https://github.com/hyperledger-iroha/iroha/issues/3964).
 
 :::
 
@@ -643,7 +647,7 @@ sub-routed values are only returned in the JSON format.
 This endpoint expects the following data:
 
 - **Body**:
-  [`VersionedSignedTransaction`](/reference/data-model-schema#versionedsignedtransaction)
+  [`SignedTransaction`](/reference/data-model-schema#signedtransaction)
 
 #### Responses
 

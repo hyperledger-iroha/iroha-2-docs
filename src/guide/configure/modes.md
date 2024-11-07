@@ -20,7 +20,7 @@ said permission.
 ::: info
 
 Refer to the
-[dedicated section on permissions](/guide/blockchain/permissions.md) for
+[dedicated section on permissions](/blockchain/permissions.md) for
 more details.
 
 :::
@@ -46,7 +46,7 @@ permission first.
 By default, Iroha allows **all** instructions to go through, until a
 permission validator that can restrict instruction execution has been
 registered. You can add permission validators to your genesis block by
-registering built-in [permission tokens](/guide/blockchain/permissions.md)
+registering built-in [permission tokens](/blockchain/permissions.md)
 that we thought would be useful for `private` and `public` blockchain
 use-cases. However, in that case, the process of registering accounts is
 different.
@@ -83,7 +83,7 @@ mode.
 :::
 
 Refer to the section on
-[instructions](/guide/blockchain/instructions.md#un-register) for more
+[instructions](/blockchain/instructions.md#un-register) for more
 details about `Register<Account>` instructions.
 
 [^1]:

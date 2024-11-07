@@ -87,11 +87,11 @@ domain_looking_glass *-- account_rabbit : registered in
 
 | Language              | Guide                                                                                                                                                                                                              |
 | --------------------- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Bash                  | Register a [domain](/guide/get-started/bash.md#_3-registering-a-domain), an [account](/guide/get-started/bash.md#_4-registering-an-account), an [asset](/guide/get-started/bash.md#_5-registering-and-minting-assets)                                  |
-| Rust                  | Register a [domain](/guide/get-started/rust.md#_3-registering-a-domain), an [account](/guide/get-started/rust.md#_4-registering-an-account), an [asset](/guide/get-started/rust.md#_5-registering-and-minting-assets)                                  |
-| Kotlin/Java           | Register a [domain](/guide/get-started/kotlin-java.md#_3-querying-and-registering-domains), an [account](/guide/get-started/kotlin-java.md#_4-registering-an-account), an [asset](/guide/get-started/kotlin-java.md#_5-registering-and-minting-assets) |
-| Python                | Register a [domain](/guide/get-started/python.md#_3-registering-a-domain), an [account](/guide/get-started/python.md#_4-registering-an-account), an [asset](/guide/get-started/python.md#_5-registering-and-minting-assets)                            |
-| JavaScript/TypeScript | Register a [domain](/guide/get-started/javascript.md#_3-registering-a-domain), an [account](/guide/get-started/javascript.md#_4-registering-an-account), an [asset](/guide/get-started/javascript.md#_5-registering-and-minting-assets)                |
+| CLI                   | Register a [domain](/get-started/operate-iroha-2-via-cli.md#_3-register-a-domain), an [account](/get-started/operate-iroha-2-via-cli.md#_4-register-an-account), an [asset](/get-started/operate-iroha-2-via-cli.md#_6-register-and-mint-assets)                                  |
+| Rust                  | Register a [domain](/guide/tutorials/rust.md#_3-registering-a-domain), an [account](/guide/tutorials/rust.md#_4-registering-an-account), an [asset](/guide/tutorials/rust.md#_5-registering-and-minting-assets)                                  |
+| Kotlin/Java           | Register a [domain](/guide/tutorials/kotlin-java.md#_3-querying-and-registering-domains), an [account](/guide/tutorials/kotlin-java.md#_4-registering-an-account), an [asset](/guide/tutorials/kotlin-java.md#_5-registering-and-minting-assets) |
+| Python                | Register a [domain](/guide/tutorials/python.md#_3-registering-a-domain), an [account](/guide/tutorials/python.md#_4-registering-an-account), an [asset](/guide/tutorials/python.md#_5-registering-and-minting-assets)                            |
+| JavaScript/TypeScript | Register a [domain](/guide/tutorials/javascript.md#_3-registering-a-domain), an [account](/guide/tutorials/javascript.md#_4-registering-an-account), an [asset](/guide/tutorials/javascript.md#_5-registering-and-minting-assets)                |
 
 :::
 

@@ -57,7 +57,7 @@ In the context of blockchains, an asset is the representation of a valuable
 object on the blockchain.
 
 Additional information on assets is available
-[here](/guide/blockchain/assets.md).
+[here](/blockchain/assets.md).
 
 ### Fungible assets
 
@@ -136,7 +136,7 @@ of conditions is met. In Iroha smart contracts are implemented using
 
 An event type that allows invoking an Iroha special instruction at specific
 block commit, time (with some caveats), etc. More on triggers
-[here](/guide/blockchain/triggers.md).
+[here](/blockchain/triggers.md).
 
 ### Versioning
 
@@ -159,7 +159,7 @@ Third party extensions to Iroha that provide custom functionality.
 
 A library of smart contracts provided with Iroha. These can be invoked via
 either transactions or registered event listeners. More on ISI
-[here](/guide/blockchain/instructions.md).
+[here](/blockchain/instructions.md).
 
 #### Utility Iroha Special Instructions
 
@@ -194,7 +194,7 @@ thus [peers](#peer) running a modified instance will have their access revoked.
 ## Iroha Query
 
 A request to read the World State View without modifying said view. More on
-queries [here](/guide/blockchain/queries.md).
+queries [here](/blockchain/queries.md).
 
 ## View change
 

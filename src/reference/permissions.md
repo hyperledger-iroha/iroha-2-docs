@@ -1,6 +1,6 @@
 # Permissions
 
-This section provides details about pre-configured permission tokens in Iroha 2. For more general information on permission tokens and permission groups (roles), refer to the [Permissions](/guide/blockchain/permissions) chapter in Guide.
+This section provides details about pre-configured permission tokens in Iroha 2. For more general information on permission tokens and permission groups (roles), refer to the [Permissions](/blockchain/permissions) chapter in Guide.
 
 ## Permission Tokens
 

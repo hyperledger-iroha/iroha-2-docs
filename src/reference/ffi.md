@@ -12,7 +12,7 @@ what a function should do, the way in which said functions are represented
 is very different. Moreover, in some languages (like Rust), the
 consequences of calling a function, and the things that it is allowed to do
 are different. Because one can use any language to create a
-[WASM smartcontract](/guide/blockchain/wasm.md), we need to level the
+[WASM smartcontract](/blockchain/wasm.md), we need to level the
 playing field. This is where the concept of foreign function interface
 (FFI) comes in.
 

@@ -24,7 +24,7 @@ The metadata can be of very different types, such as:
 - request results
 
 The object's metadata can be transferred one by one, or in bulk via a
-[WASM](/guide/blockchain/wasm.md) transaction. The `Store` asset type is
+[WASM](/blockchain/wasm.md) transaction. The `Store` asset type is
 used for working with metadata. Let's take a closer look at this asset
 type.
 
@@ -91,7 +91,7 @@ let set_hat_color = SetKeyValueBox::new(
 ## Working with metadata
 
 The following example showcases how to register and grant a
-[role](/guide/blockchain/permissions.md#permission-groups-roles) to access
+[role](/blockchain/permissions.md#permission-groups-roles) to access
 another account's metadata.
 
 ::: details Example
@@ -148,7 +148,7 @@ fn register_and_grant_role_for_metadata_access() -> Result<()> {
 ## Queries
 
 You can get the key value of an object metadata using
-[queries](/guide/blockchain/queries.md):
+[queries](/blockchain/queries.md):
 
 - [`FindAccountKeyValueByIdAndKey`](/reference/queries.md#findaccountkeyvaluebyidandkey)
 - [`FindAssetKeyValueByIdAndKey`](/reference/queries.md#findassetkeyvaluebyidandkey)

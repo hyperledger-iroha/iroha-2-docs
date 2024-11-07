@@ -36,7 +36,7 @@ the active development is happening. Clone the repository and check out the
 `iroha2` branch:
 
 ```bash
-$ git clone https://github.com/hyperledger/iroha-javascript.git --branch iroha2
+$ git clone https://github.com/hyperledger-iroha/iroha-javascript.git --branch iroha2
 ```
 
 Please note that this guide does not cover the details of this workflow.
@@ -335,7 +335,7 @@ way as in the previous section when we registered a domain.
 ## 5. Registering and minting assets
 
 Iroha has been built with few
-[underlying assumptions](/guide/blockchain/assets.md) about what the assets need
+[underlying assumptions](/blockchain/assets.md) about what the assets need
 to be in terms of their value type and characteristics (fungible or
 non-fungible, mintable or non-mintable).
 
@@ -403,7 +403,7 @@ in this guide!
 In this guide, we are roughly recreating the project that is a part of
 `iroha-javascript` integration tests. If you want to see the full project,
 please refer to the
-[`@iroha2/client-test-web` sources](https://github.com/hyperledger/iroha-javascript/tree/iroha2/packages/client/test/integration/test-web).
+[`@iroha2/client-test-web` sources](https://github.com/hyperledger-iroha/iroha-javascript/tree/main/packages/client/test/integration/test-web).
 
 :::
 
@@ -479,7 +479,7 @@ Here is a small demo with the usage of this component:
 ## 9. Subscribing to Block Stream
 
 You can use
-[`/block/stream` endpoint](https://github.com/hyperledger/iroha/blob/iroha2-lts/docs/source/references/api_spec.md#blocks-stream)
+[`/block/stream` endpoint](/reference/torii-endpoints.md#blocks-stream)
 to send a subscription request for block streaming.
 
 Via this endpoint, the client first provides the starting block number

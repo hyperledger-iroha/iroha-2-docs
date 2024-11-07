@@ -8,17 +8,21 @@ hero:
   #actions:
   #- theme: alt
   #  text: View on GitHub
-  #  link: https://github.com/hyperledger/iroha/tree/iroha2-dev
+  #  link: https://github.com/hyperledger-iroha/iroha/
 
 features:
   - icon: 🚀
     title: Get Started
-    details: Install and build Iroha, follow step-by-step SDK tutorials to start working with Iroha
-    link: /guide/get-started/
+    details: Install and build Iroha, follow a step-by-step tutorial to start working with Iroha
+    link: /get-started/
+  - icon: 🏗️
+    title: Build on Iroha
+    details: Discover how to develop a product on Iroha using popular programming languages
+    link: /guide/tutorials/
   - icon: 📖
-    title: Guide
-    details: Learn about Iroha functionality in great details and understand the underlying principles
-    link: /guide/introduction
+    title: Iroha Explained
+    details: Learn about Iroha functionality in great detail and understand the underlying principles
+    link: /blockchain/iroha-explained
   - icon: 💻
     title: Reference
     details: Consult reference documentation for extensive information about available functionality

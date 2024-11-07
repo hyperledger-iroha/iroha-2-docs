@@ -5,8 +5,8 @@ the queries and present to you what they do. You can learn
 
 ::: info
 
-The results of queries can be [sorted](/guide/blockchain/queries#sorting), [paginated](/guide/blockchain/queries#pagination)
-and [filtered](/guide/blockchain/queries#filters) peer-side all at once.
+The results of queries can be [sorted](/blockchain/queries#sorting), [paginated](/blockchain/queries#pagination)
+and [filtered](/blockchain/queries#filters) peer-side all at once.
 
 :::
 
@@ -38,7 +38,7 @@ An optional feature. By default, it is present on all Iroha 2 deployments
 when they're compiled in the private blockchain configuration.
 
 You can learn more about roles in a
-[dedicated section](/guide/blockchain/permissions.md#permission-groups-roles).
+[dedicated section](/blockchain/permissions.md#permission-groups-roles).
 
 ### `FindAllRoles`
 
@@ -94,7 +94,7 @@ blockchains but the use cases are different:
   said permission.
 
 We talk about permissions in more detail in a
-[dedicated chapter](/guide/blockchain/permissions.md).
+[dedicated chapter](/blockchain/permissions.md).
 
 ### `FindAllPermissionTokenDefinitions`
 
@@ -142,7 +142,7 @@ diverse set of queries.
 - **Details**: Returns the value keyed by the provided `Name` for the given
   account.
 
-  This is done by querying the [`metadata`](/guide/blockchain/metadata.md)
+  This is done by querying the [`metadata`](/blockchain/metadata.md)
   attached to the given account.
 
 ### `FindAccountsByName`
@@ -296,7 +296,7 @@ that is used as a secure data storage for privileged information.
 - **Returns**: `Value`
 
 - **Details**: Gets the value keyed by the given name in the
-  [metadata](/guide/blockchain/metadata.md) of the asset corresponding to
+  [metadata](/blockchain/metadata.md) of the asset corresponding to
   the given identifier.
 
 ### `FindAssetDefinitionKeyValueByIdAndKey`
@@ -306,7 +306,7 @@ that is used as a secure data storage for privileged information.
 - **Returns**: `Value`
 
 - **Details**: Gets the value keyed by the given name in the
-  [metadata](/guide/blockchain/metadata.md) of the asset definition
+  [metadata](/blockchain/metadata.md) of the asset definition
   corresponding to the given identifier.
 
 ### `FindTotalAssetQuantityByAssetDefinitionId`
@@ -484,7 +484,7 @@ Note that Iroha shut downs all listeners on panic.
 - **Returns**: `Trigger`
 
 - **Details**: Finds the value corresponding to the key in the
-  [metadata](/guide/blockchain/metadata.md) of the trigger with the given
+  [metadata](/blockchain/metadata.md) of the trigger with the given
   ID.
 
 ### `FindTriggersByDomainId`

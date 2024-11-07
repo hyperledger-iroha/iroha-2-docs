@@ -1,6 +1,6 @@
 # Iroha Special Instructions
 
-When we spoke about [how Iroha operates](/guide/blockchain/how-iroha-works), we
+When we spoke about [how Iroha operates](/blockchain/iroha-explained), we
 said that Iroha Special Instructions are the only way to modify the world
 state. So, what kind of special instructions do we have? If you've read the
 language-specific guides in this tutorial, you've already seen a couple of
@@ -40,7 +40,7 @@ all you need is the object that you want to register.
 | [Mint/Burn](#mint-burn)                                   | assets, triggers (trigger repetitions), permission tokens                                                             | accounts    |
 | [SetKeyValue/RemoveKeyValue](#setkeyvalue-removekeyvalue) | any objects that have [metadata](./metadata.md): accounts, domains, assets, asset definitions, triggers, transactions |             |
 | [NewParameter/SetParameter](#newparameter-setparameter)   | Iroha configuration parameters                                                                                        |             |
-| [Grant/Revoke](#grant-revoke)                             | [roles, permission tokens](/guide/blockchain/permissions.md)                                                          | accounts    |
+| [Grant/Revoke](#grant-revoke)                             | [roles, permission tokens](/blockchain/permissions.md)                                                          | accounts    |
 | [Transfer](#transfer)                                     | assets                                                                                                                | accounts    |
 | [ExecuteTrigger](#executetrigger)                         | triggers                                                                                                              |             |
 | [If, Pair, Sequence](#composite-instructions)             | any instructions                                                                                                      |             |
@@ -109,11 +109,11 @@ process of registering objects in a blockchain:
 
 | Language              | Guide                                                                                                                                                                                                  |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Bash                  | Register a [domain](/guide/get-started/bash.md#_3-registering-a-domain), an [account](/guide/get-started/bash.md#_4-registering-an-account), an [asset](/guide/get-started/bash.md#_5-registering-and-minting-assets)                      |
-| Rust                  | Register a [domain](/guide/get-started/rust.md#_3-registering-a-domain), an [account](/guide/get-started/rust.md#_4-registering-an-account), an [asset](/guide/get-started/rust.md#_5-registering-and-minting-assets)                      |
-| Kotlin/Java           | Register a [domain](/guide/get-started/kotlin-java.md#_3-querying-and-registering-domains), an [account](/guide/get-started/kotlin-java.md#_4-registering-an-account), an [asset](/guide/get-started/kotlin-java.md#_5-registering-and-minting-assets) |
-| Python                | Register a [domain](/guide/get-started/python.md#_3-registering-a-domain), an [account](/guide/get-started/python.md#_4-registering-an-account), an [asset](/guide/get-started/python.md#_5-registering-and-minting-assets)                |
-| JavaScript/TypeScript | Register a [domain](/guide/get-started/javascript.md#_3-registering-a-domain), an [account](/guide/get-started/javascript.md#_4-registering-an-account), an [asset](/guide/get-started/javascript.md#_5-registering-and-minting-assets)    |
+| CLI                   | Register a [domain](/get-started/operate-iroha-2-via-cli.md#_3-register-a-domain), an [account](/get-started/operate-iroha-2-via-cli.md#_4-register-an-account), an [asset](/get-started/operate-iroha-2-via-cli.md#_6-register-and-mint-assets)                      |
+| Rust                  | Register a [domain](/guide/tutorials/rust.md#_3-registering-a-domain), an [account](/guide/tutorials/rust.md#_4-registering-an-account), an [asset](/guide/tutorials/rust.md#_5-registering-and-minting-assets)                      |
+| Kotlin/Java           | Register a [domain](/guide/tutorials/kotlin-java.md#_3-querying-and-registering-domains), an [account](/guide/tutorials/kotlin-java.md#_4-registering-an-account), an [asset](/guide/tutorials/kotlin-java.md#_5-registering-and-minting-assets) |
+| Python                | Register a [domain](/guide/tutorials/python.md#_3-registering-a-domain), an [account](/guide/tutorials/python.md#_4-registering-an-account), an [asset](/guide/tutorials/python.md#_5-registering-and-minting-assets)                |
+| JavaScript/TypeScript | Register a [domain](/guide/tutorials/javascript.md#_3-registering-a-domain), an [account](/guide/tutorials/javascript.md#_4-registering-an-account), an [asset](/guide/tutorials/javascript.md#_5-registering-and-minting-assets)    |
 
 ## Mint/Burn
 
@@ -130,16 +130,16 @@ are assumed to be non-negative as well, so you can never have $-1.0$ of
 Refer to one of the language-specific guides to walk you through the
 process of minting assets in a blockchain:
 
-- [Bash](/guide/get-started/bash.md#_5-registering-and-minting-assets)
-- [Rust](/guide/get-started/rust.md#_5-registering-and-minting-assets)
-- [Kotlin/Java](/guide/get-started/kotlin-java.md#_5-registering-and-minting-assets)
-- [Python](/guide/get-started/python.md#_5-registering-and-minting-assets)
-- [JavaScript/TypeScript ](/guide/get-started/javascript.md#_5-registering-and-minting-assets)
+- [CLI](/get-started/operate-iroha-2-via-cli.md#_6-register-and-mint-assets)
+- [Rust](/guide/tutorials/rust.md#_5-registering-and-minting-assets)
+- [Kotlin/Java](/guide/tutorials/kotlin-java.md#_5-registering-and-minting-assets)
+- [Python](/guide/tutorials/python.md#_5-registering-and-minting-assets)
+- [JavaScript/TypeScript ](/guide/tutorials/javascript.md#_5-registering-and-minting-assets)
 
 Here are examples of burning assets:
 
-- [Bash](/guide/get-started/bash.md#_7-burning-assets)
-- [Rust](/guide/get-started/rust.md#_6-burning-assets)
+- [CLI](/get-started/operate-iroha-2-via-cli.md#_8-burn-assets)
+- [Rust](/guide/tutorials/rust.md#_7-burning-assets)
 
 ## Transfer
 
@@ -149,9 +149,9 @@ can transfer assets between different accounts.
 To do this, an account have to be granted the
 [permission to transfer assets](/reference/permissions.md).
 Refer to an example on how to
-[transfer assets in Bash](/guide/get-started/bash.md#_6-transferring-assets).
+transfer assets with [CLI](/get-started/operate-iroha-2-via-cli.md#_7-transfer-assets) or [Rust](/guide/tutorials/rust.md#_6-transferring-assets).
 
-<!--TODO: add links to transferring assets example in which guide after https://github.com/hyperledger/iroha-2-docs/issues/81 is addressed -->
+<!--TODO: add links to transferring assets example in which guide after https://github.com/hyperledger-iroha/iroha-2-docs/issues/81 is addressed -->
 
 ## Grant/Revoke
 
@@ -166,7 +166,7 @@ be used carefully.
 ## `SetKeyValue`/`RemoveKeyValue`
 
 These instructions are used with the key/value
-[`Store` asset type](/guide/blockchain/metadata.md#store-asset). This use
+[`Store` asset type](/blockchain/metadata.md#store-asset). This use
 case has not received much attention so far, because storing data in the
 blockchain is a rather advanced topic that we shall cover separately.
 
@@ -174,7 +174,7 @@ blockchain is a rather advanced topic that we shall cover separately.
 
 With these instructions, you can create (`NewParameter`) and change
 (`SetParameter`) chain-wide
-[configuration parameters](./../configure/client-configuration.md) for
+[configuration parameters](/guide/configure/client-configuration.md) for
 Iroha.
 
 ## `ExecuteTrigger`

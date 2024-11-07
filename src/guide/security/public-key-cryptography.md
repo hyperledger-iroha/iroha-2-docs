@@ -18,7 +18,7 @@ Since every transaction must be signed on behalf of a peer, every operation requ
 
 ::: warning
 
-All clients are different, but `iroha_client_cli` is the least secure in this regard, as it stores a peer's private key in the `multihash` format saved to a plain text file that could be overridden with an environment variable.
+All clients are different, but `iroha` binary is the least secure in this regard, as it stores a peer's private key in the `multihash` format saved to a plain text file that could be overridden with an environment variable.
 
 **This is currently a reference implementation that will _not_ be a part of the production release.**
 

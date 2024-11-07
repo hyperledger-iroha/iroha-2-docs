@@ -161,6 +161,22 @@ function renderSegment(segment: Segment, segmentName: string): string {
       ),
     )
     .with(null, () => segmentType('Zero-Size Type (unit type, null type)'))
+    .with({ Bitmap: P.select() }, ({ repr, masks }) =>
+      joinDouble(
+        // .
+        segmentType('Bitmap'),
+        segmentProp('Repr', repr),
+        segmentPropNameOnly('Masks'),
+        table(
+          [
+            { title: 'Field name', align: 'right' },
+            { title: 'Field value', align: 'left' },
+          ],
+          masks.map((x) => [code(x.name), code('0x' + x.mask.toString(16))]),
+          { indent: '  ' },
+        ),
+      ),
+    )
     .exhaustive()
 
   return joinDouble(heading, body)

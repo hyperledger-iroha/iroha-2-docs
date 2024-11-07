@@ -3,21 +3,21 @@
 `World` is the global entity that contains other entities. The `World`
 consists of:
 
-- Iroha [configuration parameters](./../configure/client-configuration.md)
+- Iroha [configuration parameters](/guide/configure/client-configuration.md)
 - the list of
   [trusted peers](/guide/configure/peer-configuration#trusted-peers)
 - registered domains
-- registered [triggers](/guide/blockchain/triggers.md)
+- registered [triggers](/blockchain/triggers.md)
 - registered
-  [roles](/guide/blockchain/permissions.md#permission-groups-roles)
+  [roles](/blockchain/permissions.md#permission-groups-roles)
 - registered
-  [permission token definitions](/guide/blockchain/permissions.md#permission-tokens)
+  [permission token definitions](/blockchain/permissions.md#permission-tokens)
 - permission tokens for all accounts
-- [the chain of runtime validators](/guide/blockchain/permissions.md#runtime-validators)
+- [the chain of runtime validators](/blockchain/permissions.md#runtime-validators)
 
 When domains, peers, or roles are registered or unregistered, the `World`
 is the target of the (un)register
-[instruction](/guide/blockchain/instructions.md).
+[instruction](/blockchain/instructions.md).
 
 ## World State View (WSV)
 

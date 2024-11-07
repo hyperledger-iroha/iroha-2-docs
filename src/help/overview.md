@@ -26,4 +26,4 @@ because it would expose the peers' public key. As such, if you have Helm
 charts or K8s deployed with keys defined via the environment variables, you
 should check for Key definitions.
 
-If in doubt, [generate a new pair of keys](../security/generating-cryptographic-keys.md).
+If in doubt, [generate a new pair of keys](/guide/security/generating-cryptographic-keys.md).
