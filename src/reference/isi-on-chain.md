@@ -13,7 +13,7 @@ This page contains description of each field configurable.
 Time since the round start[^1] by which a new block should be created regardless if there were enough transactions or
 not. Used to force block commits when there is a small influx of new transactions.
 
-A block might be created earlier if there is enough transactions in the [Queue](config/queue-params). The limit of transactions
+A block might be created earlier if there is enough transactions in the [Queue](config/params#queue). The limit of transactions
 is configured by [`transactions_in_block`](#transactions-in-block).
 
 **Example:**
@@ -45,7 +45,7 @@ commit_time = "4s"
 - **Type:** u32
 - **Default:** $2^9 = 512$
 
-The upper limit of the number of transactions per block. If there is enough transactions in the [Queue](config/queue-params),
+The upper limit of the number of transactions per block. If there is enough transactions in the [Queue](config/params#queue),
 the block is created immediately. Otherwise, the block is created when [`block_time`](#block-time) is elapsed since the
 round start[^1].
 
@@ -73,4 +73,4 @@ transactions_in_block = 512
 
 [^1]:
     The round start happens on peers rotation, when the leader is elected. Generally it happens after the previous block
-    is committed. See [Consensus](/guide/blockchain/consensus) (todo: that page doesn't mention "round start" term ).
+    is committed. See [Consensus](/blockchain/consensus) (todo: that page doesn't mention "round start" term ).

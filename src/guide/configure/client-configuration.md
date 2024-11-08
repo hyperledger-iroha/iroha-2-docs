@@ -62,7 +62,7 @@ two addresses: `TORII_API_URL` and `TORII_TELEMETRY_URL`.
 ### `TORII_API_URL`
 
 First, the `TORII_API_URL` is the same as
-[`torii.address` in the peer configuration](/reference/config/torii-params#param-address). This is the module
+[`torii.address` in the peer configuration](/reference/config/params#param-torii-address). This is the module
 responsible for handling incoming and outgoing connections. You should also add the prefix `http://` or (_preferably_)
 `https://` to the address. For example:
 

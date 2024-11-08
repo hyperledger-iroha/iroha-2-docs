@@ -8,9 +8,9 @@ This page describes available configuration parameters.
 
 [[toc]]
 
-## Root-Level
+## Root-Level {#root}
 
-### `chain_id` <Badge text="required"/> {#param-chain-id}
+### `chain_id` <Badge text="required" /> {#param-chain-id}
 
 Chain ID that must be included in each transaction. Used to prevent replay attacks.
 
@@ -18,7 +18,6 @@ Chain ID that must be included in each transaction. Used to prevent replay attac
 
 - **ENV:** `CHAIN_ID`
 - **Type:** String
-- **Required**
 
 ::: code-group
 
@@ -27,36 +26,17 @@ chain_id = "00000000-0000-0000-0000-000000000000"
 ```
 
 ```shell [ENV]
-CHAIN_ID=00000000-0000-0000-0000-000000000000
+CHAIN_ID="00000000-0000-0000-0000-000000000000"
 ```
 
 :::
 
-### `private_key` <Badge text="required"/> {#param-private-key}
-
-Private key of the peer.
-
-- **ENV:** `PRIVATE_KEY`
-- **Type:** String, private key multihash
-
-::: code-group
-
-```toml [Config File]
-private_key = "8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F84F"
-```
-
-```shell [ENV]
-PRIVATE_KEY=8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F84F
-```
-
-:::
-
-### `public_key` <Badge text="required"/> {#param-public-key}
+### `public_key` <Badge text="required" /> {#param-public-key}
 
 Public key of the peer.
 
-- **ENV:** `PRIVATE_KEY`
-- **Type:** String, private key multihash
+- **ENV:** `PUBLIC_KEY`
+- **Type:** String
 
 ::: code-group
 
@@ -65,12 +45,31 @@ public_key = "ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16A
 ```
 
 ```shell [ENV]
-PUBLIC_KEY=ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9
+PUBLIC_KEY="ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9"
 ```
 
 :::
 
-## Genesis
+### `private_key` <Badge text="required" /> {#param-private-key}
+
+Private key of the peer.
+
+- **ENV:** `PRIVATE_KEY`
+- **Type:** String
+
+::: code-group
+
+```toml [Config File]
+private_key = "8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F84F"
+```
+
+```shell [ENV]
+PRIVATE_KEY="8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F84F"
+```
+
+:::
+
+## Genesis {#genesis}
 
 ### `genesis.file`  {#param-genesis-file}
 
@@ -114,7 +113,7 @@ GENESIS_PUBLIC_KEY="ed01208BA62848CF767D72E7F7F4B9D2D7BA07FEE33760F79ABE5597A515
 
 :::
 
-## Network
+## Network {#network}
 
 ### `network.address` <Badge text="required" /> {#param-network-address}
 
@@ -244,12 +243,9 @@ idle_timeout_ms = 60_000
 
 :::
 
-## Torii
+## Torii {#torii}
 
-This module contains configuration of [Torii](/reference/glossary#torii-gate) - the API gateway of Iroha. Refer to the
-[Torii Endpoints reference](/reference/torii-endpoints) for information about exact endpoints.
-
-### `torii.address` <Badge text=required /> {#param-torii-address}
+### `torii.address` <Badge text="required" /> {#param-torii-address}
 
 Address on which Torii Endpoints will be accessible.
 
@@ -264,53 +260,79 @@ address = "0.0.0.0:8080"
 ```
 
 ```shell [ENV]
-API_ADDRESS=0.0.0.0:8080
+API_ADDRESS="0.0.0.0:8080"
 ```
 
 :::
 
-### `torii.max_content_len` {#param-torii-max-content-len}
+### `torii.max_content_len`  {#param-torii-max-content-len}
 
-The maximum number of bytes in a raw request body accepted by the
-[Transaction Endpoint](/reference/torii-endpoints#transaction). This limit is used to prevent DOS attacks.
+The maximum number of bytes in a raw request body accepted by
+the [Transaction Endpoint](/reference/torii-endpoints#transaction).
+
+This limit is used to prevent DOS attacks.
 
 - **Type:** Number (of bytes)
-- **Default:**  `16_777_216` (16 MiB, $2^{20} \cdot 16$)
+- **Default:** `16_777_216` (16 MiB, $2^{20} \cdot 16$)
 
-```toml
+::: code-group
+
+```toml [Config File]
 [torii]
 max_content_len = 16_777_216
 ```
 
-### `torii.query_idle_time_ms` {#param-torii-query-idle-time}
+:::
 
-- **Type:** Number
-- **Default:** `10_000` (10 seconds)
+### `torii.query_idle_time_ms`  {#param-torii-query-idle-time-ms}
 
 The time a query can remain in the store if unaccessed.
 
-TODO: Configures behaviour of lazily-evaluated pagination of the [Query Endpoint](/reference/torii-endpoints#query).
+- **Type:** Number (of milliseconds)
+- **Default:** `10_000` (10 seconds)
 
-```toml
+::: code-group
+
+```toml [Config File]
 [torii]
-query_idle_time = 10_000
+query_idle_time_ms = 10_000
 ```
 
-### `torii.query_store_capacity` {#param-torii-query-store-capacity}
+:::
+
+### `torii.query_store_capacity`  {#param-torii-query-store-capacity}
 
 The upper limit of the number of live queries.
 
 - **Type:** Number
 - **Default:** `128`
 
-### `torii.query_store_capacity_per_user` {#param-torii-query-store-capacity-per-user}
+::: code-group
+
+```toml [Config File]
+[torii]
+query_store_capacity = 128
+```
+
+:::
+
+### `torii.query_store_capacity_per_user`  {#param-torii-query-store-capacity-per-user}
 
 The upper limit of the number of live queries for a single user.
 
 - **Type:** Number
 - **Default:** `128`
 
-## Sumeragi
+::: code-group
+
+```toml [Config File]
+[torii]
+query_store_capacity_per_user = 128
+```
+
+:::
+
+## Sumeragi {#sumeragi}
 
 ### `sumeragi.trusted_peers`  {#param-sumeragi-trusted-peers}
 
@@ -338,9 +360,9 @@ public_key = "ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16A
 
 [sumeragi]
 trusted_peers = [
-  { address = "localhost:1338", public_key = "ed012067C02E340AADD553BCF7DB28DD1F3BE8BE3D7581A2BAD81580AEE5CC75FEBD45" },
-  { address = "localhost:1339", public_key = "ed0120236808A6D4C12C91CA19E54686C2B8F5F3A786278E3824B4571EF234DEC8683B" },
-  { address = "localhost:1340", public_key = "ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9" },
+    { address = "localhost:1338", public_key = "ed012067C02E340AADD553BCF7DB28DD1F3BE8BE3D7581A2BAD81580AEE5CC75FEBD45" },
+    { address = "localhost:1339", public_key = "ed0120236808A6D4C12C91CA19E54686C2B8F5F3A786278E3824B4571EF234DEC8683B" },
+    { address = "localhost:1340", public_key = "ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9" },
 ]
 ```
 
@@ -350,8 +372,6 @@ TRUSTED_PEERS='[{"address":"irohad2:1339","public_key":"ed01204EE2FCD53E1730AF14
 ```
 
 :::
-
-
 
 ### `sumeragi.debug.force_soft_fork` <Badge type="warning" text="debug" /> {#param-sumeragi-debug-force-soft-fork}
 
@@ -369,37 +389,9 @@ force_soft_fork = true
 
 :::
 
+## Logger {#logger}
 
-
-
-## Logger
-
-### `logger.format` {#param-logger-format}
-
-Logging format.
-
-- **ENV:** `LOG_FORMAT`
-- **Type:** String, possible values:
-    - `full`:
-    - `compact`:
-    - `pretty`:
-    - `json`:
-- **Default:** `full`
-
-::: code-group
-
-```toml [Config File]
-[logger]
-format = "full"
-```
-
-```shell [ENV]
-LOG_FORMAT=full
-```
-
-:::
-
-### `logger.level` {#param-level}
+### `logger.level`  {#param-logger-level}
 
 Logging verbosity.
 
@@ -407,7 +399,7 @@ Choose the level that best suits your use case. Refer to
 [Stack Overflow](https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels) for additional
 details on how to use different log levels.
 
-- **ENV:**  `LOG_LEVEL`
+- **ENV:** `LOG_LEVEL`
 - **Type:** String, possible values:
     - `TRACE`: All events, including low-level operations.
     - `DEBUG`: Debug-level messages, useful for diagnostics.
@@ -424,12 +416,37 @@ level = "INFO"
 ```
 
 ```shell [ENV]
-LOG_LEVEL=INFO
+LOG_LEVEL="INFO"
 ```
 
 :::
 
-## Kura
+### `logger.format`  {#param-logger-format}
+
+Logs format.
+
+- **ENV:** `LOG_FORMAT`
+- **Type:** String, possible values: (TODO: describe)
+    - `full`
+    - `compact`
+    - `pretty`
+    - `json`
+- **Default:** `full`
+
+::: code-group
+
+```toml [Config File]
+[logger]
+format = "json"
+```
+
+```shell [ENV]
+LOG_FORMAT="json"
+```
+
+:::
+
+## Kura {#kura}
 
 ### `kura.blocks_in_memory`  {#param-kura-blocks-in-memory}
 
@@ -462,7 +479,6 @@ Kura initialisation mode
 - **Type:** String, possible values:
     - `strict`: strict validation of all blocks
     - `fast`: Fast initialisation with only basic checks
-
 - **Default:** `strict`
 
 ::: code-group
@@ -484,7 +500,7 @@ Path[^paths] to the existing block store folder or path to create new folder.
 
 - **ENV:** `KURA_STORE_DIR`
 - **Type:** String, file path[^paths]
-- **Default:** `./storage`
+- **Default:** `./storage` (see also: [`snapshot.store_dir`](#param-snapshot-store-dir))
 
 ::: code-group
 
@@ -499,7 +515,7 @@ KURA_STORE_DIR="/path/to/storage"
 
 :::
 
-### `kura.debug.output_new_blocks` <Badge type=warning text=debug /> {#param-kura-debug-output-new-blocks}
+### `kura.debug.output_new_blocks` <Badge type="warning" text="debug" /> {#param-kura-debug-output-new-blocks}
 
 Flag to enable printing new blocks to console.
 
@@ -520,7 +536,7 @@ KURA_DEBUG_OUTPUT_NEW_BLOCKS=true
 
 :::
 
-## Queue
+## Queue {#queue}
 
 ### `queue.capacity`  {#param-queue-capacity}
 
@@ -572,7 +588,19 @@ transaction_time_to_live_ms = 43_200_000
 
 :::
 
-## Snapshot
+## Snapshot {#snapshot}
+
+This module is responsible for reading and writing snapshots of the
+[World State View](/blockchain/world#world-state-view-wsv).
+
+TODO: explain the purpose of snapshots, file formats, etc
+
+::: tip Wipe Snapshots
+
+In case if something is wrong with the snapshots system, and you want to start from a blank page (in terms of
+snapshots), you could remove the directory specified by [`snapshot.store_dir`](#param-snapshot-store-dir).
+
+:::
 
 ### `snapshot.mode`  {#param-snapshot-mode}
 
@@ -580,12 +608,11 @@ The mode the Snapshot system functions in.
 
 - **ENV:** `SNAPSHOT_MODE`
 - **Type:** String, possible values:
-
-- `read_write`: Iroha creates snapshots with a period specified by [`snapshot.create_every_ms`](#param-snapshot-create-every-ms).
-  On startup, Iroha reads an existing snapshot (if any) and verifies that it is up-to-date with the blocks storage.
-- `readonly`: Similar to `read_write` but Iroha doesn't create any snapshots.
-- `disabled`: Iroha neither creates new snapshots nor reads an existing one on startup.
-
+    - `read_write`: Iroha creates snapshots with a period specified by [
+      `snapshot.create_every_ms`](#param-snapshot-create-every-ms).
+      On startup, Iroha reads an existing snapshot (if any) and verifies that it is up-to-date with the blocks storage.
+    - `readonly`: Similar to `read_write` but Iroha doesn't create any snapshots.
+    - `disabled`: Iroha neither creates new snapshots nor reads an existing one on startup.
 - **Default:** `read_write`
 
 ::: code-group
@@ -594,9 +621,11 @@ The mode the Snapshot system functions in.
 [snapshot]
 mode = "readonly"
 ```
+
 ```shell [ENV]
-SNAPSHOT_MODE=readonly
+SNAPSHOT_MODE="readonly"
 ```
+
 :::
 
 ### `snapshot.create_every_ms`  {#param-snapshot-create-every-ms}
@@ -629,19 +658,20 @@ Directory where to store snapshots.
 [snapshot]
 store_dir = "/path/to/storage"
 ```
+
 ```shell [ENV]
 SNAPSHOT_STORE_DIR="/path/to/storage"
 ```
+
 :::
 
-## Telemetry
+## Telemetry {#telemetry}
 
 TODO
 
 `name` and `url` must be paired.
 
 All `telemetry` section is optional.
-
 
 ### `telemetry.name`  {#param-telemetry-name}
 
@@ -719,9 +749,6 @@ out_file = "/path/to/file.json"
 ```
 
 :::
-
-
-
 
 [^paths]: Relative file paths in the configuration file are resolved relative to the configuration file location. If
 provided via Environment Variables, they are resolved relative to the Current Working Directory.

@@ -27,113 +27,113 @@ were removed.
 |                              Before | After                                                                                                            |
 | ----------------------------------: | ---------------------------------------------------------------------------------------------------------------- |
 |                `IROHA2_CONFIG_PATH` | removed, use [`--config`](../cli#arg-config) instead                                                             |
-|               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](genesis-params#param-file)                                                                      |
-|                  `IROHA_PUBLIC_KEY` | [`PUBLIC_KEY`](base-params#param-public-key)                                                                     |
-|                 `IROHA_PRIVATE_KEY` | split into [`PRIVATE_KEY_ALGORITHM` and `PRIVATE_KEY_PAYLOAD`](base-params#param-private-key)                    |
-|                    `TORII_P2P_ADDR` | [`P2P_ADDRESS`](network-params#param-address)                                                                    |
-|  `IROHA_GENESIS_ACCOUNT_PUBLIC_KEY` | [`GENESIS_PUBLIC_KEY`](genesis-params#param-public-key)                                                          |
-| `IROHA_GENESIS_ACCOUNT_PRIVATE_KEY` | split into [`GENESIS_PRIVATE_KEY_ALGORITHM` and `GENESIS_PRIVATE_KEY_PAYLOAD`](genesis-params#param-private-key) |
-|                     `TORII_API_URL` | [`API_ADDRESS`](torii-params#param-address)                                                                      |
-|                    `KURA_INIT_MODE` | [same](kura-params#param-init-mode)                                                                              |
-|             `KURA_BLOCK_STORE_PATH` | [`KURA_STORE_DIR`](kura-params#param-store-dir)                                                                  |
-|      `KURA_DEBUG_OUTPUT_NEW_BLOCKS` | [same](kura-params#param-debug-output-new-blocks)                                                                |
-|                     `MAX_LOG_LEVEL` | [`LOG_LEVEL`](logger-params#param-level)                                                                         |
-|                      `COMPACT_MODE` | removed, see [`LOG_FORMAT`](logger-params#param-format)                                                          |
+|               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](params#param-genesis-file)                                                                      |
+|                  `IROHA_PUBLIC_KEY` | [`PUBLIC_KEY`](params#param-public-key)                                                                     |
+|                 `IROHA_PRIVATE_KEY` | split into [`PRIVATE_KEY_ALGORITHM` and `PRIVATE_KEY_PAYLOAD`](params#param-private-key)                    |
+|                    `TORII_P2P_ADDR` | [`P2P_ADDRESS`](params#param-network-address)                                                                    |
+|  `IROHA_GENESIS_ACCOUNT_PUBLIC_KEY` | [`GENESIS_PUBLIC_KEY`](params#param-genesis-public-key)                                                          |
+| `IROHA_GENESIS_ACCOUNT_PRIVATE_KEY` | split into [`GENESIS_PRIVATE_KEY_ALGORITHM` and `GENESIS_PRIVATE_KEY_PAYLOAD`](params#param-genesis-private-key) |
+|                     `TORII_API_URL` | [`API_ADDRESS`](params#param-torii-address)                                                                      |
+|                    `KURA_INIT_MODE` | [same](params#param-kura-init-mode)                                                                              |
+|             `KURA_BLOCK_STORE_PATH` | [`KURA_STORE_DIR`](params#param-kura-store-dir)                                                                  |
+|      `KURA_DEBUG_OUTPUT_NEW_BLOCKS` | [same](params#param-kura-debug-output-new-blocks)                                                                |
+|                     `MAX_LOG_LEVEL` | [`LOG_LEVEL`](params#param-logger-level)                                                                         |
+|                      `COMPACT_MODE` | removed, see [`LOG_FORMAT`](params#param-logger-format)                                                          |
 |                   `TERMINAL_COLORS` | same, see [`--terminal-colors`](../cli#arg-terminal-colors)                                                      |
-|         `SNAPSHOT_CREATION_ENABLED` | removed, see [`SNAPSHOT_MODE`](snapshot-params#param-mode)                                                       |
-|                 `SNAPSHOT_DIR_PATH` | [`SNAPSHOT_STORE_DIR`](snapshot-params#param-store-dir)                                                          |
-|            `SUMERAGI_TRUSTED_PEERS` | [same](sumeragi-params#param-trusted-peers)                                                                      |
+|         `SNAPSHOT_CREATION_ENABLED` | removed, see [`SNAPSHOT_MODE`](params#param-snapshot-mode)                                                       |
+|                 `SNAPSHOT_DIR_PATH` | [`SNAPSHOT_STORE_DIR`](params#param-snapshot-store-dir)                                                          |
+|            `SUMERAGI_TRUSTED_PEERS` | [same](params#param-sumeragi-trusted-peers)                                                                      |
 |                   ...all other ones | removed                                                                                                          |
 
 ## Configuration Parameters
 
-- New mandatory parameter: [`chain_id`](base-params#param-chain-id)
+- New mandatory parameter: [`chain_id`](params#param-chain-id)
 
 List of all old parameters:
 
-- Root parameters: see [Base Params](base-params)
-  - `PRIVATE_KEY`: became [`private_key`](base-params#param-private-key);
+- Root parameters: see [Root-Level Params](params#root)
+  - `PRIVATE_KEY`: became [`private_key`](params#param-private-key);
     rename `digest_function` to `algorithm`
-  - `PUBLIC_KEY`: became [`public_key`](base-params#param-public-key)
+  - `PUBLIC_KEY`: became [`public_key`](params#param-public-key)
 - ~~`BLOCK_SYNC`~~: section removed
   - ~~`ACTOR_CHANNEL_CAPACITY`~~: removed
   - `BLOCK_BATCH_SIZE`: became
-    [`network.max_blocks_per_gossip`](network-params#param-max-blocks-per-gossip)
+    [`network.max_blocks_per_gossip`](params#param-network-max-blocks-per-gossip)
   - `GOSSIP_PERIOD_MS`: became
-    [`network.block_gossip_period`](network-params#param-block-gossip-period)
+    [`network.block_gossip_period_ms`](params#param-network-block-gossip-period_ms)
 - ~~`DISABLE_PANIC_TERMINAL_COLORS`~~: removed
-- `GENESIS`: see [Genesis Params](genesis-params)
+- `GENESIS`: see [Genesis Params](params#genesis)
   - `ACCOUNT_PRIVATE_KEY`: became
-    [`genesis.private_key`](genesis-params#param-private-key); rename
+    [`genesis.private_key`](params#param-genesis-private-key); rename
     `digest_function` to `algorithm`
   - `ACCOUNT_PUBLIC_KEY`: became
-    [`genesis.public_key`](genesis-params#param-public-key)
-- `KURA`: see [Kura Params](kura-params)
+    [`genesis.public_key`](params#param-genesis-public-key)
+- `KURA`: see [Kura Params](params#kura)
   - ~~`ACTOR_CHANNEL_CAPACITY`~~: removed
   - ~~`BLOCKS_PER_STORAGE_FILE`~~: removed
   - `BLOCK_STORE_PATH`: became
-    [`kura.store_dir`](kura-params#param-store-dir)
+    [`kura.store_dir`](params#param-kura-store-dir)
   - `DEBUG_OUTPUT_NEW_BLOCKS`: became
-    [`kura.debug.output_new_blocks`](kura-params#param-debug-output-new-blocks)
+    [`kura.debug.output_new_blocks`](params#param-kura-debug-output-new-blocks)
   - `INIT_MODE`: same, lowercase
-- `LOGGER`: see [Logger Params](logger-params)
+- `LOGGER`: see [Logger Params](params#logger)
   - ~~`COMPACT_MODE`~~: removed; now might be enabled with
-    [`logger.format = "compact"`](logger-params#param-format)
+    [`logger.format = "compact"`](params#param-logger-format)
   - ~~`LOG_FILE_PATH`~~: removed; use STDOUT redirection instead and enable
-    JSON format with [`logger.format = "json"`](logger-params#param-format)
-  - `MAX_LOG_LEVEL`: became [`logger.log_level`](logger-params#param-level)
+    JSON format with [`logger.format = "json"`](params#param-logger-format)
+  - `MAX_LOG_LEVEL`: became [`logger.log_level`](params#param-logger-level)
   - ~~`TELEMETRY_CAPACITY`~~: removed
   - ~~`TERMINAL_COLORS`~~: removed; use [`--terminal-colors`](../cli#arg-terminal-colors)
     instead
-- `NETWORK`: see [Network Params](network-params), some parameters migrated
+- `NETWORK`: see [Network Params](params#network), some parameters migrated
   here
   - ~~`ACTOR_CHANNEL_CAPACITY`~~: removed
-- `QUEUE`: see [Queue Params](queue-params)
+- `QUEUE`: see [Queue Params](params#queue)
   - `FUTURE_THRESHOLD_MS`: became
-    [`queue.future_threshold`](queue-params#param-future-threshold)
+    [`queue.future_threshold`](params#param-queue-future-threshold)
   - `MAX_TRANSACTIONS_IN_QUEUE`: became
-    [`queue.capacity`](queue-params#param-capacity)
+    [`queue.capacity`](params#param-queue-capacity)
   - `MAX_TRANSACTIONS_IN_QUEUE_PER_USER`: became
-    [`queue.capacity_per_user`](queue-params#param-capacity-per-user)
+    [`queue.capacity_per_user`](params#param-queue-capacity-per-user)
   - `TRANSACTION_TIME_TO_LIVE_MS`: became
-    [`queue.transaction_time_to_live`](queue-params#param-transaction-time-to-live)
-- `SNAPSHOT`: see [Snapshot Params](snapshot-params)
+    [`queue.transaction_time_to_live`](params#param-queue-transaction-time-to-live)
+- `SNAPSHOT`: see [Snapshot Params](params#snapshot)
   - `CREATE_EVERY_MS`: became
-    [`snapshot.create_every`](snapshot-params#param-create-every)
+    [`snapshot.create_every`](params#param-snapshot-create-every)
   - `CREATION_ENABLED`: removed in favour of
-    [`snapshot.mode`](snapshot-params#param-mode); see the mapping:
+    [`snapshot.mode`](params#param-snapshot-mode); see the mapping:
     <MigrationSnapshotModeTable />
   - `DIR_PATH`: became
-    [`snapshot.store_dir`](snapshot-params#param-store-dir)
-- `SUMERAGI`: see [Sumeragi Params](sumeragi-params)
+    [`snapshot.store_dir`](params#param-snapshot-store-dir)
+- `SUMERAGI`: see [Sumeragi Params](params#sumeragi)
   - ~~`ACTOR_CHANNEL_CAPACITY`~~: removed
   - ~~`BLOCK_TIME_MS`~~: removed[^1]
   - ~~`COMMIT_TIME_LIMIT_MS`~~: removed[^1]
   - `GOSSIP_BATCH_SIZE`: became
-    [`network.max_transactions_per_gossip`](network-params#param-max-transactions-per-gossip)
+    [`network.max_transactions_per_gossip`](params#param-network-max-transactions-per-gossip)
   - `GOSSIP_PERIOD_MS`: became
-    [`network.transaction_gossip_period`](network-params#param-transaction-gossip-period)
+    [`network.transaction_gossip_period_ms`](params#param-network-transaction-gossip-period-ms)
   - ~~`KEY_PAIR`~~: removed
   - ~~`MAX_TRANSACTIONS_IN_BLOCK`~~: removed[^1]
   - ~~`PEER_ID`~~: removed
-  - `TRUSTED_PEERS`: [same, lowercase](sumeragi-params#param-trusted-peers)
-- `TELEMETRY`: see [Telemetry Params](telemetry-params)
+  - `TRUSTED_PEERS`: [same, lowercase](params#param-sumeragi-trusted-peers)
+- `TELEMETRY`: see [Telemetry Params](params#telemetry)
   - `FILE`: became `dev_telemetry.out_file` (todo)
   - `MAX_RETRY_DELAY_EXPONENT`: same, lowercase
   - `MIN_RETRY_PERIOD`: same, lowercase
   - `NAME`: same, lowercase
   - `URL`: same, lowercase
-- `TORII`: see [Torii Params](torii-params)
-  - `API_URL`: became [`torii.address`](torii-params#param-address)
+- `TORII`: see [Torii Params](params#torii)
+  - `API_URL`: became [`torii.address`](params#param-torii-address)
   - ~~`FETCH_SIZE`~~: removed
   - `MAX_CONTENT_LEN`: same, lowercase
   - ~~`MAX_TRANSACTION_SIZE`~~: removed
-  - `P2P_ADDR`: became [`network.address`](network-params#param-address)
+  - `P2P_ADDR`: became [`network.address`](params#param-network-address)
   - `QUERY_IDLE_TIME_MS`: became `torii.query_idle_time`
 - ~~`WSV`~~: temporarily moved to `chain_wide` section, but is going to be
   removed from the configuration entirely[^1]
 
-[^1]: See [Chain Wide Params](chain-wide-params).
+[//]: # ([^1]: See [Chain Wide Params]&#40;chain-params#wide&#41;.)
 
 ## Example
 

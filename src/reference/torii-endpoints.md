@@ -417,7 +417,7 @@ and
 ::: tip Lazily Evaluated Pagination
 
 TODO: explain how it works. Explain that this behaviour is configured with
-[`torii.query_idle_time`](/reference/config/torii-params#param-query-idle-time).
+[`torii.query_idle_time_ms`](/reference/config/params#param-torii-query-idle-time-ms).
 
 :::
 

@@ -141,7 +141,7 @@ For example, we run Iroha from `/home/alice` directory, using a config file at `
 iroha --config ./projects/iroha.toml
 ```
 
-In `iroha.toml`, we specify [`kura.store_dir`](kura-params#param-store-dir):
+In `iroha.toml`, we specify [`kura.store_dir`](params#param-kura-store-dir):
 
 ```toml
 [kura]
