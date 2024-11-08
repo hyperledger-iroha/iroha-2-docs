@@ -28,7 +28,6 @@ were removed.
 | ----------------------------------: | ---------------------------------------------------------------------------------------------------------------- |
 |                `IROHA2_CONFIG_PATH` | removed, use [`--config`](../cli#arg-config) instead                                                             |
 |               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](genesis-params#param-file)                                                                      |
-|               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](genesis-params#param-file)                                                                      |
 |                  `IROHA_PUBLIC_KEY` | [`PUBLIC_KEY`](base-params#param-public-key)                                                                     |
 |                 `IROHA_PRIVATE_KEY` | split into [`PRIVATE_KEY_ALGORITHM` and `PRIVATE_KEY_PAYLOAD`](base-params#param-private-key)                    |
 |                    `TORII_P2P_ADDR` | [`P2P_ADDRESS`](network-params#param-address)                                                                    |

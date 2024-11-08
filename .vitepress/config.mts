@@ -89,6 +89,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           text: 'JavaScript',
           link: '/guide/tutorials/javascript',
         },
+        {
+          text: 'Compatibility Matrix',
+          link: '/reference/compatibility-matrix',
+        },
       ],
     },
     {
@@ -303,10 +307,10 @@ function sidebarChain(): DefaultTheme.SidebarItem[] {
   ]
 }
 
-function sidebarAPI(): DefaultTheme.SidebarItem[] {
+function sidebarReference(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: 'About',
+      text: 'Reference',
       items: [
         {
           text: 'Glossary',
@@ -315,23 +319,6 @@ function sidebarAPI(): DefaultTheme.SidebarItem[] {
         {
           text: 'Naming Conventions',
           link: '/reference/naming.md',
-        },
-        {
-          text: 'Compatibility Matrix',
-          link: '/reference/compatibility-matrix',
-        },
-        {
-          text: 'Foreign Function Interfaces',
-          link: '/reference/ffi',
-        },
-      ],
-    },
-    {
-      text: 'Reference',
-      items: [
-        {
-          text: 'Torii Endpoints',
-          link: '/reference/torii-endpoints.md',
         },
         {
           text: 'Data Model Schema',
@@ -349,6 +336,34 @@ function sidebarAPI(): DefaultTheme.SidebarItem[] {
           text: 'Permissions',
           link: '/reference/permissions.md',
         },
+        {
+          text: 'CLI',
+        },
+        {
+          text: 'Torii HTTP API',
+          link: '/reference/torii-endpoints.md',
+        },
+        {
+          text: 'Foreign Function Interfaces',
+          link: '/reference/ffi',
+        },
+      ],
+    },
+    {
+      text: 'Configuration',
+      items: [
+        { text: 'Overview' },
+        {
+          text: 'Peer Configuration',
+          link: '/reference/config/index.md',
+          items: [
+            { text: 'Parameters', link: '/reference/config/params.md' },
+            // Consider removal
+            { text: 'Migration from pre-rc.20', link: '/reference/config/migration.md' },
+          ],
+        },
+        { text: 'Genesis Block' },
+        { text: 'On-Chain Configuration' },
       ],
     },
   ]
