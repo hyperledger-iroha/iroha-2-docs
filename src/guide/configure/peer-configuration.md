@@ -32,15 +32,6 @@ following:
   <!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/392
   The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger-iroha/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
 
-::: info
-
-Configuration options have different underlying types and default values,
-which are denoted in code as types wrapped in a single `Option<..>` or in a
-double `Option<Option<..>>`. Refer to
-[configuration types](./configuration-types.md) for details.
-
-:::
-
 ## Generation
 
 You can use `kagami` to generate the default peer configuration:
