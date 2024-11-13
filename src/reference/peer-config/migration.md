@@ -25,33 +25,33 @@ Here, the **After** column contains _all_ new supported environment
 variables. Environment variables aren't mentioned in the **Before** column
 were removed.
 
-|                              Before | After                                                                                  |
-| ----------------------------------: |----------------------------------------------------------------------------------------|
-|                `IROHA2_CONFIG_PATH` | removed, use [`--config`](../irohad-cli#arg-config) instead                            |
-|               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](params#param-genesis-file)                                            |
-|                  `IROHA_PUBLIC_KEY` | [`PUBLIC_KEY`](params#param-public-key)                                                |
-|                 `IROHA_PRIVATE_KEY` | split into [`PRIVATE_KEY_ALGORITHM` and `PRIVATE_KEY_PAYLOAD`](params#param-private-key) |
-|                    `TORII_P2P_ADDR` | [`P2P_ADDRESS`](params#param-network-address)                                          |
-|  `IROHA_GENESIS_ACCOUNT_PUBLIC_KEY` | [`GENESIS_PUBLIC_KEY`](params#param-genesis-public-key)                                |
-| `IROHA_GENESIS_ACCOUNT_PRIVATE_KEY` | removed                                                                                |
-|                     `TORII_API_URL` | [`API_ADDRESS`](params#param-torii-address)                                            |
-|                    `KURA_INIT_MODE` | [same](params#param-kura-init-mode)                                                    |
-|             `KURA_BLOCK_STORE_PATH` | [`KURA_STORE_DIR`](params#param-kura-store-dir)                                        |
-|      `KURA_DEBUG_OUTPUT_NEW_BLOCKS` | [same](params#param-kura-debug-output-new-blocks)                                      |
-|                     `MAX_LOG_LEVEL` | [`LOG_LEVEL`](params#param-logger-level)                                               |
-|                      `COMPACT_MODE` | removed, see [`LOG_FORMAT`](params#param-logger-format)                                |
-|                   `TERMINAL_COLORS` | same, see [`--terminal-colors`](../irohad-cli#arg-terminal-colors)                     |
-|         `SNAPSHOT_CREATION_ENABLED` | removed, see [`SNAPSHOT_MODE`](params#param-snapshot-mode)                             |
-|                 `SNAPSHOT_DIR_PATH` | [`SNAPSHOT_STORE_DIR`](params#param-snapshot-store-dir)                                |
-|            `SUMERAGI_TRUSTED_PEERS` | [same](params#param-trusted-peers)                                                     |
-|                   ...all other ones | removed                                                                                |
+|                              Before | After                                                              |
+| ----------------------------------: |--------------------------------------------------------------------|
+|                `IROHA2_CONFIG_PATH` | removed, use [`--config`](../irohad-cli#arg-config) instead        |
+|               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](params#param-genesis-file)                        |
+|                  `IROHA_PUBLIC_KEY` | [`PUBLIC_KEY`](params#param-public-key)                            |
+|                 `IROHA_PRIVATE_KEY` | [`PRIVATE_KEY`](params#param-private-key)                          |
+|                    `TORII_P2P_ADDR` | [`P2P_ADDRESS`](params#param-network-address)                      |
+|  `IROHA_GENESIS_ACCOUNT_PUBLIC_KEY` | [`GENESIS_PUBLIC_KEY`](params#param-genesis-public-key)            |
+| `IROHA_GENESIS_ACCOUNT_PRIVATE_KEY` | removed; genesis block is signed with it outside of Iroha          |
+|                     `TORII_API_URL` | [`API_ADDRESS`](params#param-torii-address)                        |
+|                    `KURA_INIT_MODE` | [same](params#param-kura-init-mode)                                |
+|             `KURA_BLOCK_STORE_PATH` | [`KURA_STORE_DIR`](params#param-kura-store-dir)                    |
+|      `KURA_DEBUG_OUTPUT_NEW_BLOCKS` | [same](params#param-kura-debug-output-new-blocks)                  |
+|                     `MAX_LOG_LEVEL` | [`LOG_LEVEL`](params#param-logger-level)                           |
+|                      `COMPACT_MODE` | removed, see [`LOG_FORMAT`](params#param-logger-format)            |
+|                   `TERMINAL_COLORS` | same, see [`--terminal-colors`](../irohad-cli#arg-terminal-colors) |
+|         `SNAPSHOT_CREATION_ENABLED` | removed, see [`SNAPSHOT_MODE`](params#param-snapshot-mode)         |
+|                 `SNAPSHOT_DIR_PATH` | [`SNAPSHOT_STORE_DIR`](params#param-snapshot-store-dir)            |
+|            `SUMERAGI_TRUSTED_PEERS` | [same](params#param-trusted-peers)                                 |
+|                   ...all other ones | removed                                                            |
 
 ## Configuration Parameters
 
 New mandatory parameters:
 
 - [`chain_id`](params#param-chain-id)
-- [`network.public_address`](./params.md#param-network-public-address)
+- [`network.public_address`](params#param-network-public-address)
 
 List of all old parameters:
 
