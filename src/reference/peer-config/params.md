@@ -4,8 +4,6 @@ outline: [ 2, 3 ]
 
 # Configuration Parameters
 
-This page describes available configuration parameters.
-
 [[toc]]
 
 ## Root-Level {#root}
@@ -16,7 +14,7 @@ Chain ID that must be included in each transaction. Used to prevent replay attac
 
 [//]: # (TODO: explain what replay attacks are)
 
-- **ENV:** `CHAIN_ID`
+- **Environment:** `CHAIN_ID`
 - **Type:** String
 
 ::: code-group
@@ -25,7 +23,7 @@ Chain ID that must be included in each transaction. Used to prevent replay attac
 chain_id = "00000000-0000-0000-0000-000000000000"
 ```
 
-```shell [ENV]
+```shell [Environment]
 CHAIN_ID="00000000-0000-0000-0000-000000000000"
 ```
 
@@ -35,7 +33,7 @@ CHAIN_ID="00000000-0000-0000-0000-000000000000"
 
 Public key of the peer.
 
-- **ENV:** `PUBLIC_KEY`
+- **Environment:** `PUBLIC_KEY`
 - **Type:** String
 
 ::: code-group
@@ -44,7 +42,7 @@ Public key of the peer.
 public_key = "ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9"
 ```
 
-```shell [ENV]
+```shell [Environment]
 PUBLIC_KEY="ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9"
 ```
 
@@ -54,7 +52,7 @@ PUBLIC_KEY="ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1
 
 Private key of the peer.
 
-- **ENV:** `PRIVATE_KEY`
+- **Environment:** `PRIVATE_KEY`
 - **Type:** String
 
 ::: code-group
@@ -63,8 +61,33 @@ Private key of the peer.
 private_key = "8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F84F"
 ```
 
-```shell [ENV]
+```shell [Environment]
 PRIVATE_KEY="8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F84F"
+```
+
+:::
+
+### `trusted_peers`  {#param-trusted-peers}
+
+List of predefined trusted peers.
+
+- **Environment:** `TRUSTED_PEERS`
+- **Type:** Array of strings in a format `PUBLIC_KEY@ADDRESS`
+
+::: code-group
+
+```toml [Config File]
+trusted_peers = [
+    "ed01201C61FAF8FE94E253B93114240394F79A607B7FA55F9E5A41EBEC74B88055768B@127.0.0.1:1337",
+    "ed0120CC25624D62896D3A0BFD8940F928DC2ABF27CC57CEFEB442AA96D9081AAE58A1@127.0.0.1:1338",
+    "ed0120FACA9E8AA83225CB4D16D67F27DD4F93FC30FFA11ADC1F5C88FD5495ECC91020@127.0.0.1:1339",
+    "ed01208E351A70B6A603ED285D666B8D689B680865913BA03CE29FB7D13A166C4E7F1F@127.0.0.1:1340",
+]
+```
+
+```shell [Environment]
+# as JSON
+TRUSTED_PEERS='["ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@irohad2:1339","ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@irohad1:1338","ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@irohad3:1340"]'
 ```
 
 :::
@@ -77,7 +100,7 @@ File path[^paths] to the SCALE-encoded genesis block.
 
 Must be paired with `--submit-genesis` CLI parameter.
 
-- **ENV:** `GENESIS`
+- **Environment:** `GENESIS`
 - **Type:** String, file path[^paths]
 
 ::: code-group
@@ -87,7 +110,7 @@ Must be paired with `--submit-genesis` CLI parameter.
 file = "./genesis.scale"
 ```
 
-```shell [ENV]
+```shell [Environment]
 GENESIS="./genesis.scale"
 ```
 
@@ -97,7 +120,7 @@ GENESIS="./genesis.scale"
 
 Public key of the genesis key pair.
 
-- **ENV:** `GENESIS_PUBLIC_KEY`
+- **Environment:** `GENESIS_PUBLIC_KEY`
 - **Type:** String, public key multihash
 
 ::: code-group
@@ -107,7 +130,7 @@ Public key of the genesis key pair.
 public_key = "ed01208BA62848CF767D72E7F7F4B9D2D7BA07FEE33760F79ABE5597A51520E292A0CB"
 ```
 
-```shell [ENV]
+```shell [Environment]
 GENESIS_PUBLIC_KEY="ed01208BA62848CF767D72E7F7F4B9D2D7BA07FEE33760F79ABE5597A51520E292A0CB"
 ```
 
@@ -117,9 +140,9 @@ GENESIS_PUBLIC_KEY="ed01208BA62848CF767D72E7F7F4B9D2D7BA07FEE33760F79ABE5597A515
 
 ### `network.address` <Badge text="required" /> {#param-network-address}
 
-Address for p2p communication for consensus (sumeragi) and block synchronization (block_sync) purposes
+Address for p2p communication for consensus (sumeragi) and block synchronization (block_sync) purposes.
 
-- **ENV:** `P2P_ADDRESS`
+- **Environment:** `P2P_ADDRESS`
 - **Type:** String, socket address (host/IPv4/IPv6 + port)
 
 ::: code-group
@@ -129,7 +152,7 @@ Address for p2p communication for consensus (sumeragi) and block synchronization
 address = "0.0.0.0:1337"
 ```
 
-```shell [ENV]
+```shell [Environment]
 P2P_ADDRESS="0.0.0.0:1337"
 ```
 
@@ -141,7 +164,7 @@ Peer-to-peer address (external, as seen by other peers).
 
 Will be gossiped to connected peers so that they can gossip it to other peers.
 
-- **ENV:** `P2P_PUBLIC_ADDRESS`
+- **Environment:** `P2P_PUBLIC_ADDRESS`
 - **Type:** String, socket address (host/IPv4/IPv6 + port)
 
 ::: code-group
@@ -151,7 +174,7 @@ Will be gossiped to connected peers so that they can gossip it to other peers.
 public_address = "0.0.0.0:5000"
 ```
 
-```shell [ENV]
+```shell [Environment]
 P2P_PUBLIC_ADDRESS="0.0.0.0:5000"
 ```
 
@@ -247,9 +270,9 @@ idle_timeout_ms = 60_000
 
 ### `torii.address` <Badge text="required" /> {#param-torii-address}
 
-Address on which Torii Endpoints will be accessible.
+Address to which the Torii server must listen and to which the client(s) make their requests.
 
-- **ENV:** `API_ADDRESS`
+- **Environment:** `API_ADDRESS`
 - **Type:** String, socket address (host/IPv4/IPv6 + port)
 
 ::: code-group
@@ -259,7 +282,7 @@ Address on which Torii Endpoints will be accessible.
 address = "0.0.0.0:8080"
 ```
 
-```shell [ENV]
+```shell [Environment]
 API_ADDRESS="0.0.0.0:8080"
 ```
 
@@ -332,63 +355,6 @@ query_store_capacity_per_user = 128
 
 :::
 
-## Sumeragi {#sumeragi}
-
-### `sumeragi.trusted_peers`  {#param-sumeragi-trusted-peers}
-
-List of predefined trusted peers.
-
-- **ENV:** `TRUSTED_PEERS`
-- **Type:** Array of records with `address` and `public_key` fields.
-
-::: code-group
-
-```toml [Config File]
-[[sumeragi.trusted_peers]]
-address = "localhost:1338"
-public_key = "ed012067C02E340AADD553BCF7DB28DD1F3BE8BE3D7581A2BAD81580AEE5CC75FEBD45"
-
-[[sumeragi.trusted_peers]]
-address = "localhost:1339"
-public_key = "ed0120236808A6D4C12C91CA19E54686C2B8F5F3A786278E3824B4571EF234DEC8683B"
-
-[[sumeragi.trusted_peers]]
-address = "localhost:1340"
-public_key = "ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9"
-
-# Alternative syntax
-
-[sumeragi]
-trusted_peers = [
-    { address = "localhost:1338", public_key = "ed012067C02E340AADD553BCF7DB28DD1F3BE8BE3D7581A2BAD81580AEE5CC75FEBD45" },
-    { address = "localhost:1339", public_key = "ed0120236808A6D4C12C91CA19E54686C2B8F5F3A786278E3824B4571EF234DEC8683B" },
-    { address = "localhost:1340", public_key = "ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9" },
-]
-```
-
-```shell [ENV]
-# as JSON
-TRUSTED_PEERS='[{"address":"irohad2:1339","public_key":"ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10"},{"address":"irohad1:1338","public_key":"ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D"},{"address":"irohad3:1340","public_key":"ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE"}]'
-```
-
-:::
-
-### `sumeragi.debug.force_soft_fork` <Badge type="warning" text="debug" /> {#param-sumeragi-debug-force-soft-fork}
-
-TODO
-
-- **Type:** Boolean
-- **Default:** `false`
-
-::: code-group
-
-```toml [Config File]
-[sumeragi.debug]
-force_soft_fork = true
-```
-
-:::
-
 ## Logger {#logger}
 
 ### `logger.level`  {#param-logger-level}
@@ -399,7 +365,7 @@ Choose the level that best suits your use case. Refer to
 [Stack Overflow](https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels) for additional
 details on how to use different log levels.
 
-- **ENV:** `LOG_LEVEL`
+- **Environment:** `LOG_LEVEL`
 - **Type:** String, possible values:
     - `TRACE`: All events, including low-level operations.
     - `DEBUG`: Debug-level messages, useful for diagnostics.
@@ -415,7 +381,7 @@ details on how to use different log levels.
 level = "INFO"
 ```
 
-```shell [ENV]
+```shell [Environment]
 LOG_LEVEL="INFO"
 ```
 
@@ -425,7 +391,7 @@ LOG_LEVEL="INFO"
 
 Logs format.
 
-- **ENV:** `LOG_FORMAT`
+- **Environment:** `LOG_FORMAT`
 - **Type:** String, possible values: (TODO: describe)
     - `full`
     - `compact`
@@ -440,7 +406,7 @@ Logs format.
 format = "json"
 ```
 
-```shell [ENV]
+```shell [Environment]
 LOG_FORMAT="json"
 ```
 
@@ -448,13 +414,15 @@ LOG_FORMAT="json"
 
 ## Kura {#kura}
 
+_Kura_ is the persistent storage engine of Iroha (Japanese for _warehouse_).
+
 ### `kura.blocks_in_memory`  {#param-kura-blocks-in-memory}
 
 At most N last blocks will be stored in memory.
 
 Older blocks will be dropped from memory and loaded from the disk if they are needed.
 
-- **ENV:** `KURA_BLOCKS_IN_MEMORY`
+- **Environment:** `KURA_BLOCKS_IN_MEMORY`
 - **Type:** Number
 - **Default:** `128`
 
@@ -465,7 +433,7 @@ Older blocks will be dropped from memory and loaded from the disk if they are ne
 blocks_in_memory = 256
 ```
 
-```shell [ENV]
+```shell [Environment]
 KURA_BLOCKS_IN_MEMORY=256
 ```
 
@@ -475,7 +443,7 @@ KURA_BLOCKS_IN_MEMORY=256
 
 Kura initialisation mode
 
-- **ENV:** `KURA_INIT_MODE`
+- **Environment:** `KURA_INIT_MODE`
 - **Type:** String, possible values:
     - `strict`: strict validation of all blocks
     - `fast`: Fast initialisation with only basic checks
@@ -488,7 +456,7 @@ Kura initialisation mode
 init_mode = "fast"
 ```
 
-```shell [ENV]
+```shell [Environment]
 KURA_INIT_MODE="fast"
 ```
 
@@ -496,9 +464,9 @@ KURA_INIT_MODE="fast"
 
 ### `kura.store_dir`  {#param-kura-store-dir}
 
-Path[^paths] to the existing block store folder or path to create new folder.
+Specifies the directory[^paths] where the blocks are stored.
 
-- **ENV:** `KURA_STORE_DIR`
+- **Environment:** `KURA_STORE_DIR`
 - **Type:** String, file path[^paths]
 - **Default:** `./storage` (see also: [`snapshot.store_dir`](#param-snapshot-store-dir))
 
@@ -509,7 +477,7 @@ Path[^paths] to the existing block store folder or path to create new folder.
 store_dir = "/path/to/storage"
 ```
 
-```shell [ENV]
+```shell [Environment]
 KURA_STORE_DIR="/path/to/storage"
 ```
 
@@ -519,7 +487,7 @@ KURA_STORE_DIR="/path/to/storage"
 
 Flag to enable printing new blocks to console.
 
-- **ENV:** `KURA_DEBUG_OUTPUT_NEW_BLOCKS`
+- **Environment:** `KURA_DEBUG_OUTPUT_NEW_BLOCKS`
 - **Type:** Boolean
 - **Default:** `false`
 
@@ -530,7 +498,7 @@ Flag to enable printing new blocks to console.
 output_new_blocks = true
 ```
 
-```shell [ENV]
+```shell [Environment]
 KURA_DEBUG_OUTPUT_NEW_BLOCKS=true
 ```
 
@@ -588,6 +556,24 @@ transaction_time_to_live_ms = 43_200_000
 
 :::
 
+## Sumeragi {#sumeragi}
+
+### `sumeragi.debug.force_soft_fork` <Badge type="warning" text="debug" /> {#param-sumeragi-debug-force-soft-fork}
+
+TODO
+
+- **Type:** Boolean
+- **Default:** `false`
+
+::: code-group
+
+```toml [Config File]
+[sumeragi.debug]
+force_soft_fork = true
+```
+
+:::
+
 ## Snapshot {#snapshot}
 
 This module is responsible for reading and writing snapshots of the
@@ -606,7 +592,7 @@ snapshots), you could remove the directory specified by [`snapshot.store_dir`](#
 
 The mode the Snapshot system functions in.
 
-- **ENV:** `SNAPSHOT_MODE`
+- **Environment:** `SNAPSHOT_MODE`
 - **Type:** String, possible values:
     - `read_write`: Iroha creates snapshots with a period specified by [
       `snapshot.create_every_ms`](#param-snapshot-create-every-ms).
@@ -622,7 +608,7 @@ The mode the Snapshot system functions in.
 mode = "readonly"
 ```
 
-```shell [ENV]
+```shell [Environment]
 SNAPSHOT_MODE="readonly"
 ```
 
@@ -648,7 +634,7 @@ create_every_ms = 60_000
 
 Directory where to store snapshots.
 
-- **ENV:** `SNAPSHOT_STORE_DIR`
+- **Environment:** `SNAPSHOT_STORE_DIR`
 - **Type:** String, file path[^paths]
 - **Default:** `./storage/snapshot` (see also: [`kura.store_dir`](#param-kura-store-dir))
 
@@ -659,7 +645,7 @@ Directory where to store snapshots.
 store_dir = "/path/to/storage"
 ```
 
-```shell [ENV]
+```shell [Environment]
 SNAPSHOT_STORE_DIR="/path/to/storage"
 ```
 

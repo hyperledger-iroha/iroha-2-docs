@@ -1,8 +1,10 @@
 <template>
   <table>
     <thead>
-      <th>Before: <code>creation_enabled</code></th>
-      <th>After: <code>mode</code></th>
+      <tr>
+        <th>Before: <code>creation_enabled</code></th>
+        <th>After: <code>mode</code></th>
+      </tr>
     </thead>
     <tbody>
       <tr>
@@ -23,3 +25,4 @@ td:nth-child(1) {
   text-align: right;
 }
 </style>
+<script setup lang="ts"></script>

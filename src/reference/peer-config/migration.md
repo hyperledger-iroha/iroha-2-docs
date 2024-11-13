@@ -17,6 +17,7 @@ Do the following:
 - Update CLI and ENVs
 - Use TOML for the config file
 - Update parameters
+- [Sign genesis with Kagami](../genesis.md)
 
 ## CLI and Environment
 
@@ -24,48 +25,48 @@ Here, the **After** column contains _all_ new supported environment
 variables. Environment variables aren't mentioned in the **Before** column
 were removed.
 
-|                              Before | After                                                                                                            |
-| ----------------------------------: | ---------------------------------------------------------------------------------------------------------------- |
-|                `IROHA2_CONFIG_PATH` | removed, use [`--config`](../cli#arg-config) instead                                                             |
-|               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](params#param-genesis-file)                                                                      |
-|                  `IROHA_PUBLIC_KEY` | [`PUBLIC_KEY`](params#param-public-key)                                                                     |
-|                 `IROHA_PRIVATE_KEY` | split into [`PRIVATE_KEY_ALGORITHM` and `PRIVATE_KEY_PAYLOAD`](params#param-private-key)                    |
-|                    `TORII_P2P_ADDR` | [`P2P_ADDRESS`](params#param-network-address)                                                                    |
-|  `IROHA_GENESIS_ACCOUNT_PUBLIC_KEY` | [`GENESIS_PUBLIC_KEY`](params#param-genesis-public-key)                                                          |
-| `IROHA_GENESIS_ACCOUNT_PRIVATE_KEY` | split into [`GENESIS_PRIVATE_KEY_ALGORITHM` and `GENESIS_PRIVATE_KEY_PAYLOAD`](params#param-genesis-private-key) |
-|                     `TORII_API_URL` | [`API_ADDRESS`](params#param-torii-address)                                                                      |
-|                    `KURA_INIT_MODE` | [same](params#param-kura-init-mode)                                                                              |
-|             `KURA_BLOCK_STORE_PATH` | [`KURA_STORE_DIR`](params#param-kura-store-dir)                                                                  |
-|      `KURA_DEBUG_OUTPUT_NEW_BLOCKS` | [same](params#param-kura-debug-output-new-blocks)                                                                |
-|                     `MAX_LOG_LEVEL` | [`LOG_LEVEL`](params#param-logger-level)                                                                         |
-|                      `COMPACT_MODE` | removed, see [`LOG_FORMAT`](params#param-logger-format)                                                          |
-|                   `TERMINAL_COLORS` | same, see [`--terminal-colors`](../cli#arg-terminal-colors)                                                      |
-|         `SNAPSHOT_CREATION_ENABLED` | removed, see [`SNAPSHOT_MODE`](params#param-snapshot-mode)                                                       |
-|                 `SNAPSHOT_DIR_PATH` | [`SNAPSHOT_STORE_DIR`](params#param-snapshot-store-dir)                                                          |
-|            `SUMERAGI_TRUSTED_PEERS` | [same](params#param-sumeragi-trusted-peers)                                                                      |
-|                   ...all other ones | removed                                                                                                          |
+|                              Before | After                                                                                  |
+| ----------------------------------: |----------------------------------------------------------------------------------------|
+|                `IROHA2_CONFIG_PATH` | removed, use [`--config`](../irohad-cli#arg-config) instead                            |
+|               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](params#param-genesis-file)                                            |
+|                  `IROHA_PUBLIC_KEY` | [`PUBLIC_KEY`](params#param-public-key)                                                |
+|                 `IROHA_PRIVATE_KEY` | split into [`PRIVATE_KEY_ALGORITHM` and `PRIVATE_KEY_PAYLOAD`](params#param-private-key) |
+|                    `TORII_P2P_ADDR` | [`P2P_ADDRESS`](params#param-network-address)                                          |
+|  `IROHA_GENESIS_ACCOUNT_PUBLIC_KEY` | [`GENESIS_PUBLIC_KEY`](params#param-genesis-public-key)                                |
+| `IROHA_GENESIS_ACCOUNT_PRIVATE_KEY` | removed                                                                                |
+|                     `TORII_API_URL` | [`API_ADDRESS`](params#param-torii-address)                                            |
+|                    `KURA_INIT_MODE` | [same](params#param-kura-init-mode)                                                    |
+|             `KURA_BLOCK_STORE_PATH` | [`KURA_STORE_DIR`](params#param-kura-store-dir)                                        |
+|      `KURA_DEBUG_OUTPUT_NEW_BLOCKS` | [same](params#param-kura-debug-output-new-blocks)                                      |
+|                     `MAX_LOG_LEVEL` | [`LOG_LEVEL`](params#param-logger-level)                                               |
+|                      `COMPACT_MODE` | removed, see [`LOG_FORMAT`](params#param-logger-format)                                |
+|                   `TERMINAL_COLORS` | same, see [`--terminal-colors`](../irohad-cli#arg-terminal-colors)                     |
+|         `SNAPSHOT_CREATION_ENABLED` | removed, see [`SNAPSHOT_MODE`](params#param-snapshot-mode)                             |
+|                 `SNAPSHOT_DIR_PATH` | [`SNAPSHOT_STORE_DIR`](params#param-snapshot-store-dir)                                |
+|            `SUMERAGI_TRUSTED_PEERS` | [same](params#param-trusted-peers)                                                     |
+|                   ...all other ones | removed                                                                                |
 
 ## Configuration Parameters
 
-- New mandatory parameter: [`chain_id`](params#param-chain-id)
+New mandatory parameters:
+
+- [`chain_id`](params#param-chain-id)
+- [`network.public_address`](./params.md#param-network-public-address)
 
 List of all old parameters:
 
 - Root parameters: see [Root-Level Params](params#root)
-  - `PRIVATE_KEY`: became [`private_key`](params#param-private-key);
-    rename `digest_function` to `algorithm`
+  - `PRIVATE_KEY`: became [`private_key`](params#param-private-key)
   - `PUBLIC_KEY`: became [`public_key`](params#param-public-key)
 - ~~`BLOCK_SYNC`~~: section removed
   - ~~`ACTOR_CHANNEL_CAPACITY`~~: removed
   - `BLOCK_BATCH_SIZE`: became
-    [`network.max_blocks_per_gossip`](params#param-network-max-blocks-per-gossip)
+    [`network.block_gossip_size`](params#param-network-block-gossip-size)
   - `GOSSIP_PERIOD_MS`: became
-    [`network.block_gossip_period_ms`](params#param-network-block-gossip-period_ms)
+    [`network.block_gossip_period_ms`](params#param-network-block-gossip-period-ms)
 - ~~`DISABLE_PANIC_TERMINAL_COLORS`~~: removed
 - `GENESIS`: see [Genesis Params](params#genesis)
-  - `ACCOUNT_PRIVATE_KEY`: became
-    [`genesis.private_key`](params#param-genesis-private-key); rename
-    `digest_function` to `algorithm`
+  - `ACCOUNT_PRIVATE_KEY`: removed (must be used to sign the genesis block now)
   - `ACCOUNT_PUBLIC_KEY`: became
     [`genesis.public_key`](params#param-genesis-public-key)
 - `KURA`: see [Kura Params](params#kura)
@@ -83,23 +84,22 @@ List of all old parameters:
     JSON format with [`logger.format = "json"`](params#param-logger-format)
   - `MAX_LOG_LEVEL`: became [`logger.log_level`](params#param-logger-level)
   - ~~`TELEMETRY_CAPACITY`~~: removed
-  - ~~`TERMINAL_COLORS`~~: removed; use [`--terminal-colors`](../cli#arg-terminal-colors)
+  - ~~`TERMINAL_COLORS`~~: removed; use [`--terminal-colors`](../irohad-cli#arg-terminal-colors)
     instead
 - `NETWORK`: see [Network Params](params#network), some parameters migrated
   here
   - ~~`ACTOR_CHANNEL_CAPACITY`~~: removed
 - `QUEUE`: see [Queue Params](params#queue)
-  - `FUTURE_THRESHOLD_MS`: became
-    [`queue.future_threshold`](params#param-queue-future-threshold)
+  - `FUTURE_THRESHOLD_MS`: removed
   - `MAX_TRANSACTIONS_IN_QUEUE`: became
     [`queue.capacity`](params#param-queue-capacity)
   - `MAX_TRANSACTIONS_IN_QUEUE_PER_USER`: became
     [`queue.capacity_per_user`](params#param-queue-capacity-per-user)
   - `TRANSACTION_TIME_TO_LIVE_MS`: became
-    [`queue.transaction_time_to_live`](params#param-queue-transaction-time-to-live)
+    [`queue.transaction_time_to_live`](params#param-queue-transaction-time-to-live-ms)
 - `SNAPSHOT`: see [Snapshot Params](params#snapshot)
   - `CREATE_EVERY_MS`: became
-    [`snapshot.create_every`](params#param-snapshot-create-every)
+    [`snapshot.create_every_ms`](params#param-snapshot-create-every-ms)
   - `CREATION_ENABLED`: removed in favour of
     [`snapshot.mode`](params#param-snapshot-mode); see the mapping:
     <MigrationSnapshotModeTable />
@@ -110,15 +110,15 @@ List of all old parameters:
   - ~~`BLOCK_TIME_MS`~~: removed[^1]
   - ~~`COMMIT_TIME_LIMIT_MS`~~: removed[^1]
   - `GOSSIP_BATCH_SIZE`: became
-    [`network.max_transactions_per_gossip`](params#param-network-max-transactions-per-gossip)
+    [`network.transaction_gossip_size`](params#param-network-transaction-gossip-size)
   - `GOSSIP_PERIOD_MS`: became
     [`network.transaction_gossip_period_ms`](params#param-network-transaction-gossip-period-ms)
   - ~~`KEY_PAIR`~~: removed
   - ~~`MAX_TRANSACTIONS_IN_BLOCK`~~: removed[^1]
   - ~~`PEER_ID`~~: removed
-  - `TRUSTED_PEERS`: [same, lowercase](params#param-sumeragi-trusted-peers)
+  - `TRUSTED_PEERS`: [same, lowercase](params#param-trusted-peers)
 - `TELEMETRY`: see [Telemetry Params](params#telemetry)
-  - `FILE`: became `dev_telemetry.out_file` (todo)
+  - `FILE`: became [`dev_telemetry.out_file`](./params.md#param-dev-telemetry-out-file)
   - `MAX_RETRY_DELAY_EXPONENT`: same, lowercase
   - `MIN_RETRY_PERIOD`: same, lowercase
   - `NAME`: same, lowercase
@@ -130,10 +130,9 @@ List of all old parameters:
   - ~~`MAX_TRANSACTION_SIZE`~~: removed
   - `P2P_ADDR`: became [`network.address`](params#param-network-address)
   - `QUERY_IDLE_TIME_MS`: became `torii.query_idle_time`
-- ~~`WSV`~~: temporarily moved to `chain_wide` section, but is going to be
-  removed from the configuration entirely[^1]
+- ~~`WSV`~~: removed[^1]
 
-[//]: # ([^1]: See [Chain Wide Params]&#40;chain-params#wide&#41;.)
+[^1]: on-chain configuration removed from configuration file. TODO link reference.
 
 ## Example
 
@@ -203,8 +202,3 @@ file = "./genesis.json"
 ```
 
 :::
-
-## See also
-
-- [`peer.template.toml`](https://github.com/hyperledger/iroha/blob/8d0157a969a9388ca1f942709837a5a3e591d155/configs/peer.template.toml#L66)
-- [New configuration reference](index)

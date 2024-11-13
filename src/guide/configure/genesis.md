@@ -10,7 +10,7 @@ empty, even if `configs/peer/genesis.json` is. Here's an example:
 :::
 
 The **genesis account** is specified in the
-[`genesis` section of the peer configuration](/reference/config/params#genesis) file.
+[`genesis` section of the peer configuration](/reference/peer-config/params#genesis) file.
 This is the account that will submit the
 genesis block. The genesis account is like a super user account that has
 elevated privileges, but only during the genesis round. The genesis account

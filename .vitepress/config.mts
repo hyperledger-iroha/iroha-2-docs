@@ -104,18 +104,6 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           collapsed: true,
           items: [
             {
-              text: 'Configuration Types',
-              link: '/guide/configure/configuration-types',
-            },
-            {
-              text: 'Samples',
-              link: '/guide/configure/sample-configuration',
-            },
-            {
-              text: 'Peer Configuration',
-              link: '/guide/configure/peer-configuration',
-            },
-            {
               text: 'Client Configuration',
               link: '/guide/configure/client-configuration',
             },
@@ -337,7 +325,8 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
           link: '/reference/permissions.md',
         },
         {
-          text: 'CLI',
+          text: 'irohad CLI',
+          link: '/reference/irohad-cli.md',
         },
         {
           text: 'Torii HTTP API',
@@ -347,23 +336,18 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
           text: 'Foreign Function Interfaces',
           link: '/reference/ffi',
         },
-      ],
-    },
-    {
-      text: 'Configuration',
-      items: [
-        { text: 'Overview' },
         {
           text: 'Peer Configuration',
-          link: '/reference/config/index.md',
+          link: '/reference/peer-config/index.md',
           items: [
-            { text: 'Parameters', link: '/reference/config/params.md' },
-            // Consider removal
-            { text: 'Migration from pre-rc.20', link: '/reference/config/migration.md' },
+            { text: 'Parameters', link: '/reference/peer-config/params.md' },
+            { text: 'Migration from pre-rc.20', link: '/reference/peer-config/migration.md' },
           ],
         },
-        { text: 'Genesis Block' },
-        { text: 'On-Chain Configuration' },
+        {
+          text: 'Genesis Block',
+          link: '/reference/genesis.md',
+        },
       ],
     },
   ]

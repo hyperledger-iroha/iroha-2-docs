@@ -43,11 +43,6 @@ To establish two-way communication with the `TORII` endpoints, the following add
    This address is the same as the `TORII_API_URL` address in the `configs/client_cli/config.json` client configuration file.
    - `TELEMETRY_URL` — connects to the [Prometheus](https://prometheus.io/) endpoint address that is used as a [metrics](../guide/advanced/metrics.md) tool to monitor the network performance.
 
-   ::: info
-
-   To learn more, see [Peer Configuration > Iroha Public Addresses](../guide/configure/peer-configuration.html#iroha-public-addresses).
-
-   :::
 
 -->
 
@@ -153,7 +148,7 @@ added to the blockchain.
 
 The subset of configuration parameters returned by this operation is equal
 to the one accepted by the [Configuration / Update](#configuration-update)
-operation, i.e., it only contains the `logger.level` parameter as of now.
+operation, i.e., it only contains the [`logger.level`](./peer-config/params#param-logger-level) parameter as of now.
 
 :::
 
@@ -168,23 +163,7 @@ operation, i.e., it only contains the `logger.level` parameter as of now.
 
 This endpoint expects a subset of configuration parameters serialized into
 JSON format. Currently, it only supports dynamic updating of the
-`logger.level` parameter.
-
-::: info
-
-The list of all accepted values is currently unavailable and will be a part
-of the configuration reference that is still
-<abbr title="Work in Progress">WIP</abbr>.
-
-Until then, to get assistance with the acceptable values and their
-definitions, consult [Receive Support](/help/) for ways to
-contact us.
-
-The progress on the configuration reference can be tracked in the following
-GitHub issue:\
-[iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger-iroha/iroha-2-docs/issues/392).
-
-:::
+[`logger.level`](./peer-config/params#param-logger-level).
 
 **Example**:
 
@@ -392,16 +371,16 @@ OR
 
 #### Responses
 
-| Code | Response                        | Body                                                                                               | Description                                                                |
-|:----:|---------------------------------|----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| 200  | Success                         | [`BatchedResponse<QueryOutputBox>`](/reference/data-model-schema#batchedresponse-queryoutputbox)   | Successful query request                                                   |
-| 400  | Conversion Error                | [`QueryExecutionFail::Conversion(String)`](/reference/data-model-schema#queryexecutionfail)        | Invalid asset query for the actual asset type                              |
-| 400  | Cursor Error                    | [`QueryExecutionFail::UnknownCursor`](/reference/data-model-schema#queryexecutionfail)             | An invalid cursor was provided in the batch request                        |
-| 400  | FetchSizeTooBig Error           | [`QueryExecutionFail::FetchSizeTooBig`](/reference/data-model-schema#queryexecutionfail)           | Fetch size specified in the query request is too large                     |
+| Code | Response                        | Body                                                                                             | Description                                                                |
+|:----:|---------------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| 200  | Success                         | [`QueryOutputBox`](/reference/data-model-schema#queryoutput)                                     | Successful query request                                                   |
+| 400  | Conversion Error                | [`QueryExecutionFail::Conversion(String)`](/reference/data-model-schema#queryexecutionfail)      | Invalid asset query for the actual asset type                              |
+| 400  | Cursor Error                    | [`QueryExecutionFail::UnknownCursor`](/reference/data-model-schema#queryexecutionfail)           | An invalid cursor was provided in the batch request                        |
+| 400  | FetchSizeTooBig Error           | [`QueryExecutionFail::FetchSizeTooBig`](/reference/data-model-schema#queryexecutionfail)         | Fetch size specified in the query request is too large                     |
 | 400  | InvalidSingularParameters Error | [`QueryExecutionFail::InvalidSingularParameters`](/reference/data-model-schema#queryexecutionfail) | Specified query parameters are not applicable to the (singular) query type |
-| 401  | Signature Error                 | [`QueryExecutionFail::Signature(String)`](/reference/data-model-schema#queryexecutionfail)         | The signature on the query is incorrect                                    |
-| 403  | Permission Error                | [`QueryExecutionFail::Permission(String)`](/reference/data-model-schema#queryexecutionfail)        | The user does not have permission to execute this query                    |
-| 404  | Find Error                      | [`QueryExecutionFail::Find(FindError)`](/reference/data-model-schema#queryexecutionfail)           | The queried object was not found                                           |
+| 401  | Signature Error                 | [`QueryExecutionFail::Signature(String)`](/reference/data-model-schema#queryexecutionfail)       | The signature on the query is incorrect                                    |
+| 403  | Permission Error                | [`QueryExecutionFail::Permission(String)`](/reference/data-model-schema#queryexecutionfail)      | The user does not have permission to execute this query                    |
+| 404  | Find Error                      | [`QueryExecutionFail::Find(FindError)`](/reference/data-model-schema#queryexecutionfail)         | The queried object was not found                                           |
 
 ::: info
 
@@ -417,7 +396,7 @@ and
 ::: tip Lazily Evaluated Pagination
 
 TODO: explain how it works. Explain that this behaviour is configured with
-[`torii.query_idle_time_ms`](/reference/config/params#param-torii-query-idle-time-ms).
+[`torii.query_idle_time_ms`](/reference/peer-config/params#param-torii-query-idle-time-ms).
 
 :::
 
