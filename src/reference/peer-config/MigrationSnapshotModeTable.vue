@@ -25,4 +25,3 @@ td:nth-child(1) {
   text-align: right;
 }
 </style>
-<script setup lang="ts"></script>
