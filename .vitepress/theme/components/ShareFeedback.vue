@@ -225,6 +225,9 @@ function doSubmit() {
     color: var(--vp-custom-block-tip-text);
   }
 }
+.overflow-y-scroll {
+  overflow-y: auto;
+}
 
 textarea,
 input {
@@ -250,5 +253,8 @@ input {
   font-weight: bolder;
   display: block;
   margin-bottom: 8px;
+}
+fieldset {
+  border: none;
 }
 </style>
