@@ -4,8 +4,7 @@
 consists of:
 
 - Iroha [configuration parameters](/guide/configure/client-configuration.md)
-- the list of
-  [trusted peers](/guide/configure/peer-configuration#trusted-peers)
+- TODO: peers
 - registered domains
 - registered [triggers](/blockchain/triggers.md)
 - registered

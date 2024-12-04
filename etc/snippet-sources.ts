@@ -116,18 +116,18 @@ export default [
     src: './src/example_code/lorem.rs',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/client.template.toml`,
-    filename: 'client-cli-config-template.toml',
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/docs/source/references/client.template.toml`,
+    // filename: 'client-cli-config-template.toml',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/peer.template.toml`,
-    filename: 'peer-config-template.toml',
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/docs/source/references/peer.template.toml`,
+    // filename: 'peer-config-template.toml',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/swarm/genesis.json`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/defaults/genesis.json`,
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/client/examples/tutorial.rs`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/crates/iroha/examples/tutorial.rs`,
     filename: 'tutorial-snippets.rs',
   },
 
