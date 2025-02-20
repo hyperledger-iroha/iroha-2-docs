@@ -10,7 +10,7 @@ import './style/index.scss'
 import { defineAsyncComponent } from 'vue'
 
 export default {
-  ...ThemeDefault,
+  extends: ThemeDefault,
   Layout: LayoutCustom,
   enhanceApp({ app }: EnhanceAppContext) {
     app.component('MermaidRenderWrap', MermaidRenderWrap)
@@ -23,4 +23,4 @@ export default {
       defineAsyncComponent(async () => import('./components/CompatibilityMatrixTableIcon.vue')),
     )
   },
-}
+} satisfies import('vitepress').Theme
