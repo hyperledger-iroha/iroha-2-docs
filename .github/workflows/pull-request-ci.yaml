@@ -16,7 +16,9 @@ jobs:
       # https://github.com/pnpm/action-setup#use-cache-to-reduce-installation-time
 
       - name: Enable Corepack
-        run: corepack enable
+        run: |
+          npm i -g corepack@latest
+          corepack enable
 
       - name: Get pnpm store directory
         id: pnpm-cache
