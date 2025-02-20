@@ -363,7 +363,7 @@ A `GET` request to the endpoint.
 | :--: | -------- | ------------------------------------------------------------------------------------------------------------------- |
 | 200  | OK       | Returns the Rust data structures and types of the entire [Data Model Schema](data-model-schema.md) as JSON objects. |
 
-## Telemetry / Metrics <Badge text="feature: telemetry" type=tip />
+## Telemetry / Metrics <Badge text="feature: telemetry" type=tip /> {#metrics}
 
 ::: info
 
