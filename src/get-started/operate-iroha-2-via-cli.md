@@ -29,26 +29,36 @@ $ cp path_to_iroha_repo/defaults/client.toml path_to_new_directory/
    ::: details Expected result
 
    ```bash
-   Iroha CLI Client lets you interact with Iroha Peers Web API without direct network usage
+    Iroha Client CLI provides a simple way to interact with the Iroha Web API
 
-   Usage: iroha [OPTIONS] <COMMAND>
+    Usage: iroha [OPTIONS] <COMMAND>
 
-   Commands:
-     domain   The subcommand related to domains
-     account  The subcommand related to accounts
-     asset    The subcommand related to assets
-     peer     The subcommand related to p2p networking
-     events   The subcommand related to event streaming
-     wasm     The subcommand related to Wasm
-     blocks   The subcommand related to block streaming
-     json     The subcommand related to multi-instructions as Json or Json5
-     help     Print this message or the help of the given subcommand(s)
+    Commands:
+      domain         Read and write domains
+      account        Read and write accounts
+      asset          Read and write assets
+      nft            Read and write NFTs
+      peer           Read and write peers
+      events         Subscribe to events: state changes, transaction/block/trigger progress
+      blocks         Subscribe to blocks
+      multisig       Read and write multi-signature accounts and transactions
+      query          Read various data
+      transaction    Read transactions and write various data
+      role           Read and write roles
+      parameter      Read and write system parameters
+      trigger        Read and write triggers
+      executor       Read and write the executor
+      markdown-help  Output CLI documentation in Markdown format
+      help           Print this message or the help of the given subcommand(s)
 
-   Options:
-     -c, --config <PATH>  Path to the configuration file [default: client.toml]
-     -v, --verbose        More verbose output
-     -h, --help           Print help
-     -V, --version        Print version
+    Options:
+      -c, --config <PATH>    Path to the configuration file [default: client.toml]
+      -v, --verbose          Print configuration details to stderr
+      -m, --metadata <PATH>  Path to a JSON5 file for attaching transaction metadata (optional)
+      -i, --input            Reads instructions from stdin and appends new ones
+      -o, --output           Outputs instructions to stdout without submitting them
+      -h, --help             Print help (see more with '--help')
+      -V, --version          Print version
 
    ```
 
@@ -81,26 +91,11 @@ The output should contain several preregistered domains.
 ::: details Expected result
 
 ```json
-  {
-    "id": "garden_of_live_flowers",
-    "logo": null,
-    "metadata": {},
-    "owned_by": "ed01204164BF554923ECE1FD412D241036D863A6AE430476C898248B8237D77534CFC4@genesis"
-  },
-  {
-    "id": "genesis",
-    "logo": null,
-    "metadata": {},
-    "owned_by": "ed01204164BF554923ECE1FD412D241036D863A6AE430476C898248B8237D77534CFC4@genesis"
-  },
-  {
-    "id": "wonderland",
-    "logo": null,
-    "metadata": {
-      "key": "value"
-    },
-    "owned_by": "ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03@wonderland"
-  }
+[
+  "garden_of_live_flowers",
+  "genesis",
+  "wonderland"
+]
 
 ```
 
@@ -130,12 +125,12 @@ $ iroha domain list all
 ::: details Expected result
 
 ```json
-  {
-    "id": "looking_glass",
-    "logo": null,
-    "metadata": {},
-    "owned_by": "ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03@wonderland"
-  },
+[
+  "garden_of_live_flowers",
+  "genesis",
+  "looking_glass",
+  "wonderland"
+]
 ```
 
 Note that the owner of the new domain is the account specified in our config file. They performed the registration.
@@ -187,30 +182,11 @@ $ iroha account list all
 
 ```json
 [
-  {
-    "id": "ed0120E9F632D3034BAB6BB26D92AC8FD93EF878D9C5E69E01B61B4C47101884EE2F99@garden_of_live_flowers",
-    "metadata": {}
-  },
-  {
-    "id": "ed01204164BF554923ECE1FD412D241036D863A6AE430476C898248B8237D77534CFC4@genesis",
-    "metadata": {}
-  },
-  {
-    "id": "ed0120ABA0446CFBD4E12627FFA870FB37993ED83EB1AE0588184B90D832A64C24C379@looking_glass",
-    "metadata": {}
-  },
-  {
-    "id": "ed012004FF5B81046DDCCF19E2E451C45DFB6F53759D4EB30FA2EFA807284D1CC33016@wonderland",
-    "metadata": {
-      "key": "value"
-    }
-  },
-  {
-    "id": "ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03@wonderland",
-    "metadata": {
-      "key": "value"
-    }
-  }
+  "ed0120E9F632D3034BAB6BB26D92AC8FD93EF878D9C5E69E01B61B4C47101884EE2F99@garden_of_live_flowers",
+  "ed01204164BF554923ECE1FD412D241036D863A6AE430476C898248B8237D77534CFC4@genesis",
+  "ed0120ABA0446CFBD4E12627FFA870FB37993ED83EB1AE0588184B90D832A64C24C379@looking_glass",
+  "ed012004FF5B81046DDCCF19E2E451C45DFB6F53759D4EB30FA2EFA807284D1CC33016@wonderland",
+  "ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03@wonderland"
 ]
 ```
 :::
@@ -232,8 +208,21 @@ To transfer a domain, perform the following:
 2. Check that the ownership changed:
 
    ```bash
-   $ iroha domain list all
+   $ iroha domain get --id looking_glass
    ```
+  
+  ::: details Expected result
+
+    ```json
+    {
+      "id": "looking_glass",
+      "logo": null,
+      "metadata": {},
+      "owned_by": "ed0120ABA0446CFBD4E12627FFA870FB37993ED83EB1AE0588184B90D832A64C24C379@looking_glass"
+    }
+
+    ```
+  :::
 
 3. Switch to the newly created account. For this, we need to modify the `public_key`, `private_key`, and `domain` in the `client.toml` config file with the credentials of the user we want to act as.
 
@@ -265,10 +254,10 @@ To mint an asset, its [asset definition](/blockchain/assets) must be registered 
 To register a `tea` token within the `looking_glass` domain, run:
 
 ```bash
-$ iroha asset definition register --id="tea#looking_glass" --type="Numeric"
+$ iroha asset definition register --id="tea#looking_glass"
 ```
 
-The numeric `tea` asset is now registered within the `looking_glass` domain.
+The `tea` asset is now registered within the `looking_glass` domain.
 
 If you open the terminal where the Iroha network runs, you will see that all our activity caused numerous pipeline events there.
 
@@ -288,24 +277,9 @@ $ iroha asset list all
 
 ```json
 [
-  {
-    "id": "tea##ed0120ABA0446CFBD4E12627FFA870FB37993ED83EB1AE0588184B90D832A64C24C379@looking_glass",
-    "value": {
-      "Numeric": "100"
-    }
-  },
-  {
-    "id": "cabbage#garden_of_live_flowers#ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03@wonderland",
-    "value": {
-      "Numeric": "44"
-    }
-  },
-  {
-    "id": "rose##ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03@wonderland",
-    "value": {
-      "Numeric": "13"
-    }
-  }
+  "tea##ed0120ABA0446CFBD4E12627FFA870FB37993ED83EB1AE0588184B90D832A64C24C379@looking_glass",
+  "cabbage#garden_of_live_flowers#ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03@wonderland",
+  "rose##ed0120CE7FA46C9DCE7EA4B125E2E36BDB63EA33073E7590AC92816AE1E861B7048B03@wonderland"
 ]
 ```
 :::
@@ -337,7 +311,7 @@ We will set up an event listener for the block pipeline.
 From a new terminal tab/window run:
 
 ```bash
-$ iroha events block-pipeline
+$ iroha events block
 ```
 
 ::: details Expected result
@@ -348,14 +322,26 @@ Listening to events with filter: Pipeline(Block(BlockEventFilter { height: None,
   "Pipeline": {
     "Block": {
       "header": {
-        "height": 14,
-        "prev_block_hash": "AF1ABC889019971D4C4E8866C347367D63A024319E50AEF989DB255F761E9D1D",
-        "transactions_hash": "7F2091D887BF9DBF6100DFEA696B06AE269C288AE55F1D281D9FDDAD93D1B8F1",
-        "creation_time_ms": 1721132667162,
-        "view_change_index": 1,
-        "consensus_estimation_ms": 4000
+        "height": 17,
+        "prev_block_hash": "0F6B562D8B3F635C46CD7BEB20C801B8C7594B56AD5F3E0CFBD596C0894885F3",
+        "transactions_hash": "5A85B662672155A7D93DC54A132975FA4252152AB04CA224CE49C7FF97D742AB",
+        "creation_time_ms": 1742405889662,
+        "view_change_index": 2
       },
-      "hash": "1CC6256356418D02F19B17487AD4F7F105AE6CD3FD129760C575066484F3EF97",
+      "status": "Created"
+    }
+  }
+}
+{
+  "Pipeline": {
+    "Block": {
+      "header": {
+        "height": 17,
+        "prev_block_hash": "0F6B562D8B3F635C46CD7BEB20C801B8C7594B56AD5F3E0CFBD596C0894885F3",
+        "transactions_hash": "5A85B662672155A7D93DC54A132975FA4252152AB04CA224CE49C7FF97D742AB",
+        "creation_time_ms": 1742405889662,
+        "view_change_index": 2
+      },
       "status": "Approved"
     }
   }
@@ -364,14 +350,12 @@ Listening to events with filter: Pipeline(Block(BlockEventFilter { height: None,
   "Pipeline": {
     "Block": {
       "header": {
-        "height": 14,
-        "prev_block_hash": "AF1ABC889019971D4C4E8866C347367D63A024319E50AEF989DB255F761E9D1D",
-        "transactions_hash": "7F2091D887BF9DBF6100DFEA696B06AE269C288AE55F1D281D9FDDAD93D1B8F1",
-        "creation_time_ms": 1721132667162,
-        "view_change_index": 1,
-        "consensus_estimation_ms": 4000
+        "height": 17,
+        "prev_block_hash": "0F6B562D8B3F635C46CD7BEB20C801B8C7594B56AD5F3E0CFBD596C0894885F3",
+        "transactions_hash": "5A85B662672155A7D93DC54A132975FA4252152AB04CA224CE49C7FF97D742AB",
+        "creation_time_ms": 1742405889662,
+        "view_change_index": 2
       },
-      "hash": "99D30F9DD159A397A76E4A37143433BD302264F7509B6E154CA9C18263543857",
       "status": "Committed"
     }
   }
@@ -380,18 +364,59 @@ Listening to events with filter: Pipeline(Block(BlockEventFilter { height: None,
   "Pipeline": {
     "Block": {
       "header": {
-        "height": 14,
-        "prev_block_hash": "AF1ABC889019971D4C4E8866C347367D63A024319E50AEF989DB255F761E9D1D",
-        "transactions_hash": "7F2091D887BF9DBF6100DFEA696B06AE269C288AE55F1D281D9FDDAD93D1B8F1",
-        "creation_time_ms": 1721132667162,
-        "view_change_index": 1,
-        "consensus_estimation_ms": 4000
+        "height": 17,
+        "prev_block_hash": "0F6B562D8B3F635C46CD7BEB20C801B8C7594B56AD5F3E0CFBD596C0894885F3",
+        "transactions_hash": "5A85B662672155A7D93DC54A132975FA4252152AB04CA224CE49C7FF97D742AB",
+        "creation_time_ms": 1742405889662,
+        "view_change_index": 2
       },
-      "hash": "99D30F9DD159A397A76E4A37143433BD302264F7509B6E154CA9C18263543857",
       "status": "Applied"
     }
   }
 }
+{
+  "Pipeline": {
+    "Block": {
+      "header": {
+        "height": 18,
+        "prev_block_hash": "90B8F71E96E60BBC3D52EF4FBEBA9E589D717683CE4BB7C34CCA8305235EDD53",
+        "transactions_hash": null,
+        "creation_time_ms": 1742405891677,
+        "view_change_index": 0
+      },
+      "status": "Approved"
+    }
+  }
+}
+{
+  "Pipeline": {
+    "Block": {
+      "header": {
+        "height": 18,
+        "prev_block_hash": "90B8F71E96E60BBC3D52EF4FBEBA9E589D717683CE4BB7C34CCA8305235EDD53",
+        "transactions_hash": null,
+        "creation_time_ms": 1742405891677,
+        "view_change_index": 0
+      },
+      "status": "Committed"
+    }
+  }
+}
+{
+  "Pipeline": {
+    "Block": {
+      "header": {
+        "height": 18,
+        "prev_block_hash": "90B8F71E96E60BBC3D52EF4FBEBA9E589D717683CE4BB7C34CCA8305235EDD53",
+        "transactions_hash": null,
+        "creation_time_ms": 1742405891677,
+        "view_change_index": 0
+      },
+      "status": "Applied"
+    }
+  }
+}
+
 
 ```
 
@@ -404,6 +429,7 @@ To find out how to listen to other types of events, run the `iroha events help` 
 ## What's Next
 
 Now that you understand the basics, you can explore these advanced documentation:
+- Try running a node on the [Iroha 2-based public testnet](https://wiki.sora.org/running-a-sora-testnet-node.html) on the Sora blockchain.
 - Learn how to build on Iroha 2 with our [SDK turorials](/guide/tutorials/).
 - Understand the fundamental concepts behind Iroha 2 in the [Iroha Explained](/blockchain/iroha-explained) section.
 - Build more complex networks using the [Configuration and Management](/guide/configure/overview) section.

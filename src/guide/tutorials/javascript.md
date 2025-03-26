@@ -403,7 +403,7 @@ in this guide!
 In this guide, we are roughly recreating the project that is a part of
 `iroha-javascript` integration tests. If you want to see the full project,
 please refer to the
-[`@iroha2/client-test-web` sources](https://github.com/hyperledger-iroha/iroha-javascript/tree/main/packages/client/test/integration/test-web).
+[`@iroha2/client-test-web` sources](https://github.com/hyperledger-iroha/iroha-javascript/tree/main/tests/browser).
 
 :::
 

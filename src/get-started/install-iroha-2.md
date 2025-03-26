@@ -58,6 +58,12 @@ Check the [OpenSSL installation guide](https://github.com/openssl/openssl/blob/m
    $ git clone https://github.com/hyperledger-iroha/iroha.git
    ```
 
+4. Change directory to the cloned repository:
+
+   ```bash
+   $ cd iroha
+   ```
+
 ### 3. Install Iroha Binaries
 
 To get started you need two of the binaries shipped with Iroha:
@@ -65,11 +71,11 @@ To get started you need two of the binaries shipped with Iroha:
 - `iroha`, the main command line tool for accessing the Iroha network as a user. It allows you to manage domains, accounts, and assets, and to query network status and events. To install `iroha` system-wide, use the following command:
 
 ```bash
-$ cargo install --git https://github.com/hyperledger-iroha/iroha.git iroha_cli
+$ cargo install --path crates/iroha_cli --locked
 ```
 
 - `kagami`, the tool that generates cryotpgraphic keys, configuration files and other necessary data. To install `kagami` system-wide, use the following command:
 
 ```bash
-$ cargo install --git https://github.com/hyperledger-iroha/iroha.git iroha_kagami
+$ cargo install --path crates/iroha_kagami --locked
 ```
