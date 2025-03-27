@@ -1,14 +1,13 @@
 # JavaScript/TypeScript Guide
 
-**TBA**
-
+<!-- TODO: update -->
 ::: info
 
 This guide is being revised. For the time being, please consult the up-to-date [JavaScript SDK reference](https://jsr.io/@iroha).
 
 :::
 
-<!-- TODO: update 
+
 ## 1. Client Installation
 
 The Iroha 2 JavaScript library consists of multiple packages:
@@ -487,4 +486,3 @@ added to the blockchain.
 Here is an example of how to listen to the block stream:
 
 <<<@/snippets/js-sdk-9-blocks-stream.ts
--->
