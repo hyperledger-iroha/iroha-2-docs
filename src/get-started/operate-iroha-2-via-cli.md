@@ -374,49 +374,6 @@ Listening to events with filter: Pipeline(Block(BlockEventFilter { height: None,
     }
   }
 }
-{
-  "Pipeline": {
-    "Block": {
-      "header": {
-        "height": 18,
-        "prev_block_hash": "90B8F71E96E60BBC3D52EF4FBEBA9E589D717683CE4BB7C34CCA8305235EDD53",
-        "transactions_hash": null,
-        "creation_time_ms": 1742405891677,
-        "view_change_index": 0
-      },
-      "status": "Approved"
-    }
-  }
-}
-{
-  "Pipeline": {
-    "Block": {
-      "header": {
-        "height": 18,
-        "prev_block_hash": "90B8F71E96E60BBC3D52EF4FBEBA9E589D717683CE4BB7C34CCA8305235EDD53",
-        "transactions_hash": null,
-        "creation_time_ms": 1742405891677,
-        "view_change_index": 0
-      },
-      "status": "Committed"
-    }
-  }
-}
-{
-  "Pipeline": {
-    "Block": {
-      "header": {
-        "height": 18,
-        "prev_block_hash": "90B8F71E96E60BBC3D52EF4FBEBA9E589D717683CE4BB7C34CCA8305235EDD53",
-        "transactions_hash": null,
-        "creation_time_ms": 1742405891677,
-        "view_change_index": 0
-      },
-      "status": "Applied"
-    }
-  }
-}
-
 
 ```
 

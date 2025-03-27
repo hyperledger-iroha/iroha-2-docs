@@ -1,18 +1,14 @@
 # JavaScript/TypeScript Guide
 
-::: info
-
-This guide targets `@iroha2/client` and `@iroha/data-model` version
-**`^5.0`**, which targets Iroha 2 stable (`2.0.0-pre-rc.13`, `c4af68c4f7959b154eb5380aa93c894e2e63fe4e`).
-
-:::
+**TBA**
 
 ::: info
 
-This guide assumes you are familiar with Node.js and NPM ecosystem.
+This guide is being revised. For the time being, please consult the up-to-date [JavaScript SDK reference](https://jsr.io/@iroha).
 
 :::
 
+<!-- TODO: update 
 ## 1. Client Installation
 
 The Iroha 2 JavaScript library consists of multiple packages:
@@ -491,3 +487,4 @@ added to the blockchain.
 Here is an example of how to listen to the block stream:
 
 <<<@/snippets/js-sdk-9-blocks-stream.ts
+-->
