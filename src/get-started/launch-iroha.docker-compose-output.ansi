@@ -1,39 +1,60 @@
-[38;5;33m[+] Running 9/9[0m
- [38;5;34m✔[0m irohad2 Pulled                                                          [38;5;33m6.3s[0m
- [38;5;34m✔[0m irohad0 Pulled                                                          [38;5;33m6.3s[0m
- [38;5;34m✔[0m irohad3 Pulled                                                          [38;5;33m6.3s[0m
+[38;5;33m[+] Running 12/12[0m
  [38;5;34m✔[0m irohad1 Pulled                                                          [38;5;33m6.3s[0m
-   [38;5;34m✔[0m ec99f8b99825 Already exists                                           [38;5;33m0.0s[0m
-   [38;5;34m✔[0m d3a0e7f5d646 Pull complete                                            [38;5;33m1.4s[0m
-   [38;5;34m✔[0m 1b1d5514cbbf Pull complete                                            [38;5;33m2.1s[0m
-   [38;5;34m✔[0m 86e58c28036c Pull complete                                            [38;5;33m2.3s[0m
-   [38;5;34m✔[0m 0d3b3367a826 Pull complete                                            [38;5;33m2.5s[0m
+ [38;5;34m✔[0m irohad3 Pulled                                                          [38;5;33m6.3s[0m
+ [38;5;34m✔[0m irohad0 Pulled                                                          [38;5;33m6.3s[0m
+   [38;5;34m✔[0m 6e909acdb790 Pull complete                                            [38;5;33m1.4s[0m
+   [38;5;34m✔[0m eb2adbb7f73c Pull complete                                            [38;5;33m2.1s[0m
+   [38;5;34m✔[0m 7f0f136a61ae Pull complete                                            [38;5;33m2.3s[0m
+   [38;5;34m✔[0m b614513eeeb6 Pull complete                                            [38;5;33m2.5s[0m
+   [38;5;34m✔[0m b09c8f066ef8 Pull complete                                            [38;5;33m1.4s[0m
+   [38;5;34m✔[0m 01b627bf2a6b Pull complete                                            [38;5;33m2.1s[0m
+   [38;5;34m✔[0m dfc5b0ff1db4 Pull complete                                            [38;5;33m2.3s[0m
+   [38;5;34m✔[0m 3e7e38b40299 Pull complete                                            [38;5;33m2.5s[0m
+ [38;5;34m✔[0m irohad2 Pulled                                                          [38;5;33m6.3s[0m
 [38;5;33m[+] Running 5/5[0m
- [38;5;34m✔[0m Network swarm_default      [38;5;34mCreated[0m                                      [38;5;33m0.1s[0m
- [38;5;34m✔[0m Container swarm-irohad3-1  [38;5;34mCreated[0m                                      [38;5;33m0.4s[0m
- [38;5;34m✔[0m Container swarm-irohad0-1  [38;5;34mCreated[0m                                      [38;5;33m0.5s[0m
- [38;5;34m✔[0m Container swarm-irohad1-1  [38;5;34mCreated[0m                                      [38;5;33m0.4s[0m
- [38;5;34m✔[0m Container swarm-irohad2-1  [38;5;34mCreated[0m                                      [38;5;33m0.5s[0m
+ [38;5;34m✔[0m Network defaults_default      [38;5;34mCreated[0m                                      [38;5;33m0.1s[0m
+ [38;5;34m✔[0m Container defaults-irohad1-1  [38;5;34mCreated[0m                                      [38;5;33m0.4s[0m
+ [38;5;34m✔[0m Container defaults-irohad0-1  [38;5;34mCreated[0m                                      [38;5;33m0.5s[0m
+ [38;5;34m✔[0m Container defaults-irohad2-1  [38;5;34mCreated[0m                                      [38;5;33m0.4s[0m
+ [38;5;34m✔[0m Container defaults-irohad3-1  [38;5;34mCreated[0m                                      [38;5;33m0.5s[0m
 Attaching to irohad0-1, irohad1-1, irohad2-1, irohad3-1
-[38;5;38mirohad0-1  |[0m 2024-07-15T05:51:39.204411Z  INFO irohad: Hyperledgerいろは2にようこそ！(translation) Welcome to Hyperledger Iroha! version="2.0.0-pre-rc.21" git_commit_sha="185ef76" peer=ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@@0.0.0.0:1337 chain=00000000-0000-0000-0000-000000000000 listening_on=0.0.0.0:8080
-[38;5;38mirohad0-1  |[0m 2024-07-15T05:51:39.204729Z  INFO init:start{listen_addr=WithOrigin { value: 0.0.0.0:1337, origin: Env { id: ParameterId(network.address), var: "P2P_ADDRESS" } } idle_timeout=60s}: iroha_p2p::network: Network bound to listener
-[38;5;38mirohad0-1  |[0m 2024-07-15T05:51:39.209730Z  INFO init:kura_init: iroha_core::kura: Kura init complete mode=Strict block_count=0
-[38;5;38mirohad0-1  |[0m 2024-07-15T05:51:39.210006Z  INFO init: irohad: Didn't find a state snapshot; creating an empty state
-[38;5;38mirohad0-1  |[0m 2024-07-15T05:51:39.214759Z  INFO init: irohad: Telemetry not started due to absent configuration
-[38;5;38mirohad0-1  |[0m 2024-07-15T05:51:39.215234Z  INFO iroha_core::sumeragi: Sumeragi has finished loading blocks and setting up the state
-
+irohad1-1  | 2025-03-19T16:47:34.299044Z  INFO irohad: Hyperledgerいろは2にようこそ！(translation) Welcome to Hyperledger Iroha! version="2.0.0-rc.1.0" git_commit_sha="8f71132" peer=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@0.0.0.0:1338 chain=00000000-0000-0000-0000-000000000000 listening_on=0.0.0.0:8081
+irohad1-1  | 2025-03-19T16:47:34.311653Z  INFO start: iroha_core::kura: Kura init complete mode=Strict block_count=0
+irohad1-1  | 2025-03-19T16:47:34.312089Z  INFO start: irohad: Didn't find a state snapshot; creating an empty state
+irohad1-1  | 2025-03-19T16:47:34.318511Z  INFO start:start{listen_addr=WithOrigin { value: 0.0.0.0:1338, origin: Env { id: ParameterId(network.address), var: "P2P_ADDRESS" } } public_address=WithOrigin { value: SocketAddrHost { host: "irohad1", port: 1338 }, origin: Env { id: ParameterId(network.public_address), var: "P2P_PUBLIC_ADDRESS" } } idle_timeout=60s}: iroha_p2p::network: Network bound to listener
+irohad1-1  | 2025-03-19T16:47:34.318715Z  INFO start: irohad: Telemetry not started due to absent configuration
+irohad1-1  | 2025-03-19T16:47:34.318997Z  INFO start: iroha_core::sumeragi: Sumeragi has finished loading blocks and setting up the state
+irohad1-1  | 2025-03-19T16:47:34.319410Z  INFO consensus: iroha_core::sumeragi::main_loop: Listening for genesis... peer_id=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@0.0.0.0:1338 role=Leader
+irohad1-1  | 2025-03-19T16:47:34.322874Z  WARN run{listen_addr=0.0.0.0:1338 public_key=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D}:run{conn_id=2}: iroha_p2p::peer::run: Failure during handshake. error=Io(Os { code: 111, kind: ConnectionRefused, message: "Connection refused" })
+irohad1-1  | 2025-03-19T16:47:34.323968Z  WARN run{listen_addr=0.0.0.0:1338 public_key=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D}:run{conn_id=1}: iroha_p2p::peer::run: Failure during handshake. error=Io(Os { code: 111, kind: ConnectionRefused, message: "Connection refused" })
+irohad1-1  | 2025-03-19T16:47:34.324995Z  WARN run{listen_addr=0.0.0.0:1338 public_key=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D}:run{conn_id=0}: iroha_p2p::peer::run: Failure during handshake. error=Io(Os { code: 111, kind: ConnectionRefused, message: "Connection refused" })
 ...
 
-[0;34m irohad2-1 [0m | [0;2m2024-07-15T05:51:39.332824Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Listening for genesis... peer_id=[0;36med01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@@0.0.0.0:1339[0m role=[0;31mLeader[0m
-[0;34m irohad0-1 [0m | [0;2m2024-07-15T05:51:40.478714Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=[0;36med0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@@0.0.0.0:1337[0m prev_role=[0;31mProxyTail[0m next_role=[0;31mValidatingPeer[0m block_hash=[0;36ma638001762e365280677a5407bac9adaa119c8cb82c8afe377b72f85e71ed4a9[0m new_height=[0;31m1[0m
-[0;34m irohad0-1 [0m | [0;2m2024-07-15T05:51:40.478761Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Sumeragi initialized peer_id=[0;36med0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@@0.0.0.0:1337[0m role=[0;31mValidatingPeer[0m
-[0;34m irohad2-1 [0m | [0;2m2024-07-15T05:51:42.085522Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=[0;36med01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@@0.0.0.0:1339[0m prev_role=[0;31mLeader[0m next_role=[0;31mProxyTail[0m block_hash=[0;36ma638001762e365280677a5407bac9adaa119c8cb82c8afe377b72f85e71ed4a9[0m new_height=[0;31m1[0m
-[0;34m irohad2-1 [0m | [0;2m2024-07-15T05:51:42.085585Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Sumeragi initialized peer_id=[0;36med01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@@0.0.0.0:1339[0m role=[0;31mProxyTail[0m
-[0;34m irohad1-1 [0m | [0;2m2024-07-15T05:51:42.109788Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=[0;36med01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@@0.0.0.0:1338[0m prev_role=[0;31mValidatingPeer[0m next_role=[0;31mLeader[0m block_hash=[0;36ma638001762e365280677a5407bac9adaa119c8cb82c8afe377b72f85e71ed4a9[0m new_height=[0;31m1[0m
-[0;34m irohad1-1 [0m | [0;2m2024-07-15T05:51:42.109858Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Sumeragi initialized peer_id=[0;36med01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@@0.0.0.0:1338[0m role=[0;31mLeader[0m
-[0;34m irohad3-1 [0m | [0;2m2024-07-15T05:51:42.117040Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=[0;36med0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@@0.0.0.0:1340[0m prev_role=[0;31mObservingPeer[0m next_role=[0;31mObservingPeer[0m block_hash=[0;36ma638001762e365280677a5407bac9adaa119c8cb82c8afe377b72f85e71ed4a9[0m new_height=[0;31m1[0m
-[0;34m irohad3-1 [0m | [0;2m2024-07-15T05:51:42.117083Z[0m [0;32m INFO[0m consensus: iroha_core::sumeragi::main_loop: Sumeragi initialized peer_id=[0;36med0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@@0.0.0.0:1340[0m role=[0;31mObservingPeer[0m
-[0;34m irohad0-1 [0m | [0;2m2024-07-15T05:52:39.238596Z[0m [0;32m INFO[0m iroha_core::snapshot: Successfully created a snapshot of state at_height=[0;31m1[0m
-[0;34m irohad1-1 [0m | [0;2m2024-07-15T05:52:39.266902Z[0m [0;32m INFO[0m iroha_core::snapshot: Successfully created a snapshot of state at_height=[0;31m1[0m
-[0;34m irohad3-1 [0m | [0;2m2024-07-15T05:52:39.276634Z[0m [0;32m INFO[0m iroha_core::snapshot: Successfully created a snapshot of state at_height=[0;31m1[0m
-[0;34m irohad2-1 [0m | [0;2m2024-07-15T05:52:39.349409Z[0m [0;32m INFO[0m iroha_core::snapshot: Successfully created a snapshot of state at_height=[0;31m1[0m
+irohad0-1  | 2025-03-19T16:47:34.617274Z  INFO irohad: Hyperledgerいろは2にようこそ！(translation) Welcome to Hyperledger Iroha! version="2.0.0-rc.1.0" git_commit_sha="8f71132" peer=ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@0.0.0.0:1337 chain=00000000-0000-0000-0000-000000000000 listening_on=0.0.0.0:8080
+irohad0-1  | 2025-03-19T16:47:34.625214Z  INFO start: iroha_core::kura: Kura init complete mode=Strict block_count=0
+irohad0-1  | 2025-03-19T16:47:34.625501Z  INFO start: irohad: Didn't find a state snapshot; creating an empty state
+irohad0-1  | 2025-03-19T16:47:34.634539Z  INFO start:start{listen_addr=WithOrigin { value: 0.0.0.0:1337, origin: Env { id: ParameterId(network.address), var: "P2P_ADDRESS" } } public_address=WithOrigin { value: SocketAddrHost { host: "irohad0", port: 1337 }, origin: Env { id: ParameterId(network.public_address), var: "P2P_PUBLIC_ADDRESS" } } idle_timeout=60s}: iroha_p2p::network: Network bound to listener
+irohad0-1  | 2025-03-19T16:47:34.634653Z  INFO start: irohad: Telemetry not started due to absent configuration
+irohad0-1  | 2025-03-19T16:47:34.634835Z  INFO start: iroha_core::sumeragi: Sumeragi has finished loading blocks and setting up the state
+irohad0-1  | 2025-03-19T16:47:38.410008Z  INFO consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@0.0.0.0:1337 prev_role=ProxyTail next_role=ValidatingPeer block_hash=07d640aaff537fb03c4e437604511c627d3d4b455aaae491fee7fafafdf03dab new_height=1
+irohad0-1  | 2025-03-19T16:47:38.410100Z  INFO consensus: iroha_core::sumeragi::main_loop: Sumeragi initialized peer_id=ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@0.0.0.0:1337 role=ValidatingPeer
+irohad2-1  | 2025-03-19T16:47:38.759337Z  INFO consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@0.0.0.0:1339 prev_role=Leader next_role=ProxyTail block_hash=07d640aaff537fb03c4e437604511c627d3d4b455aaae491fee7fafafdf03dab new_height=1
+irohad2-1  | 2025-03-19T16:47:38.759378Z  INFO consensus: iroha_core::sumeragi::main_loop: Sumeragi initialized peer_id=ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@0.0.0.0:1339 role=ProxyTail
+irohad1-1  | 2025-03-19T16:47:38.813375Z  INFO consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@0.0.0.0:1338 prev_role=ValidatingPeer next_role=Leader block_hash=07d640aaff537fb03c4e437604511c627d3d4b455aaae491fee7fafafdf03dab new_height=1
+irohad1-1  | 2025-03-19T16:47:38.813454Z  INFO consensus: iroha_core::sumeragi::main_loop: Sumeragi initialized peer_id=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@0.0.0.0:1338 role=Leader
+irohad3-1  | 2025-03-19T16:47:38.867395Z  INFO consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@0.0.0.0:1340 prev_role=ObservingPeer next_role=ObservingPeer block_hash=07d640aaff537fb03c4e437604511c627d3d4b455aaae491fee7fafafdf03dab new_height=1
+irohad3-1  | 2025-03-19T16:47:38.867467Z  INFO consensus: iroha_core::sumeragi::main_loop: Sumeragi initialized peer_id=ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@0.0.0.0:1340 role=ObservingPeer
+irohad1-1  | 2025-03-19T16:47:40.816265Z  INFO consensus: iroha_core::sumeragi::main_loop: Block created peer_id=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@0.0.0.0:1338 block_hash=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71 txns=0 view_change_index=0
+irohad2-1  | 2025-03-19T16:47:40.820115Z  INFO consensus: iroha_core::sumeragi::main_loop: Block received peer_id=ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@0.0.0.0:1339 role=ProxyTail block=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71
+irohad0-1  | 2025-03-19T16:47:40.822124Z  INFO consensus: iroha_core::sumeragi::main_loop: Block received peer_id=ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@0.0.0.0:1337 role=ValidatingPeer block=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71
+irohad0-1  | 2025-03-19T16:47:40.822431Z  INFO consensus: iroha_core::sumeragi::main_loop: Voted for the block peer_id=ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@0.0.0.0:1337 role=ValidatingPeer block=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71
+irohad3-1  | 2025-03-19T16:47:40.822112Z  INFO consensus: iroha_core::sumeragi::main_loop: Block received peer_id=ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@0.0.0.0:1340 role=ObservingPeer block=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71
+irohad2-1  | 2025-03-19T16:47:40.826138Z  INFO consensus: iroha_core::sumeragi::main_loop: Received block signatures peer_id=ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@0.0.0.0:1339 role=ProxyTail block=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71
+irohad2-1  | 2025-03-19T16:47:40.826729Z  INFO consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@0.0.0.0:1339 prev_role=ProxyTail next_role=ValidatingPeer block_hash=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71 new_height=2
+irohad1-1  | 2025-03-19T16:47:40.828159Z  INFO consensus: iroha_core::sumeragi::main_loop: Received block committed peer_id=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@0.0.0.0:1338 role=Leader block=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71
+irohad0-1  | 2025-03-19T16:47:40.828111Z  INFO consensus: iroha_core::sumeragi::main_loop: Received block committed peer_id=ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@0.0.0.0:1337 role=ValidatingPeer block=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71
+irohad3-1  | 2025-03-19T16:47:40.828106Z  INFO consensus: iroha_core::sumeragi::main_loop: Received block committed peer_id=ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@0.0.0.0:1340 role=ObservingPeer block=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71
+irohad1-1  | 2025-03-19T16:47:40.828732Z  INFO consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@0.0.0.0:1338 prev_role=Leader next_role=ProxyTail block_hash=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71 new_height=2
+irohad0-1  | 2025-03-19T16:47:40.828423Z  INFO consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D@0.0.0.0:1337 prev_role=ValidatingPeer next_role=Leader block_hash=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71 new_height=2
+irohad3-1  | 2025-03-19T16:47:40.828522Z  INFO consensus: iroha_core::sumeragi::main_loop: Block committed peer_id=ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@0.0.0.0:1340 prev_role=ObservingPeer next_role=ObservingPeer block_hash=27d21778eeb2c70bdf471c9ee102246438ce7531b4a31e6955044761fafe1f71 new_height=2
+

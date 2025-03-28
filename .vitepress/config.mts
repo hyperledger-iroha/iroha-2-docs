@@ -60,6 +60,10 @@ function sidebarStart(): DefaultTheme.SidebarItem[] {
           text: 'Iroha 2 vs. Iroha 1',
           link: '/get-started/iroha-2',
         },
+        {
+          text: 'Join Iroha 2 Public Testnet',
+          link: 'https://wiki.sora.org/running-a-sora-testnet-node.html',
+        },
       ],
     },
   ]
@@ -348,6 +352,10 @@ function sidebarAPI(): DefaultTheme.SidebarItem[] {
         {
           text: 'Permissions',
           link: '/reference/permissions.md',
+        },
+        {
+          text: 'Binaries',
+          link: '/reference/binaries.md',
         },
       ],
     },

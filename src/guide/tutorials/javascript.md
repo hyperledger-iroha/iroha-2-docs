@@ -1,17 +1,12 @@
 # JavaScript/TypeScript Guide
 
+<!-- TODO: update -->
 ::: info
 
-This guide targets `@iroha2/client` and `@iroha/data-model` version
-**`^5.0`**, which targets Iroha 2 stable (`2.0.0-pre-rc.13`, `c4af68c4f7959b154eb5380aa93c894e2e63fe4e`).
+This guide is being revised. For the time being, please consult the up-to-date [JavaScript SDK reference](https://jsr.io/@iroha).
 
 :::
 
-::: info
-
-This guide assumes you are familiar with Node.js and NPM ecosystem.
-
-:::
 
 ## 1. Client Installation
 
@@ -403,7 +398,7 @@ in this guide!
 In this guide, we are roughly recreating the project that is a part of
 `iroha-javascript` integration tests. If you want to see the full project,
 please refer to the
-[`@iroha2/client-test-web` sources](https://github.com/hyperledger-iroha/iroha-javascript/tree/main/packages/client/test/integration/test-web).
+[`@iroha2/client-test-web` sources](https://github.com/hyperledger-iroha/iroha-javascript/tree/main/tests/browser).
 
 :::
 
