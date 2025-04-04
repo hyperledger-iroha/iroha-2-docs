@@ -3,8 +3,13 @@ import { match, P } from 'ts-pattern'
 // https://github.com/vuejs/vitepress/blob/b16340acbd3c60fee023daadb0ec5a0292060a1e/src/node/markdown/markdown.ts#L13
 import { slugify } from '@mdit-vue/shared'
 
+function typeSlug(type: string) {
+  if (type === '()') return `unit`
+  return slugify(type)
+}
+
 function segmentHeading(content: string) {
-  return `## ${code(content)}`
+  return `## ${code(content)} {#${typeSlug(content)}}`
 }
 
 function segmentPropNameOnly(prop: string) {
@@ -32,7 +37,7 @@ function tyMdLink(ty: string) {
       'String',
       (x) => `${code(x)}`,
     )
-    .otherwise((ty) => `[${code(ty)}](#${slugify(ty)})`)
+    .otherwise((ty) => `[${code(ty)}](#${typeSlug(ty)})`)
 }
 
 function code(content: string) {
@@ -97,7 +102,14 @@ function renderSegment(segment: Segment, segmentName: string): string {
         segmentType('Enum'),
         segmentPropNameOnly('Variants'),
         table(
-          [{ title: 'Variant name', align: 'right' }, { title: 'Variant value', align: 'left' }, 'Discriminant'],
+          [
+            { title: 'Variant name', align: 'right' },
+            {
+              title: 'Variant value',
+              align: 'left',
+            },
+            'Discriminant',
+          ],
           variants.map((x) => [code(x.tag), x.type ? tyMdLink(x.type) : `&mdash;`, String(x.discriminant)]),
           { indent: '  ' },
         ),
