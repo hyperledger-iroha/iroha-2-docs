@@ -69,7 +69,6 @@ with the `telemetry` feature enabled.
 - **Encoding**: `JSON`
 - **Endpoint**: `/api_version`
 
-
 #### Responses
 
 | Code | Response | Description                                                                                 |
@@ -259,20 +258,26 @@ Healthy
 
 #### Requests
 
-This endpoint expects [`SignedQuery`](/reference/data-model-schema#signedquery) as a request body.
+This endpoint expects [`SignedQuery`](/reference/data-model-schema#signedquery)
+as a request body.
 
 #### Responses
 
-| Code | Response                        | Body                                                                                               | Description                                                                |
-| :--: | ------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| 200  | Success                         | [`QueryResponse`](/reference/data-model-schema#queryresponse)   | Successful query request                                                   |
-| 400  | Conversion Error                | [`QueryExecutionFail::Conversion(String)`](/reference/data-model-schema#queryexecutionfail)        | Invalid asset query for the actual asset type                              |
-| 400  | Cursor Error                    | [`QueryExecutionFail::UnknownCursor`](/reference/data-model-schema#queryexecutionfail)             | An invalid cursor was provided in the batch request                        |
-| 400  | FetchSizeTooBig Error           | [`QueryExecutionFail::FetchSizeTooBig`](/reference/data-model-schema#queryexecutionfail)           | Fetch size specified in the query request is too large                     |
-| 400  | InvalidSingularParameters Error | [`QueryExecutionFail::InvalidSingularParameters`](/reference/data-model-schema#queryexecutionfail) | Specified query parameters are not applicable to the (singular) query type |
-| 401  | Signature Error                 | [`QueryExecutionFail::Signature(String)`](/reference/data-model-schema#queryexecutionfail)         | The signature on the query is incorrect                                    |
-| 403  | Permission Error                | [`QueryExecutionFail::Permission(String)`](/reference/data-model-schema#queryexecutionfail)        | The user does not have permission to execute this query                    |
-| 404  | Find Error                      | [`QueryExecutionFail::Find(FindError)`](/reference/data-model-schema#queryexecutionfail)           | The queried object was not found                                           |
+- 200
+  - [`QueryResponse`](/reference/data-model-schema#queryresponse)
+  - Successful query request
+
+| Code | Response                         | Body                                                            | Description                                                                |
+| :--: | -------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 200  | Success                          | [`QueryResponse`](/reference/data-model-schema#queryresponse)   | Successful query request                                                   |
+| 400  | Conversion Error                 | [`ValidationFail`](/reference/data-model-schema#validationfail) | Invalid asset query for the actual asset type                              |
+| 400  | CursorMismatch/CursorDone Errors | [`ValidationFail`](/reference/data-model-schema#validationfail) | An invalid cursor was provided in the batch request                        |
+| 400  | FetchSizeTooBig Error            | [`ValidationFail`](/reference/data-model-schema#validationfail) | Fetch size specified in the query request is too large                     |
+| 400  | InvalidSingularParameters Error  | [`ValidationFail`](/reference/data-model-schema#validationfail) | Specified query parameters are not applicable to the (singular) query type |
+| 400  | CapacityLimit Error              | [`ValidationFail`](/reference/data-model-schema#validationfail) | Reached the limit of parallel queries                                      |
+| 401  | Signature Error                  | [`ValidationFail`](/reference/data-model-schema#validationfail) | The signature on the query is incorrect                                    |
+| 403  | Permission Error                 | [`ValidationFail`](/reference/data-model-schema#validationfail) | The user does not have permission to execute this query                    |
+| 404  | Find Error                       | [`ValidationFail`](/reference/data-model-schema#validationfail) | The queried object was not found                                           |
 
 ::: info
 
@@ -282,9 +287,17 @@ Rust's [PartialOrd](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html) and
 
 :::
 
+::: tip
+
+See [`QueryExecutionFail`](/reference/data-model-schema#queryexecutionfail) type
+for details of the errors.
+
+:::
+
 ### Account Not Found 404
 
-The following table shows which error you will get depending on which prerequisite object could not be found
+The following table shows which error you will get depending on which
+prerequisite object could not be found
 [`FindError`](/reference/data-model-schema#finderror):
 
 | Domain | Account | [`FindError`](/reference/data-model-schema#finderror)                     |
@@ -294,7 +307,8 @@ The following table shows which error you will get depending on which prerequisi
 
 ### Asset Not Found 404
 
-The following table shows which error you will get depending on which prerequisite object could not be found
+The following table shows which error you will get depending on which
+prerequisite object could not be found
 [`FindError`](/reference/data-model-schema#finderror):
 
 | Domain | Account | Asset Definition | Asset | [`FindError`](/reference/data-model-schema#finderror)                                     |
