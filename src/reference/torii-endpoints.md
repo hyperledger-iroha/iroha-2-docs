@@ -279,7 +279,7 @@ A `GET` request to the endpoint.
 
 #### Requests
 
-This endpoint expects requests with two shapes:
+This endpoint expects requests in two formats:
 
 Start a query:
 
@@ -317,7 +317,7 @@ Rust's [PartialOrd](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html) and
 
 ### Account Not Found 404
 
-Whether each prerequisite object was found and
+The following table shows which error you will get depending on which prerequisite object could not be found
 [`FindError`](/reference/data-model-schema#finderror):
 
 | Domain | Account | [`FindError`](/reference/data-model-schema#finderror)                     |
@@ -327,7 +327,7 @@ Whether each prerequisite object was found and
 
 ### Asset Not Found 404
 
-Whether each prerequisite object was found and
+The following table shows which error you will get depending on which prerequisite object could not be found
 [`FindError`](/reference/data-model-schema#finderror):
 
 | Domain | Account | Asset Definition | Asset | [`FindError`](/reference/data-model-schema#finderror)                                     |
