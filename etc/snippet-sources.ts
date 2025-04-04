@@ -1,5 +1,5 @@
 import type { SnippetSourceDefinition } from './types'
-import { IROHA_JAVA_REV_DEV, IROHA_JS_REV, IROHA_REV_DEV } from './meta'
+import { IROHA_JAVA_REV_DEV, IROHA_JS_REV, IROHA_RC_1 } from './meta'
 import { render as renderDataModelSchema } from './schema'
 
 // *****
@@ -102,11 +102,11 @@ const javascriptSnippets = [
 
 export default [
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/MAINTAINERS.md`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/MAINTAINERS.md`,
     filename: 'iroha-maintainers.md',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/docs/source/references/schema.json`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/docs/source/references/schema.json`,
     filename: `data-model-schema.md`,
     transform: (source) => {
       return renderDataModelSchema(JSON.parse(source))
@@ -116,18 +116,18 @@ export default [
     src: './src/example_code/lorem.rs',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/client.template.toml`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/docs/source/references/client.template.toml`,
     filename: 'client-cli-config-template.toml',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/peer.template.toml`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/docs/source/references/peer.template.toml`,
     filename: 'peer-config-template.toml',
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/configs/swarm/genesis.json`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/defaults/genesis.json`,
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV_DEV}/client/examples/tutorial.rs`,
+    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/crates/iroha/examples/tutorial.rs`,
     filename: 'tutorial-snippets.rs',
   },
 

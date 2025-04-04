@@ -69,9 +69,6 @@ with the `telemetry` feature enabled.
 - **Encoding**: `JSON`
 - **Endpoint**: `/api_version`
 
-#### Requests
-
-A `GET` request to the endpoint.
 
 #### Responses
 
@@ -81,8 +78,8 @@ A `GET` request to the endpoint.
 
 **Example**:
 
-```json
-"1"
+```
+1
 ```
 
 ::: info
@@ -123,10 +120,6 @@ they are added to the blockchain.
 - **Method**: `GET`
 - **Encoding**: `JSON`
 - **Endpoint**: `/configuration`
-
-#### Requests
-
-A `GET` request to the endpoint.
 
 #### Responses
 
@@ -196,15 +189,6 @@ GitHub issue:\
 | :--: | -------- | ------------------------------------------------------------------------------- |
 | 202  | Accepted | The request to update the configuration is accepted and is due to be processed. |
 
-::: tip Guarantees
-
-A successful configuration update does not guarantee that the configuration is
-indeed updated. While a follow-up
-[Configuration / Retrieve](#configuration-retrieve) request will return updated
-values, the actual update is performed asynchronously.
-
-:::
-
 ## Events
 
 - **Protocols**: `HTTP` upgraded to `WebSocket`
@@ -254,10 +238,6 @@ request, after which the server sends an
 - **Encoding**: `JSON`
 - **Endpoint**: `/health`
 
-#### Requests
-
-A `GET` request to the endpoint.
-
 #### Responses
 
 | Code | Response      | Description                                                    |
@@ -266,8 +246,8 @@ A `GET` request to the endpoint.
 
 **Example**:
 
-```json
-"Healthy"
+```
+Healthy
 ```
 
 ## Query
@@ -279,26 +259,13 @@ A `GET` request to the endpoint.
 
 #### Requests
 
-This endpoint expects requests in two formats:
-
-Start a query:
-
-- **Body**: [`SignedQuery`](/reference/data-model-schema#signedquery)
-
-OR
-
-Get the next batch of a previously started query:
-
-- **Parameters**:
-  - `cursor` - specifies a cursor previously returned as part of query response
-
-Request
+This endpoint expects [`SignedQuery`](/reference/data-model-schema#signedquery) as a request body.
 
 #### Responses
 
 | Code | Response                        | Body                                                                                               | Description                                                                |
 | :--: | ------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| 200  | Success                         | [`BatchedResponse<QueryOutputBox>`](/reference/data-model-schema#batchedresponse-queryoutputbox)   | Successful query request                                                   |
+| 200  | Success                         | [`QueryResponse`](/reference/data-model-schema#queryresponse)   | Successful query request                                                   |
 | 400  | Conversion Error                | [`QueryExecutionFail::Conversion(String)`](/reference/data-model-schema#queryexecutionfail)        | Invalid asset query for the actual asset type                              |
 | 400  | Cursor Error                    | [`QueryExecutionFail::UnknownCursor`](/reference/data-model-schema#queryexecutionfail)             | An invalid cursor was provided in the batch request                        |
 | 400  | FetchSizeTooBig Error           | [`QueryExecutionFail::FetchSizeTooBig`](/reference/data-model-schema#queryexecutionfail)           | Fetch size specified in the query request is too large                     |
