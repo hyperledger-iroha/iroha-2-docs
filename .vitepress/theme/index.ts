@@ -23,4 +23,4 @@ export default {
       defineAsyncComponent(async () => import('./components/CompatibilityMatrixTableIcon.vue')),
     )
   },
-}
+} satisfies import('vitepress').Theme

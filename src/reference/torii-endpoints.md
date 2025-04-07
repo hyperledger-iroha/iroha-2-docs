@@ -3,10 +3,10 @@
 ::: tip About Parity SCALE Codec
 
 Messages for certain `TORII` operations are encoded with the Parity
-<abbr title="Simple Concatenated Aggregate Little-Endian">SCALE</abbr>
-Codec (`SCALE`) commonly used with the
-[Parity Substrate](https://www.parity.io/technologies/substrate/)
-blockchain framework, and other blockchains utilizing it.
+<abbr title="Simple Concatenated Aggregate Little-Endian">SCALE</abbr> Codec
+(`SCALE`) commonly used with the
+[Parity Substrate](https://www.parity.io/technologies/substrate/) blockchain
+framework, and other blockchains utilizing it.
 
 For more information on `SCALE`, see the
 [Substrate Documentation: Type encoding (SCALE)](https://docs.substrate.io/reference/scale-codec/)
@@ -17,11 +17,11 @@ article and its
 
 :::
 
-Torii (Japanese: 鳥居 — Shinto shrine gateway) is the Iroha 2 module in
-charge of handling `HTTP` and `WebSocket` requests. It is the main
-<abbr title="Application Programming Interface">API</abbr> for interacting
-with Iroha 2. Such interactions include sending transactions, making
-queries, listening for blocks stream, etc.
+Torii (Japanese: 鳥居 — Shinto shrine gateway) is the Iroha 2 module in charge
+of handling `HTTP` and `WebSocket` requests. It is the main
+<abbr title="Application Programming Interface">API</abbr> for interacting with
+Iroha 2. Such interactions include sending transactions, making queries,
+listening for blocks stream, etc.
 
 <!-- TODO: Update the following as part of PR #397: https://github.com/hyperledger-iroha/iroha-2-docs/pull/397
 
@@ -46,12 +46,14 @@ To establish two-way communication with the `TORII` endpoints, the following add
 
 -->
 
+[[toc]]
+
 ## API Version
 
 ::: info
 
-This operation requires the specific Iroha node being requested to be
-compiled with the `telemetry` feature enabled.
+This operation requires the specific Iroha node being requested to be compiled
+with the `telemetry` feature enabled.
 
 <!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
 
@@ -62,10 +64,6 @@ compiled with the `telemetry` feature enabled.
 - **Encoding**: `JSON`
 - **Endpoint**: `/api_version`
 
-#### Requests
-
-A `GET` request to the endpoint.
-
 #### Responses
 
 |  Code   | Response | Description                                                                         |
@@ -75,16 +73,16 @@ A `GET` request to the endpoint.
 
 **Example**:
 
-```json
-"1"
+```
+1
 ```
 
 ::: info
 
 The API version is retrieved from and is the same as the version of the
-[genesis block](genesis.md), which means that at least a minimal subnet of
-four peers must be running, and the genesis block must already be submitted
-at the time of the request.
+[genesis block](../guide/configure/genesis.md), which means that at least a
+minimal subnet of four peers must be running, and the genesis block must already
+be submitted at the time of the request.
 
 :::
 
@@ -96,9 +94,9 @@ at the time of the request.
 
 #### Handshake
 
-Since the `/block/stream` endpoint handles continuous two-way data
-exchange, a `WebSocket` handshake between the client and server must first
-be performed to initiate communication with this endpoint.
+Since the `/block/stream` endpoint handles continuous two-way data exchange, a
+`WebSocket` handshake between the client and server must first be performed to
+initiate communication with this endpoint.
 
 #### Data Exchange
 
@@ -106,10 +104,10 @@ After establishing a `WebSocket` connection, the client must send a
 [`BlockSubscriptionRequest`](/reference/data-model-schema#blocksubscriptionrequest)
 request with the starting block number provided (i.e., the `height` value).
 Then, upon sending the confirmation and
-[`BlockMessage`](/reference/data-model-schema#blockmessage) messages, the
-server starts streaming all of the blocks, beginning with the block
-specified with `height` up to the most recent one, and then continues to
-stream new blocks as they are added to the blockchain.
+[`BlockMessage`](/reference/data-model-schema#blockmessage) messages, the server
+starts streaming all of the blocks, beginning with the block specified with
+`height` up to the most recent one, and then continues to stream new blocks as
+they are added to the blockchain.
 
 ## Configuration / Retrieve
 
@@ -117,16 +115,6 @@ stream new blocks as they are added to the blockchain.
 - **Method**: `GET`
 - **Encoding**: `JSON`
 - **Endpoint**: `/configuration`
-
-#### Requests
-
-A `GET` request to the endpoint.
-
-Via this endpoint, the client first provides the starting block number
-(i.e. height) in the subscription request. After sending the confirmation
-message, the server starts streaming all the blocks from the given block
-number up to the current block and continues to stream blocks as they are
-added to the blockchain.
 
 #### Responses
 
@@ -146,9 +134,9 @@ added to the blockchain.
 
 ::: info
 
-The subset of configuration parameters returned by this operation is equal
-to the one accepted by the [Configuration / Update](#configuration-update)
-operation, i.e., it only contains the [`logger.level`](./peer-config/params#param-logger-level) parameter as of now.
+The subset of configuration parameters returned by this operation is equal to
+the one accepted by the [Configuration / Update](#configuration-update)
+operation, i.e., it only contains the `logger.level` parameter as of now.
 
 :::
 
@@ -161,9 +149,24 @@ operation, i.e., it only contains the [`logger.level`](./peer-config/params#para
 
 #### Requests
 
-This endpoint expects a subset of configuration parameters serialized into
-JSON format. Currently, it only supports dynamic updating of the
-[`logger.level`](./peer-config/params#param-logger-level).
+This endpoint expects a subset of configuration parameters serialized into JSON
+format. Currently, it only supports dynamic updating of the `logger.level`
+parameter.
+
+::: info
+
+The list of all accepted values is currently unavailable and will be a part of
+the configuration reference that is still
+<abbr title="Work in Progress">WIP</abbr>.
+
+Until then, to get assistance with the acceptable values and their definitions,
+consult [Receive Support](/help/) for ways to contact us.
+
+The progress on the configuration reference can be tracked in the following
+GitHub issue:\
+[iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger-iroha/iroha-2-docs/issues/392).
+
+:::
 
 **Example**:
 
@@ -181,15 +184,6 @@ JSON format. Currently, it only supports dynamic updating of the
 | :--: | -------- | ------------------------------------------------------------------------------- |
 | 202  | Accepted | The request to update the configuration is accepted and is due to be processed. |
 
-::: tip Guarantees
-
-A successful configuration update does not guarantee that the configuration
-is indeed updated. While a follow-up
-[Configuration / Retrieve](#configuration-retrieve) request will return
-updated values, the actual update is performed asynchronously.
-
-:::
-
 ## Events
 
 - **Protocols**: `HTTP` upgraded to `WebSocket`
@@ -202,26 +196,28 @@ The status of a transaction event can be one of the following:
 
 - `Validating` — The transaction has been successfully submitted and is
   currently being validated by peers.
-- `Committed` — The transaction has been successfully validated and is
-  committed to the blockchain.
-- `Rejected`— The transaction has been rejected by at least one peer and is
+- `Committed` — The transaction has been successfully validated and is committed
+  to the blockchain.
+- `Rejected` — The transaction has been rejected by at least one peer and is
   **not** committed to the blockchain.
 
 All transactions are designated with the `Validating` status upon creation,
-which later proceeds to either `Committed` or `Rejected`. However, due to
-the distributed nature of the network, some peers might receive events out
-of order (e.g., `Committed` before `Validating`).
+which later proceeds to either `Committed` or `Rejected`. However, due to the
+distributed nature of the network, some peers might receive events out of order
+(e.g., `Committed` before `Validating`).
 
-Some peers in the network may be offline for the validation round. If a
-client connects to them while they are offline, the peers might not respond
-with the `Validating` status. But when the offline peers come back online
-they will automatically synchronize the blocks. These peers are then
-guaranteed to respond with either `Committed` or `Rejected` status,
-depending on the information found in the block.#### Handshake
+Some peers in the network may be offline for the validation round. If a client
+connects to them while they are offline, the peers might not respond with the
+`Validating` status. But when the offline peers come back online they will
+automatically synchronize the blocks. These peers are then guaranteed to respond
+with either `Committed` or `Rejected` status, depending on the information found
+in the block.
+
+#### Handshake
 
 Since the `/events` endpoint handles continuous two-way data exchange, a
-`WebSocket` handshake between the client and server must first be performed
-to initiate communication with this endpoint.
+`WebSocket` handshake between the client and server must first be performed to
+initiate communication with this endpoint.
 
 #### Data Exchange
 
@@ -237,10 +233,6 @@ request, after which the server sends an
 - **Encoding**: `JSON`
 - **Endpoint**: `/health`
 
-#### Requests
-
-A `GET` request to the endpoint.
-
 #### Responses
 
 | Code | Response      | Description                                                    |
@@ -249,11 +241,106 @@ A `GET` request to the endpoint.
 
 **Example**:
 
-```json
-"Healthy"
+```
+Healthy
 ```
 
-## Metrics
+## Query
+
+- **Protocol**: `HTTP`
+- **Method**: `POST`
+- **Encoding**: `SCALE`
+- **Endpoint**: `/query`
+
+#### Requests
+
+This endpoint expects [`SignedQuery`](/reference/data-model-schema#signedquery)
+as a request body.
+
+#### Responses
+
+- 200
+  - [`QueryResponse`](/reference/data-model-schema#queryresponse)
+  - Successful query request
+
+| Code | Response                         | Body                                                            | Description                                                                |
+| :--: | -------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 200  | Success                          | [`QueryResponse`](/reference/data-model-schema#queryresponse)   | Successful query request                                                   |
+| 400  | Conversion Error                 | [`ValidationFail`](/reference/data-model-schema#validationfail) | Invalid asset query for the actual asset type                              |
+| 400  | CursorMismatch/CursorDone Errors | [`ValidationFail`](/reference/data-model-schema#validationfail) | An invalid cursor was provided in the batch request                        |
+| 400  | FetchSizeTooBig Error            | [`ValidationFail`](/reference/data-model-schema#validationfail) | Fetch size specified in the query request is too large                     |
+| 400  | InvalidSingularParameters Error  | [`ValidationFail`](/reference/data-model-schema#validationfail) | Specified query parameters are not applicable to the (singular) query type |
+| 400  | CapacityLimit Error              | [`ValidationFail`](/reference/data-model-schema#validationfail) | Reached the limit of parallel queries                                      |
+| 401  | Signature Error                  | [`ValidationFail`](/reference/data-model-schema#validationfail) | The signature on the query is incorrect                                    |
+| 403  | Permission Error                 | [`ValidationFail`](/reference/data-model-schema#validationfail) | The user does not have permission to execute this query                    |
+| 404  | Find Error                       | [`ValidationFail`](/reference/data-model-schema#validationfail) | The queried object was not found                                           |
+
+::: info
+
+The `200 Success` response returns results that are ordered by `id`, which use
+Rust's [PartialOrd](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html) and
+[Ord](https://doc.rust-lang.org/std/cmp/trait.Ord.html) traits.
+
+:::
+
+::: tip
+
+See [`QueryExecutionFail`](/reference/data-model-schema#queryexecutionfail) type
+for details of the errors.
+
+:::
+
+### Account Not Found 404
+
+The following table shows which error you will get depending on which
+prerequisite object could not be found
+[`FindError`](/reference/data-model-schema#finderror):
+
+| Domain | Account | [`FindError`](/reference/data-model-schema#finderror)                     |
+| :----: | :-----: | ------------------------------------------------------------------------- |
+|   N    |    -    | [`FindError::Domain(DomainId)`](/reference/data-model-schema#finderror)   |
+|   Y    |    N    | [`FindError::Account(AccountId)`](/reference/data-model-schema#finderror) |
+
+### Asset Not Found 404
+
+The following table shows which error you will get depending on which
+prerequisite object could not be found
+[`FindError`](/reference/data-model-schema#finderror):
+
+| Domain | Account | Asset Definition | Asset | [`FindError`](/reference/data-model-schema#finderror)                                     |
+| :----: | :-----: | :--------------: | :---: | ----------------------------------------------------------------------------------------- |
+|   N    |    -    |        -         |   -   | [`FindError::Domain(DomainId)`](/reference/data-model-schema#finderror)                   |
+|   Y    |    N    |        -         |   -   | [`FindError::Account(AccountId)`](/reference/data-model-schema#finderror)                 |
+|   Y    |    -    |        N         |   -   | [`FindError::AssetDefinition(AssetDefinitionId)`](/reference/data-model-schema#finderror) |
+|   Y    |    Y    |        Y         |   N   | [`FindError::Asset(AssetId)`](/reference/data-model-schema#finderror)                     |
+
+## Schema <Badge text="feature: schema" type=tip />
+
+::: info
+
+This operation requires the Iroha 2 network to be established with the `schema`
+feature enabled.
+
+<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
+
+:::
+
+- **Protocol**: `HTTP`
+- **Method**: `GET`
+- **Encoding**: `JSON`
+- **Endpoint**: `/schema`
+
+#### Requests
+
+A `GET` request to the endpoint.
+
+#### Responses
+
+| Code | Response | Description                                                                                                         |
+| :--: | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| 200  | OK       | Returns the Rust data structures and types of the entire [Data Model Schema](data-model-schema.md) as JSON objects. |
+
+## Telemetry / Metrics <Badge text="feature: telemetry" type=tip /> {#metrics}
 
 ::: info
 
@@ -330,113 +417,12 @@ To learn more about metrics, see [Metrics](../guide/advanced/metrics.md).
 
 :::
 
-## Pending Transactions
-
-- **Protocol**: `HTTP`
-- **Method**: `GET`
-- **Encoding**: `SCALE`
-- **Endpoint**: `/pending_transactions`
-
-#### Requests
-
-A `GET` request to the endpoint.
-
-#### Responses
-
-| Code | Response | Description                                                                                                                                                          |
-| :--: | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 200  | OK       | Returns a list of pending transactions as [`SignedTransaction`](data-model-schema.md#signedtransaction) objects encoded with `SCALE`; must be decoded by the client. |
-
-## Query
-
-- **Protocol**: `HTTP`
-- **Method**: `POST`
-- **Encoding**: `SCALE`
-- **Endpoint**: `/query`
-
-#### Requests
-
-This endpoint expects requests with two shapes:
-
-Start a query:
-
-- **Body**:
-  [`SignedQuery`](/reference/data-model-schema#signedquery)
-OR
-  Get the next batch of a previously started query:
-  
-  - **Parameters**:
-    - `cursor` - specifies a cursor previously returned as part of query response
-    Request
-
-#### Responses
-
-| Code | Response                        | Body                                                                                             | Description                                                                |
-|:----:|---------------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| 200  | Success                         | [`QueryOutputBox`](/reference/data-model-schema#queryoutput)                                     | Successful query request                                                   |
-| 400  | Conversion Error                | [`QueryExecutionFail::Conversion(String)`](/reference/data-model-schema#queryexecutionfail)      | Invalid asset query for the actual asset type                              |
-| 400  | Cursor Error                    | [`QueryExecutionFail::UnknownCursor`](/reference/data-model-schema#queryexecutionfail)           | An invalid cursor was provided in the batch request                        |
-| 400  | FetchSizeTooBig Error           | [`QueryExecutionFail::FetchSizeTooBig`](/reference/data-model-schema#queryexecutionfail)         | Fetch size specified in the query request is too large                     |
-| 400  | InvalidSingularParameters Error | [`QueryExecutionFail::InvalidSingularParameters`](/reference/data-model-schema#queryexecutionfail) | Specified query parameters are not applicable to the (singular) query type |
-| 401  | Signature Error                 | [`QueryExecutionFail::Signature(String)`](/reference/data-model-schema#queryexecutionfail)       | The signature on the query is incorrect                                    |
-| 403  | Permission Error                | [`QueryExecutionFail::Permission(String)`](/reference/data-model-schema#queryexecutionfail)      | The user does not have permission to execute this query                    |
-| 404  | Find Error                      | [`QueryExecutionFail::Find(FindError)`](/reference/data-model-schema#queryexecutionfail)         | The queried object was not found                                           |
-
-::: info
-
-The `200 Success` response returns results that are ordered by `id`, which
-use
-Rust's
-[PartialOrd](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html)
-and
-[Ord](https://doc.rust-lang.org/std/cmp/trait.Ord.html) traits.
-
-:::
-
-::: tip Lazily Evaluated Pagination
-
-TODO: explain how it works. Explain that this behaviour is configured with
-[`torii.query_idle_time_ms`](/reference/peer-config/params#param-torii-query-idle-time-ms).
-
-:::
-
-### Account Not Found 404
-
-Whether each prerequisite object was found and
-[`FindError`](/reference/data-model-schema#finderror):
-
-| Domain | Account | [`FindError`](/reference/data-model-schema#finderror)                     |
-| :----: | :-----: | ------------------------------------------------------------------------- |
-|   N    |    -    | [`FindError::Domain(DomainId)`](/reference/data-model-schema#finderror)   |
-|   Y    |    N    | [`FindError::Account(AccountId)`](/reference/data-model-schema#finderror) |
-
-### Asset Not Found 404
-
-Whether each prerequisite object was found and
-[`FindError`](/reference/data-model-schema#finderror):
-
-| Domain | Account | Asset Definition | Asset | [`FindError`](/reference/data-model-schema#finderror)                                     |
-| :----: | :-----: | :--------------: | :---: | ----------------------------------------------------------------------------------------- |
-|   N    |    -    |        -         |   -   | [`FindError::Domain(DomainId)`](/reference/data-model-schema#finderror)                   |
-|   Y    |    N    |        -         |   -   | [`FindError::Account(AccountId)`](/reference/data-model-schema#finderror)                 |
-|   Y    |    -    |        N         |   -   | [`FindError::AssetDefinition(AssetDefinitionId)`](/reference/data-model-schema#finderror) |
-|   Y    |    Y    |        Y         |   N   | [`FindError::Asset(AssetId)`](/reference/data-model-schema#finderror)                     |
-
-## Schema
-
-::: info
-
-This operation requires the Iroha 2 network to be established with the
-`schema` feature enabled.
-
-<!-- TODO: Link to a topic about Iroha features/flags; Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/465 -->
-
-:::
+## Telemetry / Peers <Badge text="feature: telemetry" type=tip />
 
 - **Protocol**: `HTTP`
 - **Method**: `GET`
 - **Encoding**: `JSON`
-- **Endpoint**: `/schema`
+- **Endpoint**: `/peers`
 
 #### Requests
 
@@ -444,11 +430,22 @@ A `GET` request to the endpoint.
 
 #### Responses
 
-| Code | Response | Description                                                                                                         |
-| :--: | -------- | ------------------------------------------------------------------------------------------------------------------- |
-| 200  | OK       | Returns the Rust data structures and types of the entire [Data Model Schema](data-model-schema.md) as JSON objects. |
+| Code | Response             |
+| ---- | -------------------- |
+| 200  | List of online peers |
 
-## Status
+**Example:**
+
+```json
+[
+  {
+    "address": "0.0.0.0:8081",
+    "id": "ed0120B23E14F659B91736AAB980B6ADDCE4B1DB8A138AB0267E049C082A744471714E"
+  }
+]
+```
+
+## Telemetry / Status <Badge text="feature: telemetry" type=tip />
 
 ::: info
 
@@ -472,12 +469,12 @@ This endpoint also accepts the following:
 
 - **Header**: Specifies the encoding of the retrieved data.\
   Can be set to one of the following:
-  - `Accept: application/x-parity-scale` — the retrieved data is encoded
-    with `SCALE`.
+  - `Accept: application/x-parity-scale` — the retrieved data is encoded with
+    `SCALE`.
   - `Accept: application/json` — the retrieved data is encoded with `JSON`.
 
-If no header is specified in the request, the `Accept: application/json`
-header is used by default.
+If no header is specified in the request, the `Accept: application/json` header
+is used by default.
 
 #### Responses
 
@@ -554,8 +551,8 @@ The following examples represent the same data:
 
 ::: warning JSON Precision Lost
 
-Almost all fields in the `Status` structure are 64-bit integers, and they
-are encoded in JSON as-is. Since native JSON's number type according to the
+Almost all fields in the `Status` structure are 64-bit integers, and they are
+encoded in JSON as-is. Since native JSON's number type according to the
 specification effectively is `f64`, the precision might be lost on
 deserialization, for example, in
 [JavaScript's `JSON.parse`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse).
@@ -575,8 +572,8 @@ Fields with `u64` type are serialized in the
 ### Sub-routing
 
 It is also possible to retrieve the data of a specific `struct` group or
-variable within it by adding their path to the endpoint address. The
-sub-routed values are only returned in the JSON format.
+variable within it by adding their path to the endpoint address. The sub-routed
+values are only returned in the JSON format.
 
 **Examples**:
 

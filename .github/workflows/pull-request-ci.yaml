@@ -10,13 +10,15 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 22
 
       # --- Install with caching
       # https://github.com/pnpm/action-setup#use-cache-to-reduce-installation-time
 
       - name: Enable Corepack
-        run: corepack enable
+        run: |
+          npm i -g corepack@latest
+          corepack enable
 
       - name: Get pnpm store directory
         id: pnpm-cache

@@ -40,8 +40,8 @@ You can monitor blockchain events in the terminal where the network runs.
 
 The following options are also available for local compilation:
 
-- To test Iroha code quickly, use the `docker-compose-single.yml` network configuration file, which starts a container with a single peer.
-- To test Iroha code in normal conditions, use the `docker-compose-local.yml` network configuration file, which starts four connected containers with peers.
+- To test Iroha code quickly, use the `docker-compose.single.yml` network configuration file, which starts a container with a single peer.
+- To test Iroha code in normal conditions, use the `docker-compose.local.yml` network configuration file, which starts four connected containers with peers.
 
 ::: tip Note
 

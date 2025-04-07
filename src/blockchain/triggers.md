@@ -19,7 +19,7 @@ contains the necessary information:
     The documentation on the `EventFilter` types is under construction, as
     we are likely to make major changes to that particular architecture.
     For now, suffice it to say that you can look at the
-    [source code](https://github.com/hyperledger-iroha/iroha/blob/main/data_model/src/events/data/filters.rs)
+    [source code](https://github.com/hyperledger-iroha/iroha/blob/main/crates/iroha_data_model/src/events/data/filters.rs)
     in `iroha_data_model` and see a few particularly interesting
     applications.
 
