@@ -13,14 +13,6 @@ Path to the [configuration](/reference/peer-config/index.md) file.
 irohad --config path/to/iroha.toml
 ```
 
-::: tip
-
-Paths parameters in the config file are resolved relative to its own
-location. See how
-[paths resolution](/reference/peer-config/glossary#paths-resolution) works.
-
-:::
-
 ## `--trace-config` {#arg-trace-config}
 
 Enables trace logs of configuration reading and parsing.  Might be useful for configuration troubleshooting.

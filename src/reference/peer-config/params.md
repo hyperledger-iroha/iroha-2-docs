@@ -2,6 +2,10 @@
 outline: [ 2, 3 ]
 ---
 
+<script setup>
+import ParamTable from './ParamTable.vue';
+</script>
+
 # Configuration Parameters
 
 [[toc]]
@@ -14,8 +18,7 @@ Chain ID that must be included in each transaction. Used to prevent replay attac
 
 [//]: # (TODO: explain what replay attacks are)
 
-- **Environment:** `CHAIN_ID`
-- **Type:** String
+<param-table type=string env=CHAIN_ID />
 
 ::: code-group
 
@@ -33,8 +36,7 @@ CHAIN_ID="00000000-0000-0000-0000-000000000000"
 
 Public key of the peer.
 
-- **Environment:** `PUBLIC_KEY`
-- **Type:** String
+<param-table type="public-key" env="PUBLIC_KEY" />
 
 ::: code-group
 
@@ -52,8 +54,7 @@ PUBLIC_KEY="ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1
 
 Private key of the peer.
 
-- **Environment:** `PRIVATE_KEY`
-- **Type:** String
+<param-table type="private-key" env="PRIVATE_KEY" />
 
 ::: code-group
 
@@ -67,12 +68,17 @@ PRIVATE_KEY="8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F
 
 :::
 
-### `trusted_peers`  {#param-trusted-peers}
+### `trusted_peers` {#param-trusted-peers}
 
 List of predefined trusted peers.
 
-- **Environment:** `TRUSTED_PEERS`
-- **Type:** Array of strings in a format `PUBLIC_KEY@ADDRESS`
+<param-table env="TRUSTED_PEERS">
+<template #type>
+
+Array of strings in format `PUBLIC_KEY@ADDRESS`
+
+</template>
+</param-table>
 
 ::: code-group
 
@@ -94,14 +100,11 @@ TRUSTED_PEERS='["ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB6185
 
 ## Genesis {#genesis}
 
-### `genesis.file`  {#param-genesis-file}
+### `genesis.file` {#param-genesis-file}
 
-File path[^paths] to the SCALE-encoded genesis block.
+File path to the SCALE-encoded genesis block.
 
-Must be paired with `--submit-genesis` CLI parameter.
-
-- **Environment:** `GENESIS`
-- **Type:** String, file path[^paths]
+<param-table type="file-path" env="GENESIS" />
 
 ::: code-group
 
@@ -120,8 +123,7 @@ GENESIS="./genesis.scale"
 
 Public key of the genesis key pair.
 
-- **Environment:** `GENESIS_PUBLIC_KEY`
-- **Type:** String, public key multihash
+<param-table type="public-key" env="GENESIS_PUBLIC_KEY" />
 
 ::: code-group
 
@@ -142,8 +144,7 @@ GENESIS_PUBLIC_KEY="ed01208BA62848CF767D72E7F7F4B9D2D7BA07FEE33760F79ABE5597A515
 
 Address for p2p communication for consensus (sumeragi) and block synchronization (block_sync) purposes.
 
-- **Environment:** `P2P_ADDRESS`
-- **Type:** String, socket address (host/IPv4/IPv6 + port)
+<param-table type="socket-addr" env="P2P_ADDRESS" />
 
 ::: code-group
 
@@ -153,7 +154,7 @@ address = "0.0.0.0:1337"
 ```
 
 ```shell [Environment]
-P2P_ADDRESS="0.0.0.0:1337"
+P2P_ADDRESS=0.0.0.0:1337
 ```
 
 :::
@@ -164,8 +165,7 @@ Peer-to-peer address (external, as seen by other peers).
 
 Will be gossiped to connected peers so that they can gossip it to other peers.
 
-- **Environment:** `P2P_PUBLIC_ADDRESS`
-- **Type:** String, socket address (host/IPv4/IPv6 + port)
+<param-table type="socket-addr" env="P2P_PUBLIC_ADDRESS" />
 
 ::: code-group
 
@@ -175,17 +175,16 @@ public_address = "0.0.0.0:5000"
 ```
 
 ```shell [Environment]
-P2P_PUBLIC_ADDRESS="0.0.0.0:5000"
+P2P_PUBLIC_ADDRESS=0.0.0.0:5000
 ```
 
 :::
 
-### `network.block_gossip_size`  {#param-network-block-gossip-size}
+### `network.block_gossip_size` {#param-network-block-gossip-size}
 
 The amount of blocks that can be sent in a single synchronization message.
 
-- **Type:** Number
-- **Default:** `500`
+<param-table type=number default-value=4 />
 
 ::: code-group
 
@@ -196,14 +195,13 @@ block_gossip_size = 256
 
 :::
 
-### `network.block_gossip_period_ms`  {#param-network-block-gossip-period-ms}
+### `network.block_gossip_period_ms` {#param-network-block-gossip-period-ms}
 
 The time interval between requests to peers for the most recent block.
 
 More frequent gossiping shortens the time to sync, but can overload the network.
 
-- **Type:** Number (of milliseconds)
-- **Default:** `10_000` (10 seconds)
+<param-table type=millis default-value=10_000 default-note="10 seconds" />
 
 ::: code-group
 
@@ -214,14 +212,13 @@ block_gossip_period_ms = 1_000
 
 :::
 
-### `network.transaction_gossip_size`  {#param-network-transaction-gossip-size}
+### `network.transaction_gossip_size` {#param-network-transaction-gossip-size}
 
 Max number of transactions in a gossip batch message.
 
 Smaller size leads to longer time to synchronise, but useful if you have high packet loss.
 
-- **Type:** Number
-- **Default:** `500`
+<param-table type=number default-value=500 />
 
 ::: code-group
 
@@ -232,14 +229,13 @@ transaction_gossip_size = 256
 
 :::
 
-### `network.transaction_gossip_period_ms`  {#param-network-transaction-gossip-period-ms}
+### `network.transaction_gossip_period_ms` {#param-network-transaction-gossip-period-ms}
 
 Period of gossiping pending transaction between peers.
 
 More frequent gossiping shortens the time to sync, but can overload the network.
 
-- **Type:** Number (of milliseconds)
-- **Default:** `1_000` (1 second)
+<param-table type=millis default-value=1_000 default-note="1 second" />
 
 ::: code-group
 
@@ -250,12 +246,11 @@ transaction_gossip_period_ms = 5_000
 
 :::
 
-### `network.idle_timeout_ms`  {#param-network-idle-timeout-ms}
+### `network.idle_timeout_ms` {#param-network-idle-timeout-ms}
 
 Duration of time after which connection with peer is terminated if peer is idle.
 
-- **Type:** Number (of milliseconds)
-- **Default:** `60_000` (60 seconds)
+<param-table type=millis default-value=60_000 default-note="1 minute" />
 
 ::: code-group
 
@@ -272,8 +267,7 @@ idle_timeout_ms = 60_000
 
 Address to which the Torii server must listen and to which the client(s) make their requests.
 
-- **Environment:** `API_ADDRESS`
-- **Type:** String, socket address (host/IPv4/IPv6 + port)
+<param-table type=socket-addr env=API_ADDRESS />
 
 ::: code-group
 
@@ -283,20 +277,30 @@ address = "0.0.0.0:8080"
 ```
 
 ```shell [Environment]
-API_ADDRESS="0.0.0.0:8080"
+API_ADDRESS=0.0.0.0:8080
 ```
 
 :::
 
-### `torii.max_content_len`  {#param-torii-max-content-len}
+### `torii.max_content_len` {#param-torii-max-content-len}
 
-The maximum number of bytes in a raw request body accepted by
-the [Transaction Endpoint](/reference/torii-endpoints#transaction).
+The maximum number of bytes in a raw request body accepted by the
+[Transaction Endpoint](/reference/torii-endpoints#transaction).
 
 This limit is used to prevent DOS attacks.
 
-- **Type:** Number (of bytes)
-- **Default:** `16_777_216` (16 MiB, $2^{20} \cdot 16$)
+<param-table>
+<template #type>
+
+Number (of bytes)
+
+</template>
+<template #default-value>
+
+`16_777_216` ($16 \cdot 2^{20}$, or 16 MiB)
+
+</template>
+</param-table>
 
 ::: code-group
 
@@ -307,12 +311,11 @@ max_content_len = 16_777_216
 
 :::
 
-### `torii.query_idle_time_ms`  {#param-torii-query-idle-time-ms}
+### `torii.query_idle_time_ms` {#param-torii-query-idle-time-ms}
 
 The time a query can remain in the store if unaccessed.
 
-- **Type:** Number (of milliseconds)
-- **Default:** `10_000` (10 seconds)
+<param-table type=millis default-value=10_000 default-note="10 seconds" />
 
 ::: code-group
 
@@ -323,12 +326,11 @@ query_idle_time_ms = 10_000
 
 :::
 
-### `torii.query_store_capacity`  {#param-torii-query-store-capacity}
+### `torii.query_store_capacity` {#param-torii-query-store-capacity}
 
 The upper limit of the number of live queries.
 
-- **Type:** Number
-- **Default:** `128`
+<param-table type=number default-value=128 />
 
 ::: code-group
 
@@ -339,12 +341,11 @@ query_store_capacity = 128
 
 :::
 
-### `torii.query_store_capacity_per_user`  {#param-torii-query-store-capacity-per-user}
+### `torii.query_store_capacity_per_user` {#param-torii-query-store-capacity-per-user}
 
 The upper limit of the number of live queries for a single user.
 
-- **Type:** Number
-- **Default:** `128`
+<param-table type=number default-value=128 />
 
 ::: code-group
 
@@ -357,22 +358,27 @@ query_store_capacity_per_user = 128
 
 ## Logger {#logger}
 
-### `logger.level`  {#param-logger-level}
+### `logger.level` {#param-logger-level}
 
-Logging verbosity.
+_General_ logging verbosity (see [`logger.filter`](#param-logger-filter) for refined configuration).
+
+<param-table default-value=INFO env=LOG_LEVEL>
+<template #type>
+
+String, possible values:
+
+- `TRACE`: All events, including low-level operations.
+- `DEBUG`: Debug-level messages, useful for diagnostics.
+- `INFO`: General informational messages.
+- `WARN`: Warnings that indicate potential issues.
+- `ERROR`: Errors that disrupt normal function but allow continued operation.
 
 Choose the level that best suits your use case. Refer to
 [Stack Overflow](https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels) for additional
 details on how to use different log levels.
 
-- **Environment:** `LOG_LEVEL`
-- **Type:** String, possible values:
-    - `TRACE`: All events, including low-level operations.
-    - `DEBUG`: Debug-level messages, useful for diagnostics.
-    - `INFO`: General informational messages.
-    - `WARN`: Warnings that indicate potential issues.
-    - `ERROR`: Errors that disrupt normal function but allow continued operation.
-- **Default:** `INFO`
+</template>
+</param-table>
 
 ::: code-group
 
@@ -382,22 +388,95 @@ level = "INFO"
 ```
 
 ```shell [Environment]
-LOG_LEVEL="INFO"
+LOG_LEVEL=INFO
 ```
 
 :::
 
-### `logger.format`  {#param-logger-format}
+::: tip Runtime update
+
+This parameter is subject for [runtime configuration update](/reference/torii-endpoints#configuration-update).
+
+:::
+
+### `logger.filter` {#param-logger-filter}
+
+Refined log filters in addition to [`logger.level`](#param-logger-level). Allows to customize logging verbosity
+per-_target_.
+
+<param-table type=string env=LOG_FILTER>
+<template #type>
+
+String, consists of one or more comma-separated directives. Each directive may have a corresponding maximum verbosity
+_level_ which enables (e.g., _selects for_) spans and events that match. Iroha considers less exclusive levels (like
+`trace` or `info`) to be more verbose than more exclusive levels (like `error` or `warn`).
+
+At a high level, the syntax for directives consists of several parts:
+
+```
+target[span{field=value}]=level
+```
+
+For more details, see
+[`tracing-subscriber` documentation](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/filter/struct.EnvFilter.html).
+
+</template>
+
+</param-table>
+
+::: code-group
+
+```toml [Config File]
+[logger]
+filter = "iroha_core=debug,iroha_p2p=debug"
+```
+
+```shell [Environment]
+LOG_FILTER=iroha_core=debug,iroha_p2p=debug
+```
+
+:::
+
+::: info Compatibility with [`logger.level`](#param-logger-level)
+
+`logger.filter` works _together_ with [`logger.level`](#param-logger-level) and neither one overwrites another one.
+
+For example, if `logger.level` is set to `INFO` and `logger.filter` is set to `iroha_core=debug`, the resulting filter
+set will be `info,iroha_core=debug` (i.e. `info` for all modules, `debug` for `iroha_core`).
+
+:::
+
+::: tip Runtime update
+
+This parameter is subject for [runtime configuration update](/reference/torii-endpoints#configuration-update).
+
+:::
+
+### `logger.format` {#param-logger-format}
 
 Logs format.
 
-- **Environment:** `LOG_FORMAT`
-- **Type:** String, possible values: (TODO: describe)
-    - `full`
-    - `compact`
-    - `pretty`
-    - `json`
-- **Default:** `full`
+<param-table default-value=full env=LOG_FORMAT>
+<template #type>
+
+String, possible values:
+
+- `full`: The default formatter. This emits human-readable, single-line logs for each event that occurs, with the
+  current span context displayed before the formatted representation of the event.
+- `compact`: A variant of the default formatter, optimized for short line lengths. Fields from the current span context
+  are appended to the fields of the formatted event, and span names are not shown; the verbosity level is abbreviated to
+  a single character.
+- `pretty`: Emits excessively pretty, multi-line logs, optimized for human readability. This is primarily intended to be
+  used in local development and debugging, or for command-line applications, where automated analysis and compact
+  storage of logs is less of a priority than readability and visual appeal.
+- `json`: Outputs newline-delimited JSON logs. This is intended for production use with systems where structured logs
+  are consumed as JSON by analysis and viewing tools. The JSON output is not optimized for human readability.
+
+For more details and sample outputs, see
+[`tracing-subscriber` documentation](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/format/index.html).
+
+</template>
+</param-table>
 
 ::: code-group
 
@@ -407,7 +486,7 @@ format = "json"
 ```
 
 ```shell [Environment]
-LOG_FORMAT="json"
+LOG_FORMAT=json
 ```
 
 :::
@@ -416,15 +495,13 @@ LOG_FORMAT="json"
 
 _Kura_ is the persistent storage engine of Iroha (Japanese for _warehouse_).
 
-### `kura.blocks_in_memory`  {#param-kura-blocks-in-memory}
+### `kura.blocks_in_memory` {#param-kura-blocks-in-memory}
 
 At most N last blocks will be stored in memory.
 
 Older blocks will be dropped from memory and loaded from the disk if they are needed.
 
-- **Environment:** `KURA_BLOCKS_IN_MEMORY`
-- **Type:** Number
-- **Default:** `128`
+<param-table type=number default-value=128 env=KURA_BLOCKS_IN_MEMORY />
 
 ::: code-group
 
@@ -439,15 +516,20 @@ KURA_BLOCKS_IN_MEMORY=256
 
 :::
 
-### `kura.init_mode`  {#param-kura-init-mode}
+### `kura.init_mode` {#param-kura-init-mode}
 
 Kura initialisation mode
 
-- **Environment:** `KURA_INIT_MODE`
-- **Type:** String, possible values:
-    - `strict`: strict validation of all blocks
-    - `fast`: Fast initialisation with only basic checks
-- **Default:** `strict`
+<param-table  default-value=strict env=KURA_INIT_MODE>
+<template #type>
+
+String, possible values:
+
+- `strict`: strict validation of all blocks
+- `fast`: Fast initialisation with only basic checks
+
+</template>
+</param-table>
 
 ::: code-group
 
@@ -457,18 +539,18 @@ init_mode = "fast"
 ```
 
 ```shell [Environment]
-KURA_INIT_MODE="fast"
+KURA_INIT_MODE=fast
 ```
 
 :::
 
-### `kura.store_dir`  {#param-kura-store-dir}
+### `kura.store_dir` {#param-kura-store-dir}
 
 Specifies the directory[^paths] where the blocks are stored.
 
-- **Environment:** `KURA_STORE_DIR`
-- **Type:** String, file path[^paths]
-- **Default:** `./storage` (see also: [`snapshot.store_dir`](#param-snapshot-store-dir))
+See also: [`snapshot.store_dir`](#param-snapshot-store-dir).
+
+<param-table env=KURA_STORE_DIR type=file-path default-value=./storage />
 
 ::: code-group
 
@@ -478,7 +560,7 @@ store_dir = "/path/to/storage"
 ```
 
 ```shell [Environment]
-KURA_STORE_DIR="/path/to/storage"
+KURA_STORE_DIR=/path/to/storage
 ```
 
 :::
@@ -487,9 +569,7 @@ KURA_STORE_DIR="/path/to/storage"
 
 Flag to enable printing new blocks to console.
 
-- **Environment:** `KURA_DEBUG_OUTPUT_NEW_BLOCKS`
-- **Type:** Boolean
-- **Default:** `false`
+<param-table env=KURA_DEBUG_OUTPUT_NEW_BLOCKS type=bool default-value=false />
 
 ::: code-group
 
@@ -506,12 +586,11 @@ KURA_DEBUG_OUTPUT_NEW_BLOCKS=true
 
 ## Queue {#queue}
 
-### `queue.capacity`  {#param-queue-capacity}
+### `queue.capacity` {#param-queue-capacity}
 
 The upper limit of the number of transactions waiting in the queue.
 
-- **Type:** Number
-- **Default:** `65_536`
+<param-table type=number default-value=65_536 />
 
 ::: code-group
 
@@ -522,14 +601,13 @@ capacity = 1_048_576
 
 :::
 
-### `queue.capacity_per_user`  {#param-queue-capacity-per-user}
+### `queue.capacity_per_user` {#param-queue-capacity-per-user}
 
 The upper limit of the number of transactions waiting in the queue for a single user.
 
 Use this option to apply throttling.
 
-- **Type:** Number
-- **Default:** 65_536
+<param-table type=number default-value=65_536 />
 
 ::: code-group
 
@@ -540,12 +618,11 @@ capacity_per_user = 1_048_576
 
 :::
 
-### `queue.transaction_time_to_live_ms`  {#param-queue-transaction-time-to-live-ms}
+### `queue.transaction_time_to_live_ms` {#param-queue-transaction-time-to-live-ms}
 
 The transaction will be dropped after this time if it is still in the queue.
 
-- **Type:** Number (of milliseconds)
-- **Default:** `86_400_000` (24 hours)
+<param-table type=millis default-value=86_400_000 default-note="24 hours" />
 
 ::: code-group
 
@@ -562,8 +639,7 @@ transaction_time_to_live_ms = 43_200_000
 
 TODO
 
-- **Type:** Boolean
-- **Default:** `false`
+<param-table type=bool default-value=false />
 
 ::: code-group
 
@@ -588,18 +664,23 @@ snapshots), you could remove the directory specified by [`snapshot.store_dir`](#
 
 :::
 
-### `snapshot.mode`  {#param-snapshot-mode}
+### `snapshot.mode` {#param-snapshot-mode}
 
 The mode the Snapshot system functions in.
 
-- **Environment:** `SNAPSHOT_MODE`
-- **Type:** String, possible values:
-    - `read_write`: Iroha creates snapshots with a period specified by [
-      `snapshot.create_every_ms`](#param-snapshot-create-every-ms).
-      On startup, Iroha reads an existing snapshot (if any) and verifies that it is up-to-date with the blocks storage.
-    - `readonly`: Similar to `read_write` but Iroha doesn't create any snapshots.
-    - `disabled`: Iroha neither creates new snapshots nor reads an existing one on startup.
-- **Default:** `read_write`
+<param-table default-value=read_write env=SNAPSHOT_MODE>
+<template #type>
+
+String, possible values:
+
+- `read_write`: Iroha creates snapshots with a period specified by
+  [`snapshot.create_every_ms`](#param-snapshot-create-every-ms). On startup, Iroha reads an existing snapshot (if any)
+  and verifies that it is up-to-date with the blocks storage.
+- `readonly`: Similar to `read_write` but Iroha doesn't create any snapshots.
+- `disabled`: Iroha neither creates new snapshots nor reads an existing one on startup.
+
+</template>
+</param-table>
 
 ::: code-group
 
@@ -609,17 +690,16 @@ mode = "readonly"
 ```
 
 ```shell [Environment]
-SNAPSHOT_MODE="readonly"
+SNAPSHOT_MODE=readonly
 ```
 
 :::
 
-### `snapshot.create_every_ms`  {#param-snapshot-create-every-ms}
+### `snapshot.create_every_ms` {#param-snapshot-create-every-ms}
 
 Frequency of snapshots.
 
-- **Type:** Number (of milliseconds)
-- **Default:** `600_000` (10 minutes)
+<param-table type=millis default-value=600_000 default-note="10 minutes" />
 
 ::: code-group
 
@@ -630,13 +710,13 @@ create_every_ms = 60_000
 
 :::
 
-### `snapshot.store_dir`  {#param-snapshot-store-dir}
+### `snapshot.store_dir` {#param-snapshot-store-dir}
 
 Directory where to store snapshots.
 
-- **Environment:** `SNAPSHOT_STORE_DIR`
-- **Type:** String, file path[^paths]
-- **Default:** `./storage/snapshot` (see also: [`kura.store_dir`](#param-kura-store-dir))
+See also: [`kura.store_dir`](#param-kura-store-dir)
+
+<param-table type=file-path default-value=./storage/snapshot env=SNAPSHOT_STORE_DIR />
 
 ::: code-group
 
@@ -659,11 +739,11 @@ TODO
 
 All `telemetry` section is optional.
 
-### `telemetry.name`  {#param-telemetry-name}
+### `telemetry.name` {#param-telemetry-name}
 
 The node's name to be displayed on the telemetry.
 
-- **Type:** String
+<param-table type=string />
 
 ::: code-group
 
@@ -674,11 +754,11 @@ name = "iroha"
 
 :::
 
-### `telemetry.url`  {#param-telemetry-url}
+### `telemetry.url` {#param-telemetry-url}
 
 The url of the telemetry. TODO update example value
 
-- **Type:** String
+<param-table type=string />
 
 ::: code-group
 
@@ -689,12 +769,11 @@ url = "ws://substrate.telemetry.iroha"
 
 :::
 
-### `telemetry.min_retry_period_ms`  {#param-telemetry-min-retry-period-ms}
+### `telemetry.min_retry_period_ms` {#param-telemetry-min-retry-period-ms}
 
 The minimum period of time to wait before reconnecting.
 
-- **Type:** Number (of milliseconds)
-- **Default:** `1_000` (1 second)
+<param-table type=millis default-value=1_000  default-note="1 second" />
 
 ::: code-group
 
@@ -705,12 +784,11 @@ min_retry_period_ms = 5_000
 
 :::
 
-### `telemetry.max_retry_delay_exponent`  {#param-telemetry-max-retry-delay-exponent}
+### `telemetry.max_retry_delay_exponent` {#param-telemetry-max-retry-delay-exponent}
 
 The maximum exponent of 2 that is used for increasing delay between reconnections.
 
-- **Type:** Number
-- **Default:** `4`
+<param-table type=number default-value=4 />
 
 ::: code-group
 
@@ -721,11 +799,11 @@ max_retry_delay_exponent = 4
 
 :::
 
-### `dev_telemetry.out_file`  {#param-dev-telemetry-out-file}
+### `dev_telemetry.out_file` {#param-dev-telemetry-out-file}
 
 The filepath to write dev-telemetry to
 
-- **Type:** String, file path[^paths]
+<param-table type=file-path />
 
 ::: code-group
 
@@ -735,6 +813,3 @@ out_file = "/path/to/file.json"
 ```
 
 :::
-
-[^paths]: Relative file paths in the configuration file are resolved relative to the configuration file location. If
-provided via Environment Variables, they are resolved relative to the Current Working Directory.

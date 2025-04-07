@@ -11,7 +11,6 @@ Iroha 2 provides the following binary executables:
   > See also:
   > - [Generating Cryptographic Keys](../guide/security/generating-cryptographic-keys.md) — instructions on how to generate cryptographic keys with `kagami`.
   > - [Configure Iroha > Genesis Block: Generation](../guide/configure/genesis.md#generation) — instructions on how to generate a default genesis block with `kagami`.
-  > - [Configure Iroha > Peer Configuration: Generation](../guide/configure/peer-configuration.md#generation) — instructions on how to generate a default peer configuration file with `kagami`.
   > - [Configure Iroha > Client Configuration: Generation](../guide/configure/client-configuration.md#generation) — instructions on how to generate a default client configuration file with `kagami`.
 
 There are two main ways to work with Iroha 2 binaries:
