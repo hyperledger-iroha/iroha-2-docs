@@ -130,19 +130,22 @@ they are added to the blockchain.
 
 ```json
 {
-  "logger": {
-    "level": "TRACE"
-  }
+    "public_key": "ed0120A98BAFB0663CE08D75EBD506FEC38A84E576A7C9B0897693ED4B04FD9EF2D18D",
+    "logger": {
+        "level": "INFO",
+        "filter": null
+    },
+    "network": {
+        "block_gossip_size": 4,
+        "block_gossip_period_ms": 10000,
+        "transaction_gossip_size": 500,
+        "transaction_gossip_period_ms": 1000
+    },
+    "queue": {
+        "capacity": 65536
+    }
 }
 ```
-
-::: info
-
-The subset of configuration parameters returned by this operation is equal to
-the one accepted by the [Configuration / Update](#configuration-update)
-operation, i.e., it only contains the `logger.level` parameter as of now.
-
-:::
 
 ## Configuration / Update
 
@@ -153,9 +156,13 @@ operation, i.e., it only contains the `logger.level` parameter as of now.
 
 #### Requests
 
-This endpoint expects a subset of configuration parameters serialized into JSON
-format. Currently, it only supports dynamic updating of the `logger.level`
-parameter.
+This endpoint expects a _subset_ of configuration parameters serialized into JSON
+format.
+
+Supported parameters:
+
+- `logger.level`
+- `logger.filter`
 
 ::: info
 
