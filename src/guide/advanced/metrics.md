@@ -21,6 +21,8 @@ The progress on the configuration reference can be tracked in the following GitH
 
 After the above is configured, you can use the IP address set in the `"TORII_TELEMETRY_URL"` variable to access the metrics data from within a running Iroha instance.
 
+<!-- FIXME: irrelevant information about configuration above -->
+
 **Example**:
 
 ```bash
@@ -30,19 +32,68 @@ $ curl http://127.0.0.1:8180/metrics
 This returns a result similar to the following:
 
 ```bash
-# HELP blocks_height Total number of blocks in chain
-# TYPE blocks_height gauge
-blocks_height 135543
-# HELP peers_number Total number peers to send transactions and request proposals
-# TYPE peers_number gauge
-peers_number 7
-# HELP number_of_domains Total number of domains in WSV
-# TYPE number_of_domains gauge
-number_of_domains 14
-# HELP total_number_of_transactions Total number of transactions in blockchain
-# TYPE total_number_of_transactions gauge
-total_number_of_transactions 216499
-# HELP number_of_signatures_in_last_block Number of signatures in last block
-# TYPE number_of_signatures_in_last_block gauge
-number_of_signatures_in_last_block 5
+# HELP accounts User accounts registered at this time
+# TYPE accounts gauge
+accounts{domain="garden_of_live_flowers"} 1
+accounts{domain="genesis"} 1
+accounts{domain="wonderland"} 2
+# HELP block_height Current block height
+# TYPE block_height counter
+block_height 2
+# HELP block_height_non_empty Current count of non-empty blocks
+# TYPE block_height_non_empty counter
+block_height_non_empty 1
+# HELP commit_time_ms Average block commit time on this peer
+# TYPE commit_time_ms histogram
+commit_time_ms_bucket{le="100"} 2
+commit_time_ms_bucket{le="400"} 2
+commit_time_ms_bucket{le="1600"} 2
+commit_time_ms_bucket{le="6400"} 2
+commit_time_ms_bucket{le="25600"} 2
+commit_time_ms_bucket{le="+Inf"} 2
+commit_time_ms_sum 13
+commit_time_ms_count 2
+# HELP connected_peers Total number of currently connected peers
+# TYPE connected_peers gauge
+connected_peers 3
+# HELP domains Total number of domains
+# TYPE domains gauge
+domains 3
+# HELP dropped_messages Sumeragi dropped messages
+# TYPE dropped_messages counter
+dropped_messages 0
+# HELP last_commit_time_ms Time (since block creation) it took for the latest block to be committed by this peer
+# TYPE last_commit_time_ms gauge
+last_commit_time_ms 13
+# HELP queue_size Number of the transactions in the queue
+# TYPE queue_size gauge
+queue_size 0
+# HELP tx_amount average amount involved in a transaction on this peer
+# TYPE tx_amount histogram
+tx_amount_bucket{le="-1000000000"} 0
+tx_amount_bucket{le="-10000000"} 0
+tx_amount_bucket{le="-100000"} 0
+tx_amount_bucket{le="-1000"} 0
+tx_amount_bucket{le="-10"} 0
+tx_amount_bucket{le="0"} 0
+tx_amount_bucket{le="10"} 0
+tx_amount_bucket{le="1000"} 2
+tx_amount_bucket{le="100000"} 2
+tx_amount_bucket{le="10000000"} 2
+tx_amount_bucket{le="1000000000"} 2
+tx_amount_bucket{le="+Inf"} 2
+tx_amount_sum 57
+tx_amount_count 2
+# HELP txs Transactions committed
+# TYPE txs counter
+txs{type="accepted"} 4
+txs{type="rejected"} 0
+txs{type="total"} 4
+# HELP uptime_since_genesis_ms Network up-time, from creation of the genesis block
+# TYPE uptime_since_genesis_ms gauge
+uptime_since_genesis_ms 529270
+# HELP view_changes Number of view changes in the current round
+# TYPE view_changes gauge
+view_changes 0
+
 ```
