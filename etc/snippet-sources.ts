@@ -117,11 +117,9 @@ export default [
   },
   {
     src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/docs/source/references/client.template.toml`,
-    filename: 'client-cli-config-template.toml',
   },
   {
     src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/docs/source/references/peer.template.toml`,
-    filename: 'peer-config-template.toml',
   },
   {
     src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_RC_1}/defaults/genesis.json`,

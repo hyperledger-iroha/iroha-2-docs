@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import { defineConfig, DefaultTheme } from 'vitepress'
+import { DefaultTheme, defineConfig } from 'vitepress'
 import footnote from 'markdown-it-footnote'
 import { resolve } from 'path'
 import ViteSvgLoader from 'vite-svg-loader'
@@ -28,7 +28,7 @@ function nav(): DefaultTheme.NavItem[] {
     {
       text: 'Reference',
       link: '/reference/torii-endpoints',
-      activeMatch: '/reference/',
+      activeMatch: '^/reference/',
     },
     {
       text: 'Help',
@@ -93,6 +93,10 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           text: 'JavaScript',
           link: '/guide/tutorials/javascript',
         },
+        {
+          text: 'Compatibility Matrix',
+          link: '/reference/compatibility-matrix',
+        },
       ],
     },
     {
@@ -103,18 +107,6 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           text: 'Configure Iroha',
           collapsed: true,
           items: [
-            {
-              text: 'Configuration Types',
-              link: '/guide/configure/configuration-types',
-            },
-            {
-              text: 'Samples',
-              link: '/guide/configure/sample-configuration',
-            },
-            {
-              text: 'Peer Configuration',
-              link: '/guide/configure/peer-configuration',
-            },
             {
               text: 'Client Configuration',
               link: '/guide/configure/client-configuration',
@@ -307,10 +299,10 @@ function sidebarChain(): DefaultTheme.SidebarItem[] {
   ]
 }
 
-function sidebarAPI(): DefaultTheme.SidebarItem[] {
+function sidebarReference(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: 'About',
+      text: 'Reference',
       items: [
         {
           text: 'Glossary',
@@ -319,23 +311,6 @@ function sidebarAPI(): DefaultTheme.SidebarItem[] {
         {
           text: 'Naming Conventions',
           link: '/reference/naming.md',
-        },
-        {
-          text: 'Compatibility Matrix',
-          link: '/reference/compatibility-matrix',
-        },
-        {
-          text: 'Foreign Function Interfaces',
-          link: '/reference/ffi',
-        },
-      ],
-    },
-    {
-      text: 'Reference',
-      items: [
-        {
-          text: 'Torii Endpoints',
-          link: '/reference/torii-endpoints.md',
         },
         {
           text: 'Data Model Schema',
@@ -356,6 +331,30 @@ function sidebarAPI(): DefaultTheme.SidebarItem[] {
         {
           text: 'Binaries',
           link: '/reference/binaries.md',
+        },
+        {
+          text: 'irohad CLI',
+          link: '/reference/irohad-cli.md',
+        },
+        {
+          text: 'Torii HTTP API',
+          link: '/reference/torii-endpoints.md',
+        },
+        {
+          text: 'Foreign Function Interfaces',
+          link: '/reference/ffi',
+        },
+        {
+          text: 'Peer Configuration',
+          link: '/reference/peer-config/index.md',
+          items: [
+            { text: 'Parameters', link: '/reference/peer-config/params.md' },
+            { text: 'Migration from pre-rc.20', link: '/reference/peer-config/migration.md' },
+          ],
+        },
+        {
+          text: 'Genesis Block',
+          link: '/reference/genesis.md',
         },
       ],
     },
@@ -473,13 +472,12 @@ export default defineConfig({
     },
 
     nav: nav(),
-    outline: [2, 3],
 
     sidebar: {
       '/get-started/': sidebarStart(),
       '/guide/': sidebarGuide(),
       '/blockchain/': sidebarChain(),
-      '/reference/': sidebarAPI(),
+      '/reference/': sidebarReference(),
       '/help/': sidebarHelp(),
     },
 

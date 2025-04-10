@@ -21,7 +21,7 @@ first**.
 
 Here's a quick explanation: It is not possible to differentiate the error
 messages that arise when peers' keys do not match the keys in the array of
-[trusted peers](/guide/configure/peer-configuration.md#trusted-peers),
+trusted peers (TODO link to config guide)
 because it would expose the peers' public key. As such, if you have Helm
 charts or K8s deployed with keys defined via the environment variables, you
 should check for Key definitions.

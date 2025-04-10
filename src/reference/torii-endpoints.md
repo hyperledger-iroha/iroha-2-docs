@@ -43,11 +43,6 @@ To establish two-way communication with the `TORII` endpoints, the following add
    This address is the same as the `TORII_API_URL` address in the `configs/client_cli/config.json` client configuration file.
    - `TELEMETRY_URL` — connects to the [Prometheus](https://prometheus.io/) endpoint address that is used as a [metrics](../guide/advanced/metrics.md) tool to monitor the network performance.
 
-   ::: info
-
-   To learn more, see [Peer Configuration > Iroha Public Addresses](../guide/configure/peer-configuration.html#iroha-public-addresses).
-
-   :::
 
 -->
 
@@ -71,9 +66,10 @@ with the `telemetry` feature enabled.
 
 #### Responses
 
-| Code | Response | Description                                                                                 |
-| :--: | -------- | ------------------------------------------------------------------------------------------- |
-| 200  | OK       | Returns the current version of the API used by the requested Iroha 2 node as a JSON string. |
+|  Code   | Response | Description                                                                         |
+| :-----: | -------- | ----------------------------------------------------------------------------------- |
+|   200   | OK       | Returns the current version of the API used by the requested Iroha 2 node as a JSON |
+| string. |
 
 **Example**:
 
@@ -495,27 +491,41 @@ is used by default.
 
 The response body has the following structure:
 
-```rust
-struct Status {
-    /// Number of connected peers, except for the reporting peer itself
-    peers: u64,
-    /// Number of committed blocks
-    blocks: u64,
-    /// Number of accepted transactions
-    txs_accepted: u64,
-    /// Number of rejected transactions
-    txs_rejected: u64,
-    /// Uptime since genesis block creation
-    uptime: Uptime,
-    /// Number of view changes in the current round
-    view_changes: u64,
-    /// Number of the transactions in the queue
-    queue_size: u64,
-}
+`200 OK` reports status as JSON:
 
-struct Uptime {
-    secs: u64,
-    nanos: u32
+::: details Sample response
+
+```json5
+// Note: while this snippet is JSON5 (for better readability),
+//       the actual response is JSON
+{
+  /**
+   * Number of connected peers, except for the reporting peer itself
+   */
+  peers: 3,
+  /**
+   * Number of committed blocks (block height)
+   */
+  blocks: 1,
+  /**
+   * Total number of accepted transactions
+   */
+  txs_accepted: 3,
+  /**
+   * Total number of rejected transactions
+   */
+  txs_rejected: 0,
+  /**
+   * Uptime with nanosecond precision since creation of the genesis block
+   */
+  uptime: {
+    secs: 5,
+    nanos: 937000000,
+  },
+  /**
+   * Number of view changes in the current round
+   */
+  view_changes: 0,
 }
 ```
 
