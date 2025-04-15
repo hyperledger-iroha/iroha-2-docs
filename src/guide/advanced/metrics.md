@@ -95,5 +95,4 @@ uptime_since_genesis_ms 529270
 # HELP view_changes Number of view changes in the current round
 # TYPE view_changes gauge
 view_changes 0
-
 ```
