@@ -1,2 +1,9 @@
+.DS_Store
 node_modules
 dist
+/src/flymd.md
+/src/flymd.html
+/src/*.temp
+/src/snippets
+.vitepress/cache
+.idea
