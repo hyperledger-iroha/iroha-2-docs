@@ -12,19 +12,12 @@ error-prone, particularly for exotic systems (Windows).
 ::: info
 
 For this chapter, we assume you have learned about
-[configuration](/guide/configure/sample-configuration.md) and
 [management](/guide/configure/peer-management.md) in Iroha 2. Here we offer
 you instructions to run Iroha on bare metal without going into details
 about various configuration options available.
 
-You can always check
-[sample configuration files](/guide/configure/sample-configuration.md) for
-`configs/peer/genesis.json` and `configs/peer/config.json`, or refer to
-[peer configuration options](/guide/configure/peer-configuration.md) for
-more details.
+TODO extend with a relevant config guide
 
-<!-- TODO: Add the new configuration reference, once its ready. Issue: https://github.com/hyperledger-iroha/iroha-2-docs/issues/392
-The full list of available options is in the [Iroha Configuration Reference](https://github.com/hyperledger-iroha/iroha/blob/iroha2-dev/docs/source/references/config.md). -->
 
 :::
 
@@ -448,13 +441,11 @@ Iroha in the real world.
     ```
 
 3.  Register your peer to a network, and make sure to add at least four of
-    the peers on that network to the
-    [`TRUSTED_PEERS`](/guide/configure/peer-configuration.md#trusted-peers)
+    the peers on that network to the trusted peers
     array in your configuration file.
 
-4.  Determine the web socket that the other peers will use to connect to
-    you. Make sure that the port is open and use that address
-    ([`P2P_ADDR`](/guide/configure/peer-configuration.md#p2p-addr)) in your
+4.  Determine the socket address that the other peers will use to connect to
+    you. Make sure that the port is open and use that address in your
     `configs/peer/config.json` file.
 
 5.  After you have finished editing the configuration file, deploy Iroha by

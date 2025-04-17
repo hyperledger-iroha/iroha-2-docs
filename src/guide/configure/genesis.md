@@ -10,8 +10,8 @@ empty, even if `configs/peer/genesis.json` is. Here's an example:
 :::
 
 The **genesis account** is specified in the
-[peer configuration](./peer-configuration.md#genesis) file,
-`configs/peer/config.json`. This is the account that will submit the
+[`genesis` section of the peer configuration](/reference/peer-config/params#genesis) file.
+This is the account that will submit the
 genesis block. The genesis account is like a super user account that has
 elevated privileges, but only during the genesis round. The genesis account
 should be signed by one of the peers, or, in other words, it should have
@@ -80,10 +80,3 @@ You can use `kagami` to generate the default genesis block:
   ```
 
 The genesis block should be located in `configs/peer/genesis.json`.
-
-## Configuration
-
-As we already explained, _genesis account_ is specified in the peer
-configuration file, `configs/peer/config.json`. You can use the same
-configuration file to fine-tune other
-[genesis block configurations](./peer-configuration.md#genesis).

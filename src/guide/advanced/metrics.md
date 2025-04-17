@@ -19,12 +19,6 @@ This topic will be updated as part of the new configuration reference.
 The progress on the configuration reference can be tracked in the following GitHub issue:\
 [iroha-2-docs > Issue #392: Tracking issue for Configuration Reference as per RFC](https://github.com/hyperledger-iroha/iroha-2-docs/issues/392).
 
-::: note
-
-For examples, see [Sample Configuration Files](../configure/sample-configuration.md).
-
-:::
-
 After the above is configured, you can use the IP address set in the `"TORII_TELEMETRY_URL"` variable to access the metrics data from within a running Iroha instance.
 
 **Example**:

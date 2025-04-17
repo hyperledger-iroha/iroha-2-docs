@@ -4,7 +4,7 @@ Let's look at the client configuration options.
 
 ::: details Client configuration template
 
-<<< @/snippets/client-cli-config-template.toml
+<<< @/snippets/client.template.toml
 
 :::
 
@@ -24,26 +24,26 @@ For details on cryptographic keys, see [Public Key Cryptography](../security/pub
 
 ## User account
 
-The `ACCOUNT_ID` should be self-explanatory. The only thing you need to
-worry about is that the account must already exist in the blockchain. In
-other words, the account you provide here should already be
+The `ACCOUNT_ID` should be self-explanatory. The only thing you need to worry about is that the account must already
+exist in the blockchain. In other words, the account you provide here should already be
 [registered](/blockchain/instructions.md#un-register).
 
 ::: info Note
 
-Iroha is **case-sensitive**, meaning that _Alice_@wonderland is different
-from _alice_@wonderland. It should go without saying that
-_alice@wonderland_ is not the same as _alice@looking_glass_ either, since
-these accounts belong to different domains, `wonderland` and
-`looking_glass`.
+Iroha is **case-sensitive**, meaning that _Alice_@wonderland is different from _alice_@wonderland. It should go without
+saying that _alice@wonderland_ is not the same as _alice@looking_glass_ either, since these accounts belong to different
+domains, `wonderland` and `looking_glass`.
 
 :::
 
 ## Basic Authentication Credentials
 
-The idea of basic authentication credentials is to provide the access control using a web server with a reverse proxy like [Nginx](https://www.nginx.com/) while these credentials are ignored by the Iroha peers.
+The idea of basic authentication credentials is to provide the access control using a web server with a reverse proxy
+like [Nginx](https://www.nginx.com/) while these credentials are ignored by the Iroha peers.
 
-The login and password will be filled by the client and used for the [`Authorization`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) HTTP [header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers).
+The login and password will be filled by the client and used for the
+[`Authorization`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) HTTP
+[header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers).
 
 Use this style of configuration to provide the basic authentication credentials (login and password):
 
@@ -56,49 +56,26 @@ Use this style of configuration to provide the basic authentication credentials 
 
 ## Iroha Public Addresses
 
-`TORII` is the module in charge of handling incoming and outgoing
-connections. For client configuration, you can set up two addresses:
-`TORII_API_URL` and `TORII_TELEMETRY_URL`.
+`TORII` is the module in charge of handling incoming and outgoing connections. For client configuration, you can set up
+two addresses: `TORII_API_URL` and `TORII_TELEMETRY_URL`.
 
 ### `TORII_API_URL`
 
-First, the `TORII_API_URL` is the same as `TORII` `API_URL` in the
-[peer configuration](peer-configuration.md#api-url). This is the module
-responsible for handling incoming and outgoing connections. You should also
-add the prefix `http://` or (_preferably_) `https://` to the address. For
-example:
+First, the `TORII_API_URL` is the same as
+[`torii.address` in the peer configuration](/reference/peer-config/params#param-torii-address). This is the module
+responsible for handling incoming and outgoing connections. You should also add the prefix `http://` or (_preferably_)
+`https://` to the address. For example:
 
 ```json
-"TORII_API_URL": "http://127.0.0.1:8080"
+{
+  "TORII_API_URL": "http://127.0.0.1:8080"
+}
 ```
-
-### `TORII_TELEMETRY_URL`
-
-The `TORII_TELEMETRY_URL` is used to specify the prometheus endpoint
-address. You can set `TORII_TELEMETRY_URL` like this:
-
-```json
-"TORII_TELEMETRY_URL": "http://127.0.0.1:8180"
-```
-
-A `GET` request to the `127.0.0.1:8180/status` will give you a JSON-encoded
-representation of the top-level metrics, while a `GET` request to
-`127.0.0.1:8180/metrics` will give you a (somewhat verbose) list of all
-available metrics gathered in Iroha. You might want to change this if
-you're having trouble gathering metrics using `prometheus`.
-
-::: info
-
-Learn how to [monitor Iroha performance](/guide/advanced/metrics.md) using
-prometheus.
-
-:::
 
 ## Transaction Limits
 
-You can specify the transaction limits that each transaction must adhere
-to: the maximum number of instructions and the maximum size of a WASM blob
-(in bytes). For example:
+You can specify the transaction limits that each transaction must adhere to: the maximum number of instructions and the
+maximum size of a WASM blob (in bytes). For example:
 
 ```json
 {
@@ -109,9 +86,8 @@ to: the maximum number of instructions and the maximum size of a WASM blob
 
 ## Transaction TTL and Timeout
 
-Configure the time-to-live (TTL) for transactions and the timeout to wait
-for the status. Both values have to be provided in milliseconds. For
-example:
+Configure the time-to-live (TTL) for transactions and the timeout to wait for the status. Both values have to be
+provided in milliseconds. For example:
 
 ```json
 "TRANSACTION_TIME_TO_LIVE_MS": 100000,
@@ -120,5 +96,5 @@ example:
 
 ## Transaction Nonce
 
-If you set `ADD_TRANSACTION_NONCE` to `true`, Iroha will create different
-hashes for transactions that occur repeatedly and simultaneously.
+If you set `ADD_TRANSACTION_NONCE` to `true`, Iroha will create different hashes for transactions that occur repeatedly
+and simultaneously.
