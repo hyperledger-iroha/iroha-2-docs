@@ -621,6 +621,6 @@ This endpoint expects the following data:
 
 | Code | Response                             | Description                                                                        |
 | :--: | ------------------------------------ | ---------------------------------------------------------------------------------- |
-| 200  | OK, Transaction Accepted             | Transaction has been accepted, but is not yet guaranteed to have passed consensus. |
-| 400  | Bad Request, Transaction Rejected    | Transaction is rejected due to being malformed.                                    |
-| 500  | Internal Error, Transaction Rejected | Iroha could not accept transaction due to e.g. its queue being full.               |
+| 200  | OK, Transaction Accepted             | The Transaction has been accepted, but is not yet guaranteed to have passed consensus. |
+| 400  | Bad Request, Transaction Rejected    | The Transaction has been rejected due to being malformed.                                    |
+| 500  | Internal Error, Transaction Rejected | Iroha could not accept the transaction due to e.g. its queue being full.               |
