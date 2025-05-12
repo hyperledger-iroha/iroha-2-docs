@@ -1,4 +1,4 @@
-export const IROHA_RC_1 = 'v2.0.0-rc.1.0'
+export const IROHA_REV = 'v2.0.0-rc.2.0'
 
 /**
  * hyperledger-iroha/iroha-javascript#iroha2 (rc13)

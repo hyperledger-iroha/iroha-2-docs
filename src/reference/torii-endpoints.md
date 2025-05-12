@@ -43,7 +43,6 @@ To establish two-way communication with the `TORII` endpoints, the following add
    This address is the same as the `TORII_API_URL` address in the `configs/client_cli/config.json` client configuration file.
    - `TELEMETRY_URL` — connects to the [Prometheus](https://prometheus.io/) endpoint address that is used as a [metrics](../guide/advanced/metrics.md) tool to monitor the network performance.
 
-
 -->
 
 [[toc]]
@@ -252,6 +251,33 @@ request, after which the server sends an
 Healthy
 ```
 
+## Peers
+
+- **Protocol**: `HTTP`
+- **Method**: `GET`
+- **Encoding**: `JSON`
+- **Endpoint**: `/peers`
+
+#### Requests
+
+A `GET` request to the endpoint.
+
+#### Responses
+
+| Code | Response             |
+| ---- | -------------------- |
+| 200  | List of online peers |
+
+**Example:**
+
+```json
+[
+  "ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@irohad2:1339",
+  "ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@irohad1:1338",
+  "ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@irohad3:1340"
+]
+```
+
 ## Query
 
 - **Protocol**: `HTTP`
@@ -376,42 +402,65 @@ This operation requires the Iroha 2 network to be established with the
 ```bash
 # HELP accounts User accounts registered at this time
 # TYPE accounts gauge
+accounts{domain="garden_of_live_flowers"} 1
 accounts{domain="genesis"} 1
-accounts{domain="wonderland"} 1
+accounts{domain="wonderland"} 2
 # HELP block_height Current block height
 # TYPE block_height counter
-block_height 1
+block_height 2
+# HELP block_height_non_empty Current count of non-empty blocks
+# TYPE block_height_non_empty counter
+block_height_non_empty 1
+# HELP commit_time_ms Average block commit time on this peer
+# TYPE commit_time_ms histogram
+commit_time_ms_bucket{le="100"} 2
+commit_time_ms_bucket{le="400"} 2
+commit_time_ms_bucket{le="1600"} 2
+commit_time_ms_bucket{le="6400"} 2
+commit_time_ms_bucket{le="25600"} 2
+commit_time_ms_bucket{le="+Inf"} 2
+commit_time_ms_sum 13
+commit_time_ms_count 2
 # HELP connected_peers Total number of currently connected peers
 # TYPE connected_peers gauge
-connected_peers 0
+connected_peers 3
 # HELP domains Total number of domains
 # TYPE domains gauge
-domains 2
+domains 3
+# HELP dropped_messages Sumeragi dropped messages
+# TYPE dropped_messages counter
+dropped_messages 0
+# HELP last_commit_time_ms Time (since block creation) it took for the latest block to be committed by this peer
+# TYPE last_commit_time_ms gauge
+last_commit_time_ms 13
+# HELP queue_size Number of the transactions in the queue
+# TYPE queue_size gauge
+queue_size 0
 # HELP tx_amount average amount involved in a transaction on this peer
 # TYPE tx_amount histogram
-tx_amount_bucket{le="0.005"} 0
-tx_amount_bucket{le="0.01"} 0
-tx_amount_bucket{le="0.025"} 0
-tx_amount_bucket{le="0.05"} 0
-tx_amount_bucket{le="0.1"} 0
-tx_amount_bucket{le="0.25"} 0
-tx_amount_bucket{le="0.5"} 0
-tx_amount_bucket{le="1"} 0
-tx_amount_bucket{le="2.5"} 0
-tx_amount_bucket{le="5"} 0
+tx_amount_bucket{le="-1000000000"} 0
+tx_amount_bucket{le="-10000000"} 0
+tx_amount_bucket{le="-100000"} 0
+tx_amount_bucket{le="-1000"} 0
+tx_amount_bucket{le="-10"} 0
+tx_amount_bucket{le="0"} 0
 tx_amount_bucket{le="10"} 0
+tx_amount_bucket{le="1000"} 2
+tx_amount_bucket{le="100000"} 2
+tx_amount_bucket{le="10000000"} 2
+tx_amount_bucket{le="1000000000"} 2
 tx_amount_bucket{le="+Inf"} 2
-tx_amount_sum 26
+tx_amount_sum 57
 tx_amount_count 2
 # HELP txs Transactions committed
 # TYPE txs counter
-txs{type="accepted"} 1
+txs{type="accepted"} 4
 txs{type="rejected"} 0
-txs{type="total"} 1
+txs{type="total"} 4
 # HELP uptime_since_genesis_ms Network up-time, from creation of the genesis block
 # TYPE uptime_since_genesis_ms gauge
-uptime_since_genesis_ms 54572974
-# HELP view_changes Number of view_changes in the current round
+uptime_since_genesis_ms 529270
+# HELP view_changes Number of view changes in the current round
 # TYPE view_changes gauge
 view_changes 0
 ```
@@ -423,34 +472,6 @@ view_changes 0
 To learn more about metrics, see [Metrics](../guide/advanced/metrics.md).
 
 :::
-
-## Telemetry / Peers <Badge text="feature: telemetry" type=tip />
-
-- **Protocol**: `HTTP`
-- **Method**: `GET`
-- **Encoding**: `JSON`
-- **Endpoint**: `/peers`
-
-#### Requests
-
-A `GET` request to the endpoint.
-
-#### Responses
-
-| Code | Response             |
-| ---- | -------------------- |
-| 200  | List of online peers |
-
-**Example:**
-
-```json
-[
-  {
-    "address": "0.0.0.0:8081",
-    "id": "ed0120B23E14F659B91736AAB980B6ADDCE4B1DB8A138AB0267E049C082A744471714E"
-  }
-]
-```
 
 ## Telemetry / Status <Badge text="feature: telemetry" type=tip />
 
@@ -485,49 +506,9 @@ is used by default.
 
 #### Responses
 
-| Code | Response     | Description                                                                                |
-| :--: | ------------ | ------------------------------------------------------------------------------------------ |
-| 200  | Iroha Status | Returns the Iroha network status report encoded as specified in the header of the request. |
-
-The response body has the following structure:
-
-`200 OK` reports status as JSON:
-
-::: details Sample response
-
-```json5
-// Note: while this snippet is JSON5 (for better readability),
-//       the actual response is JSON
-{
-  /**
-   * Number of connected peers, except for the reporting peer itself
-   */
-  peers: 3,
-  /**
-   * Number of committed blocks (block height)
-   */
-  blocks: 1,
-  /**
-   * Total number of accepted transactions
-   */
-  txs_accepted: 3,
-  /**
-   * Total number of rejected transactions
-   */
-  txs_rejected: 0,
-  /**
-   * Uptime with nanosecond precision since creation of the genesis block
-   */
-  uptime: {
-    secs: 5,
-    nanos: 937000000,
-  },
-  /**
-   * Number of view changes in the current round
-   */
-  view_changes: 0,
-}
-```
+| Code | Response | Body     | Description                                                                                |
+| :--: | -------- | -------- | ------------------------------------------------------------------------------------------ |
+| 200  | OK       | [`Status`](/reference/data-model-schema#status) | Returns the Iroha network status report encoded as specified in the header of the request. |
 
 ::: details Examples
 
@@ -539,7 +520,9 @@ The following examples represent the same data:
 {
   "peers": 4,
   "blocks": 5,
-  "txs_accepted": 31,
+  "blocks_non_empty": 3,
+  "commit_time_ms": 130,
+  "txs_approved": 31,
   "txs_rejected": 3,
   "uptime": {
     "secs": 5,
@@ -551,7 +534,7 @@ The following examples represent the same data:
 ```
 
 ```[SCALE]
-10 14 7C 0C 14 40 7C D9 37 08 48
+10 14 0C 09 02 7C 0C 14 40 7C D9 37 08 48
 ```
 
 :::
@@ -590,7 +573,9 @@ values are only returned in the JSON format.
 {
   "peers": 4,
   "blocks": 5,
-  "txs_accepted": 31,
+  "blocks_non_empty": 3,
+  "commit_time_ms": 130,
+  "txs_approved": 31,
   "txs_rejected": 3,
   "uptime": {
     "secs": 5,
@@ -634,8 +619,8 @@ This endpoint expects the following data:
 
 #### Responses
 
-| Code | Response                                 | Description                                                                        |
-| :--: | ---------------------------------------- | ---------------------------------------------------------------------------------- |
-| 200  | Transaction Accepted                     | Transaction has been accepted, but is not yet guaranteed to have passed consensus. |
-| 400  | Transaction Rejected (Malformed)         | Transaction is rejected due to being malformed.                                    |
-| 401  | Transaction Rejected (Improperly signed) | Transaction is rejected due to being improperly signed.                            |
+| Code | Response                             | Description                                                                        |
+| :--: | ------------------------------------ | ---------------------------------------------------------------------------------- |
+| 200  | OK, Transaction Accepted             | The transaction has been accepted, but is not yet guaranteed to have passed consensus. |
+| 400  | Bad Request, Transaction Rejected    | The transaction has been rejected due to being malformed.                                    |
+| 500  | Internal Error, Transaction Rejected | Iroha could not accept the transaction due to e.g. its queue being full.               |
