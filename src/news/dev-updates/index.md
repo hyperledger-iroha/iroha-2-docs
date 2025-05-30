@@ -5,6 +5,7 @@ Welcome to the Iroha 2 Developer Updates Index — your go-to source for trackin
 ## May 2025
 - [Week of May 9 -16](/news/dev-updates/may-9-16.md)
 - [Week of May 16 -23](/news/dev-updates/may-16-23.md)
+- [Week of May 26 -30](/news/dev-updates/may-26-30.md)
 
 ## Learn More
 - [Iroha 2 Social Media Communities](/news/socials.md)
