@@ -410,6 +410,10 @@ function sidebarNews(): DefaultTheme.SidebarItem[] {
       text: 'Socials',
       link: '/news/socials',
     },
+     {
+      text: 'Developer Updates',
+      link: '/news/dev-updates/index',
+    },
   ]
 }
 

@@ -1,11 +1,12 @@
 # Iroha 2 News
 
-In this section you will find the latest Iroha development updates and other relevant news including weekly development updates and releases.
+Welcome to the Iroha 2 News section — your source for the latest updates and announcements from the Iroha 2 development team. Here you'll find weekly developer updates, release notes, and curated external articles highlighting key milestones and insights from the Iroha ecosystem. Whether you're tracking technical progress or looking to learn more about the project, this page provides a centralized hub for staying informed and exploring additional resources.
 
 
 ## Developer Updates
 
-- [Week of May 16 -23](/news/may-16-23.md)
+- [Week of May 9 -16](/news/dev-updates/may-9-16.md)
+- [Week of May 16 -23](/news/dev-updates/may-16-23.md)
 
 ## External Links
 

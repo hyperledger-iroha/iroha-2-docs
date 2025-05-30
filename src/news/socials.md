@@ -18,5 +18,5 @@ Stay in the loop with all the Hyperledger Iroha developments by joining the Iroh
 ### Join the monthly Hyperledger Iroha Community Calls, announced on Iroha social media communities.
 
 ## Learn More
-- [Iroha 2 News](/news/index.md)
+- [Iroha 2 Explained](/blockchain/iroha-explained.md)
 - [Iroha 2 Public Testnet](https://wiki.sora.org/running-a-sora-testnet-node.html)
