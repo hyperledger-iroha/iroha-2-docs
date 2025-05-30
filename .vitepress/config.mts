@@ -412,7 +412,7 @@ function sidebarNews(): DefaultTheme.SidebarItem[] {
     },
      {
       text: 'Developer Updates',
-      link: '/news/dev-updates/index',
+      link: '/news/dev-updates/',
     },
   ]
 }
