@@ -35,6 +35,11 @@ function nav(): DefaultTheme.NavItem[] {
       link: '/help/',
       activeMatch: '/help/',
     },
+     {
+      text: 'News',
+      link: '/news/',
+      activeMatch: '/news/',
+    },
   ]
 }
 
@@ -395,6 +400,23 @@ function sidebarHelp(): DefaultTheme.SidebarItem[] {
   ]
 }
 
+function sidebarNews(): DefaultTheme.SidebarItem[] {
+  return [
+    {
+      text: 'News',
+      link: '/news/',
+    },
+    {
+      text: 'Socials',
+      link: '/news/socials',
+    },
+     {
+      text: 'Developer Updates',
+      link: '/news/dev-updates/',
+    },
+  ]
+}
+
 const BASE = process.env.PUBLIC_PATH ?? '/'
 
 export default defineConfig({
@@ -479,6 +501,7 @@ export default defineConfig({
       '/blockchain/': sidebarChain(),
       '/reference/': sidebarReference(),
       '/help/': sidebarHelp(),
+      '/news/': sidebarNews(),
     },
 
     search: {
