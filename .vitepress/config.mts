@@ -35,11 +35,6 @@ function nav(): DefaultTheme.NavItem[] {
       link: '/help/',
       activeMatch: '/help/',
     },
-    {
-      text: 'News',
-      link: '/news/',
-      activeMatch: '/news/',
-    },
   ]
 }
 
