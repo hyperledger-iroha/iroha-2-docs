@@ -7,7 +7,7 @@ Welcome to the Iroha 2 News section — your source for the latest updates and a
 
 - [Week of May 9 -16](/news/dev-updates/may-9-16.md)
 - [Week of May 16 -23](/news/dev-updates/may-16-23.md)
-- [Week of May 26 -30](/news/dev-updates/may-26-30.md)
+- [Week of May 23 -30](/news/dev-updates/may-23-30.md)
 
 ## External Links
 
