@@ -35,7 +35,7 @@ function nav(): DefaultTheme.NavItem[] {
       link: '/help/',
       activeMatch: '/help/',
     },
-     {
+    {
       text: 'News',
       link: '/news/',
       activeMatch: '/news/',
@@ -410,7 +410,7 @@ function sidebarNews(): DefaultTheme.SidebarItem[] {
       text: 'Socials',
       link: '/news/socials',
     },
-     {
+    {
       text: 'Developer Updates',
       link: '/news/dev-updates/',
     },
