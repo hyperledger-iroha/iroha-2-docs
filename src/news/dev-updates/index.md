@@ -9,4 +9,4 @@ Welcome to the Iroha 2 Developer Updates Index — your go-to source for trackin
 
 ## Learn More
 - [Iroha 2 Social Media Communities](/news/socials.md)
-- [Start Building on Iroha 2](/guide/tutorials.md)
+- [Start Building on Iroha 2](/guide/tutorials/index.md)
