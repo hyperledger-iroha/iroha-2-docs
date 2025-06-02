@@ -54,4 +54,14 @@ describe('Parse link', () => {
       anchor: 'zzz',
     } satisfies LinkOtherFile)
   })
+
+  test('Emoji in anchor (self)', () => {
+    const result = parseLink({ root: '/root', source: '/root/index.html', href: '/#🆕' })
+    expect(result).toEqual({ type: 'self', anchor: '🆕' } satisfies LinkSelfAnchor)
+  })
+
+  test('Emoji in anchor (other)', () => {
+    const result = parseLink({ root: '/root', source: '/root/index.html', href: '/other.html#🆕' })
+    expect(result).toEqual({ type: 'other', file: '/root/other.html', anchor: '🆕' } satisfies LinkOtherFile)
+  })
 })

@@ -220,7 +220,7 @@ export function parseLink(opts: { root: string; source: string; href: string; pu
     .with(
       { origin: DUMMY_ORIGIN, pathname: P.select('pathname'), hash: P.select('hash') },
       ({ pathname, hash }): ParsedLink => {
-        const anchor = hash ? hash.slice(1) : undefined
+        const anchor = hash ? decodeURI(hash.slice(1)) : undefined
 
         let pathProcessed = pathname
         if (opts.publicPath && pathProcessed.startsWith(opts.publicPath)) {
