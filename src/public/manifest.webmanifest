@@ -1,0 +1,9 @@
+{
+  "name": "Iroha 2 Documentation",
+  "start_url": "https://hyperledger.github.io/iroha-2-docs/",
+  "display": "standalone",
+  "icons": [
+    { "src": "icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ]
+}

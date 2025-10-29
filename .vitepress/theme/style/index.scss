@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
+
+:root {
+  --vp-font-family-mono:
+    "JetBrains Mono", "Fira Code", Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  --vp-font-family-base:
+    "Sora", "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --vp-c-brand-1: var(--vp-c-red-1);
+  --vp-c-brand-2: var(--vp-c-red-2);
+  --vp-c-brand-3: var(--vp-c-red-3);
+  --vp-c-brand-soft: var(--vp-c-red-soft);
+}
+
+.VPSidebarItem.level-0 .text {
+  font-weight: 500 !important;
+  color: var(--vp-c-text-1);
+}
+
+.VPSidebarItem.level-1 .text,
+.VPSidebarItem.level-2 .text,
+.VPSidebarItem.level-3 .text,
+.VPSidebarItem.level-4 .text,
+.VPSidebarItem.level-5 .text {
+  font-weight: 400 !important;
+  color: var(--vp-c-text-2);
+}
+
+.VPHero .image {
+  min-height: 320px;
+}
+
+.vp-doc {
+  div[class*="language-"] {
+    pre {
+      font-size: 14px;
+      font-variant-ligatures: none;
+    }
+  }
+
+  code {
+    font-variant-ligatures: none;
+  }
+
+  sup {
+    line-height: 0;
+  }
+
+  p {
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  tr.transposed-table:nth-child(2n+1) {
+    background: var(--vp-c-bg-soft);
+
+    pre {
+      border: 1px solid var(--vp-c-divider);
+      border-radius: 8px;
+    }
+  }
+
+  tr.transposed-table:nth-child(2n) {
+    background: transparent;
+  }
+
+  section.footnotes {
+    font-size: 0.8rem;
+  }
+}
