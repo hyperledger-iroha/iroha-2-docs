@@ -1,27 +1,23 @@
 # Foreign Function Interfaces (FFI)
 
-To reduce the sizes of smartcontracts, we provide a dynamic library in the
-execution environment. We shall detail how to link against that library and
-use the functions at a later date, but for now, let's explore how to
-include functions and trait implementations into that library.
+The `iroha_ffi` crate provides macros and traits for generating C ABI
+bindings from Rust APIs. It is used where Iroha types need to cross an FFI
+boundary, for example by SDK bindings or host integrations.
 
 ## Why FFI
 
 A function is a rather abstract entity, and while most languages agree on
-what a function should do, the way in which said functions are represented
-is very different. Moreover, in some languages (like Rust), the
-consequences of calling a function, and the things that it is allowed to do
-are different. Because one can use any language to create a
-[WASM smartcontract](/blockchain/wasm.md), we need to level the
-playing field. This is where the concept of foreign function interface
-(FFI) comes in.
+what a function should do, the way in which functions are represented is
+very different. Moreover, in some languages, such as Rust, the consequences
+of calling a function and the things that it is allowed to do are also
+different. When Rust APIs need to be called from another language or a
+different host environment, Iroha uses a foreign function interface (FFI)
+to level the playing field.
 
 The main standard used today is the C application binary interface. It's
-simple, it's guaranteed to be available even in languages which can't
-compile to WASM, and it's stable. In principle, you could do everything
-manually, but Iroha provides you with a crate `iroha_ffi` which contains
-all you need to generate FFI-compliant functions out of your existing
-`Rust` API.
+simple, widely available, and stable. In principle, you could do
+everything manually, but Iroha provides the `iroha_ffi` crate to generate
+FFI-compliant functions out of an existing Rust API.
 
 You can, of course, do this your way. The `iroha_ffi` crate merely
 generates the code that you would need to generate anyway. Writing the
@@ -84,16 +80,8 @@ mistakes, you must ensure the program's correctness on your end.
 
 :::
 
-The diagram below uses the creation of a new domain as an example to show
-the conversion process (more on the name mangling semantics in a
-[separate section](#name-mangling)).
-
-![Untitled](/img/ffi.png)
-
-The main traits that enable binding generation are `ReprC`, `FfiType` and
-`FfiConvert`
-
-<!-- Check: might change in future releases -->
+The main traits that enable binding generation are `ReprC`, `FfiType`, and
+`FfiConvert`.
 
 | Trait        | Description                                                                                                                                                                     |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

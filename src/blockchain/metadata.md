@@ -1,7 +1,9 @@
 # Metadata
 
-Metadata are key-value pairs that are attached to objects in the
-blockchain. The following can contain metadata:
+Metadata is a checked key-value map attached to ledger objects. Keys are
+`Name` values and values are JSON (`Json`) payloads.
+
+The following objects can carry metadata:
 
 - domains
 - accounts
@@ -10,47 +12,44 @@ blockchain. The following can contain metadata:
 - triggers
 - transactions
 
-The metadata can be of very different types, such as:
+Use metadata for small descriptive or indexing fields that belong in ledger
+state. Large payloads should be stored outside the WSV and referenced by a
+digest, URI, or SoraFS path.
 
-- structures with named or unnamed fields
-- enums
-- integers
-- numbers with fixed decimal precision
-- strings
-- Boolean values
-- arrays
-- associative arrays
-- vectors
-- request results
+For guidance on choosing metadata, assets, NFTs, or off-chain storage, see
+[Metadata and Ledger Storage Choices](/guide/configure/metadata-and-store-assets.md).
 
-The object's metadata can be transferred one by one, or in bulk via a
-[WASM](/blockchain/wasm.md) transaction. The `Store` asset type is
-used for working with metadata. Let's take a closer look at this asset
-type.
+## Updating Metadata
 
-## `MetadataChanged`
+Metadata is changed with Iroha Special Instructions:
 
-`MetadataInserted` or `MetadataRemoved` events are emitted when metadata is
-inserted or removed from accounts, domains, assets, or asset definitions.
-The emitted event also contains the data that was inserted or removed from
-the object. This data is stored in `MetadataChanged` in the form of a
-`(key, value)` pair.
+- [`SetKeyValue`](/blockchain/instructions.md#setkeyvalue-removekeyvalue)
+  inserts or replaces a key
+- [`RemoveKeyValue`](/blockchain/instructions.md#setkeyvalue-removekeyvalue)
+  removes a key
+
+The authority submitting the transaction must have the permission required by
+the active runtime validator. For the default permission surface, see
+[Permission Tokens](/reference/permissions.md).
+
+## Events
+
+Data events are emitted when metadata changes. The generic event payload is
+`MetadataChanged<Id>`:
 
 ```mermaid
 classDiagram
 
-direction LR
-
-class MetadataChanged~ID~ {
-    target_id: ID
-    key: Name
-    value: Box~Value~
+class MetadataChanged~Id~ {
+  target: Id
+  key: Name
+  value: Json
 }
 
-class AccountMetadataChanged~AccountId~
-class AssetMetadataChanged~AssetId~
-class AssetDefinitionMetadataChanged~AssetDefinitionId~
-class DomainMetadataChanged~DomainId~
+class AccountMetadataChanged
+class AssetMetadataChanged
+class AssetDefinitionMetadataChanged
+class DomainMetadataChanged
 
 MetadataChanged --> AccountMetadataChanged
 MetadataChanged --> AssetMetadataChanged
@@ -58,105 +57,18 @@ MetadataChanged --> AssetDefinitionMetadataChanged
 MetadataChanged --> DomainMetadataChanged
 ```
 
-Check [data filters](./filters.md#data-filters) for details.
-
-## `Store` Asset
-
-In Iroha 2 there is an asset called `Store` that was designed to be a
-package of data. You can use `Store` when you require a storage of
-key-value pairs. The `SetKeyValue` and `RemoveKeyValue` instructions are
-used with the `Store` asset type. Here is an example of `SetKeyValue`
-instruction:
-
-```rust
-// Mouse's account
-let mouse_id: AccountId = "mouse@wonderland".parse();
-
-// Registering `Store` asset definition
-let hat_definition_id: AssetDefinitionId =
-    "hat#wonderland".parse();
-let new_hat_definition = AssetDefinition::store(hat_definition_id);
-let register_hat = RegisterBox::new(new_hat_definition);
-
-let mouse_hat_id = AssetId::new(hat_definition_id, mouse_id);
-
-// New Iroha Special Instruction for setting key-value pairs for Mouse's hats:
-let set_hat_color = SetKeyValueBox::new(
-    mouse_hat_id,
-    Name::from_str("color"),
-    "yellow".to_owned(),
-);
-```
-
-## Working with metadata
-
-The following example showcases how to register and grant a
-[role](/blockchain/permissions.md#permission-groups-roles) to access
-another account's metadata.
-
-::: details Example
-
-```rust
-#[test]
-fn register_and_grant_role_for_metadata_access() -> Result<()> {
-    let (_rt, _peer, test_client) = <PeerBuilder>::new().start_with_runtime();
-    wait_for_genesis_committed(&vec![test_client.clone()], 0);
-
-    let alice_id = AccountId::from_str("alice@wonderland")?;
-    let mouse_id = AccountId::from_str("mouse@wonderland")?;
-
-    // Registering Mouse
-    let mouse_key_pair = KeyPair::generate()?;
-    let register_mouse = RegisterBox::new(Account::new(
-        mouse_id.clone(),
-        [mouse_key_pair.public_key().clone()],
-    ));
-    test_client.submit_blocking(register_mouse)?;
-
-    // Registering role
-    let role_id = <Role as Identifiable>::Id::from_str("ACCESS_TO_MOUSE_METADATA")?;
-    let role = iroha_data_model::role::Role::new(role_id.clone())
-        .add_permission(CanSetKeyValueInUserMetadata::new(mouse_id.clone()))
-        .add_permission(CanRemoveKeyValueInUserMetadata::new(mouse_id.clone()));
-    let register_role = RegisterBox::new(role);
-    test_client.submit_blocking(register_role)?;
-
-    // Mouse grants role to Alice
-    let grant_role = GrantBox::new(role_id.clone(), alice_id.clone());
-    let grant_role_tx = Transaction::new(mouse_id.clone(), vec![grant_role.into()].into(), 100_000)
-        .sign(mouse_key_pair)?;
-    test_client.submit_transaction_blocking(grant_role_tx)?;
-
-    // Alice modifies Mouse's metadata
-    let set_key_value = SetKeyValueBox::new(
-        mouse_id,
-        Name::from_str("key").expect("Valid"),
-        Value::String("value".to_owned()),
-    );
-    test_client.submit_blocking(set_key_value)?;
-
-    // Making request to find Alice's roles
-    let found_role_ids = test_client.request(client::role::by_account_id(alice_id))?;
-    assert!(found_role_ids.contains(&role_id));
-
-    Ok(())
-}
-```
-
-:::
+Use [data event filters](/blockchain/filters.md#data-event-filters) to
+subscribe only to metadata events for the entity type or object ID that
+matters to an integration.
 
 ## Queries
 
-You can get the key value of an object metadata using
-[queries](/blockchain/queries.md):
+Metadata is returned as part of the queried object. For example, use
+[`FindAccountById`](/reference/queries.md#accounts-and-permissions),
+[`FindDomainById`](/reference/queries.md#domains-and-peers), or
+[`FindAssetDefinitionById`](/reference/queries.md#assets-nfts-and-rwas) and
+then read the object's `metadata` field.
 
-- [`FindAccountKeyValueByIdAndKey`](/reference/queries.md#findaccountkeyvaluebyidandkey)
-- [`FindAssetKeyValueByIdAndKey`](/reference/queries.md#findassetkeyvaluebyidandkey)
-- [`FindAssetDefinitionKeyValueByIdAndKey`](/reference/queries.md#findassetdefinitionkeyvaluebyidandkey)
-- [`FindDomainKeyValueByIdAndKey`](/reference/queries.md#finddomainkeyvaluebyidandkey)
-- [`FindTriggerKeyValueByIdAndKey`](/reference/queries.md#findtriggerkeyvaluebyidandkey)
-
-## Permissions
-
-Pre-configured tokens in Iroha 2 that allow to set or remove
-key-values in accounts, assets, asset definitions, and so on are described in [`Permissions`](/reference/permissions.md).
+Metadata keys are part of the ledger state, so keep them stable and avoid
+encoding application-specific version churn into the key name when a JSON value
+can carry that version explicitly.

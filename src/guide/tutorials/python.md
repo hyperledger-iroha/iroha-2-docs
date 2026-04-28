@@ -1,9 +1,8 @@
 # Python
 
 The Python SDK in the upstream workspace is `iroha-python`. It targets the
-current Torii and Norito surfaces and is still marked as work in progress, but
-it already covers the core client flows you need to start integrating with
-Iroha 3.
+current Torii and Norito surfaces. Treat it as a fast-moving preview SDK and
+pin the package version or source revision used by your integration.
 
 ## Install
 

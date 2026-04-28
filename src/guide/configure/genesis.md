@@ -1,82 +1,61 @@
-# Genesis Block
+# Genesis
 
-The **genesis block** is the first block in your blockchain. It's never
-empty, even if `configs/peer/genesis.json` is. Here's an example:
+Genesis defines the initial chain state. In the current Iroha 2 and Iroha 3
+codebase, the editable source is a JSON manifest and the node consumes a signed
+Norito transaction file.
 
-::: details Genesis Block Example: alice@wonderland
+::: details Default genesis manifest
 
 <<< @/snippets/genesis.json
 
 :::
 
-The **genesis account** is specified in the
-[`genesis` section of the peer configuration](/reference/peer-config/params#genesis) file.
-This is the account that will submit the
-genesis block. The genesis account is like a super user account that has
-elevated privileges, but only during the genesis round. The genesis account
-should be signed by one of the peers, or, in other words, it should have
-the public key of this peer.
+## Files
 
-If you look at the example of a genesis block above, you will see that it
-contains instructions for registering a new domain (`wonderland`), two new
-accounts (`alice@wonderland` and `bob@wonderland`), a new asset
-(`rose#wonderland`) and a `Mint` instruction for this asset, as well as
-several permission tokens and roles. Both new accounts are signed with the
-`ed01207233bfc89dcbd68c19fde6ce6158225298ec1131b6a130d1aeb454c1ab5183c0`
-public key.
+The upstream repository ships a default manifest at `defaults/genesis.json`.
+Kagami-generated networks write their own manifest and signed transaction into
+the output directory:
 
-::: info Note
+```bash
+cargo run --bin kagami -- localnet --build-line iroha3 --peers 4 --out-dir ./localnet
+```
 
-Iroha is **case-sensitive**, meaning that _Alice_@wonderland is different
-from _alice_@wonderland. It should go without saying that
-_alice@wonderland_ is not the same as _alice@looking_glass_ either, since
-these accounts belong to different domains, `wonderland` and
-`looking_glass`.
+The generated `README.md` in that directory records the exact files and launch
+commands for the selected profile.
 
-:::
+## Peer Configuration
 
-The accounts registered in the genesis block are just new accounts. As we
-said above, the **genesis account** is determined in the peer
-configuration. However, you can use the matching signature for the genesis
-account and for a new account in the genesis block. Since the genesis
-account only has privileges during the genesis round, it won't be a
-security issue.
+Peers point at the signed genesis transaction in the `[genesis]` section of
+`config.toml`:
 
-You can generate the default genesis block or create a custom one.
+```toml
+[genesis]
+file = "./genesis.signed.nrt"
+public_key = "ed0120..."
+```
 
-If you need to recommit a genesis block, remove the previously stored
-blocks, then restart the Docker container. The new genesis block will be
-automatically recommited upon container restart.
+All peers in the network must agree on the signed genesis transaction and the
+genesis public key.
 
-## Generation
+## Signing Genesis
 
-You can add various instructions to the genesis block, such as registering
-new accounts or assets, as well as minting assets. You can also register
-permission tokens and roles, as well as grant them to the registered
-accounts.
+If you edit a manifest manually, validate and sign it before starting peers:
 
-### Generate default genesis block
+```bash
+cargo run --bin kagami -- genesis validate ./genesis.json
+cargo run --bin kagami -- genesis sign ./genesis.json \
+  --private-key "$GENESIS_PRIVATE_KEY_HEX" \
+  --algorithm ed25519 \
+  --out-file ./genesis.signed.nrt
+```
 
-You can use `kagami` to generate the default genesis block:
+For NPoS or Nexus profiles, include the topology and BLS Proofs-of-Possession
+required by the generated profile. Kagami `localnet`, `wizard`, and profile
+generation commands handle those details automatically.
 
-- Generate a genesis block in JSON format:
+## Recommitting Genesis
 
-  ```bash
-  $ kagami genesis
-  ```
-
-- Generate a genesis block in JSON format and write the output to the
-  specified file:
-
-  ```bash
-  $ kagami genesis > genesis.json
-  ```
-
-- Generate a synthetic genesis block in JSON format and write the `n`
-  domains, `m` accounts per domain and `p` assets per domain:
-
-  ```bash
-  $ kagami genesis --synthetic --domains n --accounts-per-domain m --assets-per-domain p
-  ```
-
-The genesis block should be located in `configs/peer/genesis.json`.
+A peer only commits genesis when its storage is empty. To test a new genesis in
+a disposable localnet, stop the peers, remove their generated state directory,
+and start from the new signed genesis. Do not replace genesis on a running
+network unless every validator is coordinating the same migration.

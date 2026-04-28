@@ -1,5 +1,5 @@
-// FIXME: this file reflects types from `@iroha2/data-model-schema` package which isn't published yet
-//        https://github.com/hyperledger-iroha/iroha-javascript/pull/170
+// Types accepted by the docs schema renderer. They mirror the JSON emitted by
+// `kagami advanced schema` in the local Iroha workspace.
 
 export interface Schema {
   [type: string]: SchemaTypeDefinition
@@ -11,6 +11,7 @@ export type SchemaTypeDefinition =
   | MapDefinition
   | VecDefinition
   | OptionDefinition
+  | ResultDefinition
   | NamedStructDefinition
   | EnumDefinition
   | ArrayDefinition
@@ -45,6 +46,13 @@ export interface ArrayDefinition {
 
 export interface OptionDefinition {
   Option: TypePath
+}
+
+export interface ResultDefinition {
+  Result: {
+    ok: TypePath
+    err: TypePath
+  }
 }
 
 export interface NamedStructDefinition {

@@ -38,5 +38,6 @@ these changes most quickly:
 ## Read Next
 
 - [Launch Iroha 3](/get-started/launch-iroha-2.md)
+- [World, WSV, and Kura storage](/blockchain/world.md)
 - [Genesis reference](/reference/genesis.md)
 - [Torii endpoints](/reference/torii-endpoints.md)

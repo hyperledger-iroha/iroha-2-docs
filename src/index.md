@@ -43,5 +43,16 @@ features:
 footer: true
 ---
 
+<section class="nexus-build" aria-labelledby="nexus-build-title">
+  <a class="nexus-build__panel" href="/get-started/sora-nexus-dataspaces">
+    <span class="nexus-build__copy">
+      <span class="nexus-build__eyebrow">SORA Nexus</span>
+      <span id="nexus-build-title" class="nexus-build__title">Build on Iroha 3 / SORA Nexus</span>
+      <span class="nexus-build__details">Build on SORA 3 with Taira testnet, Minamoto mainnet, and copy-paste examples you can try now.</span>
+    </span>
+    <span class="nexus-build__action">Open guide <span aria-hidden="true">-&gt;</span></span>
+  </a>
+</section>
+
 <hr style="margin-top: 3rem;">
 <p style="font-weight: 200; font-size: 0.875rem;">Hyperledger Iroha is part of <a href="https://www.lfdecentralizedtrust.org/projects/tag/ledger-technology" target="_blank">LF Decentralized Trust</a>. Learn more at <a href="https://iroha.tech/" target="_blank">iroha.tech</a>.</p>

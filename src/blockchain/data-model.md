@@ -1,139 +1,100 @@
 # Data Model
 
-In language-specific guides we already walked you through registering
-domains, accounts, and assets. Here we merely wish to illustrate the
-relationship between various objects in the blockchain.
+Iroha stores ledger state in the `World`. The current model keeps the same
+high-level entities as Iroha 2 while changing several identifiers for Iroha 3
+and Nexus flows:
 
+- domains are dataspace-qualified, for example `payments.universal`
+- accounts are canonical and domainless; the account ID is derived from the
+  account controller
+- asset definitions can keep a domain/name projection, but their canonical
+  textual address is an opaque Base58 identifier
+- assets are balances held by accounts for a specific asset definition
+
+```mermaid
+classDiagram
+
+class World
+class Domain {
+  id: DomainId
+  logo: Option<SorafsUri>
+  metadata: Metadata
+  owned_by: AccountId
+}
+class Account {
+  id: AccountId
+  metadata: Metadata
+  label: Option<AccountAlias>
+  uaid: Option<UniversalAccountId>
+  opaque_ids: Vec<OpaqueAccountId>
+}
+class AccountController {
+  key
+  multisig policy
+}
+class AssetDefinition {
+  id: AssetDefinitionId
+  spec
+  mintable
+  metadata
+}
+class Asset {
+  id: AssetId
+  value
+}
+
+World *-- Domain : registers
+World *-- Account : registers
+World *-- AssetDefinition : registers
+World *-- Asset : stores balances
+Account --> AccountController : authorized by
+Domain --> Account : owned_by
+AssetDefinition --> Domain : optional projection
+Asset --> AssetDefinition : definition
+Asset --> Account : held by
 ```
 
-   +-----------------------------------------------+
-   |                                               |
-   |     +-----------------+                       |
-   |     |Domain           |                       |
-   |     +--------------+  |                       |
-   |     ||Asset        |  |                       |
-+--+--+  ||Definition(s)|  |                       |
-|World|  +--------------+  |                       |
-+--+--+  |                 |                       |
-   |     +------------+    |                       |
-   |     ||Account(s)||    | has   +-----------+   |
-   |     |------------------------->Signatories|   |
-   |     +-----------------+       +-----------+   |
-   |                       |                       |
-   |                       |  has  +--------+      |
-   |                       +------->Asset(s)|      |
-   |                               +--------+      |
-   +-----------------------------------------------+
+## Example
 
-```
-
-[//]: # 'TODO: rewrite above schema with mermaid'
-
-The following example shows the relationship between domains, accounts, and
-assets.
-
-<div class="domains-example-scope">
+In an Iroha 3 network, `wonderland.universal` is a domain inside the
+`universal` dataspace. `alice` and `rabbit` are not encoded as
+`alice@wonderland`; they are canonical accounts controlled by their keys or
+policies. A projected asset definition can still be constructed from a domain
+and name such as `rose` in `wonderland.universal`, while the canonical asset
+definition address used on the wire is the generated Base58 address.
 
 ```mermaid
 classDiagram
 
 class domain_wonderland {
-  id = "wonderland"
+  id = "wonderland.universal"
 }
-class account_alice:::aliceblue {
-  id = "alice@wonderland"
+class account_alice {
+  id = "AccountId(controller=alice_key)"
+  label = "alice"
 }
-class account_mad_hatter:::aliceblue {
-  id = "mad_hatter@wonderland"
+class account_rabbit {
+  id = "AccountId(controller=rabbit_key)"
+  label = "rabbit"
 }
-
-class asset_rose:::pink {
-  id = "rose#wonderland"
-}
-
-domain_wonderland *-- account_alice : registered in
-domain_wonderland *-- asset_rose : registered in
-account_alice *-- asset_rose : registered by
-domain_wonderland *-- account_mad_hatter : registered in
-
-class domain_looking_glass {
-  id = "looking_glass"
+class asset_rose {
+  name projection = "rose"
+  domain projection = "wonderland.universal"
 }
 
-class account_rabbit:::aliceblue {
-  id = "white_rabbit@looking_glass"
-}
-
-domain_looking_glass *-- account_rabbit : registered in
+domain_wonderland --> account_alice : owned_by
+asset_rose --> domain_wonderland : projected under
+account_alice --> asset_rose : holds balance
+account_rabbit --> asset_rose : may receive balance
 ```
 
-</div>
+## Related docs
 
-<style scoped lang="scss">
-.domains-example-scope {
-  :deep(.aliceblue) rect {
-      stroke: rgba(59, 130, 246, 0.8) !important;
-      stroke-width: 4 !important;
-  }
-
-  :deep(.pink) rect {
-    stroke: rgba(246, 50, 100, 0.8) !important;
-    stroke-width: 4 !important;
-  }
-}
-</style>
-
-::: details Language-specific guides to register these objects
-
-| Language              | Guide                                                                                                                                                                                                              |
-| --------------------- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| CLI                   | Register a [domain](/get-started/operate-iroha-2-via-cli.md#_3-register-a-domain), an [account](/get-started/operate-iroha-2-via-cli.md#_4-register-an-account), an [asset](/get-started/operate-iroha-2-via-cli.md#_6-register-and-mint-assets)                                  |
-| Rust                  | Register a [domain](/guide/tutorials/rust.md#_3-registering-a-domain), an [account](/guide/tutorials/rust.md#_4-registering-an-account), an [asset](/guide/tutorials/rust.md#_5-registering-and-minting-assets)                                  |
-| Kotlin/Java           | Register a [domain](/guide/tutorials/kotlin-java.md#_3-querying-and-registering-domains), an [account](/guide/tutorials/kotlin-java.md#_4-registering-an-account), an [asset](/guide/tutorials/kotlin-java.md#_5-registering-and-minting-assets) |
-| Python                | Register a [domain](/guide/tutorials/python.md#_3-registering-a-domain), an [account](/guide/tutorials/python.md#_4-registering-an-account), an [asset](/guide/tutorials/python.md#_5-registering-and-minting-assets)                            |
-| JavaScript/TypeScript | Register a [domain](/guide/tutorials/javascript.md#_3-registering-a-domain), an [account](/guide/tutorials/javascript.md#_4-registering-an-account), an [asset](/guide/tutorials/javascript.md#_5-registering-and-minting-assets)                |
-
-:::
-
-The diagram below provides a more detailed illustration of the relationship
-between domains, accounts, and assets in the blockchain. You can learn more
-about [permissions and roles](./permissions.md) and [metadata](metadata.md)
-in the corresponding sections. The asset structure is illustrated in a
-[dedicated chapter](./assets.md).
-
-```mermaid
-classDiagram
-
-class Domain
-class Account
-class AssetDefinition
-class Asset
-
-Domain *-- "many" Account : contains
-Domain *-- "many" AssetDefinition : contains
-Account *-- "many" Asset : contains
-Asset -- AssetDefinition
-
-Domain : id
-Domain : accounts
-Domain : asset_definitions
-Domain : logo
-Domain : metadata
-
-Account : id
-Account : assets
-Account : signatories
-Account : signature_check_condition
-Account : metadata
-Account : roles
-
-
-AssetDefinition : id
-AssetDefinition : value_type
-AssetDefinition : mintable
-AssetDefinition : metadata
-
-Asset : id
-Asset : value
-```
-
+| Topic | Where to go |
+| --- | --- |
+| Domains | [Domains](/blockchain/domains.md) |
+| Accounts | [Accounts](/blockchain/accounts.md) |
+| Assets | [Assets](/blockchain/assets.md) |
+| Metadata | [Metadata](/blockchain/metadata.md) |
+| Registration and transfer instructions | [Instructions](/blockchain/instructions.md) |
+| Runtime permissions | [Permissions](/blockchain/permissions.md) |

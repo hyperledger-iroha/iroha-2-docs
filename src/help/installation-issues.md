@@ -1,10 +1,31 @@
 # Troubleshooting Installation Issues
 
-This section offers troubleshooting tips for issues with Iroha 2
+This section offers troubleshooting tips for issues with Iroha 2 and Iroha 3
 installation. If the issue you are experiencing is not described here,
 contact us via [Telegram](https://t.me/hyperledgeriroha).
 
-<!-- TODO: add -->
+## Quick checks
+
+Most installation failures come from one of four places:
+
+- a Rust toolchain older than the version pinned by the upstream workspace
+- `cargo` or `rustc` resolving to a different installation than `rustup`
+- missing system build tools such as a C compiler, `pkg-config`, or CMake
+- stale generated snippets or local build artifacts after switching between
+  Iroha branches
+
+From the Iroha source checkout, start with:
+
+```bash
+rustup show
+cargo --version
+rustc --version
+cargo metadata --no-deps
+```
+
+If `cargo metadata` fails, fix the local toolchain before running docs
+commands such as `pnpm get-snippets`, because the docs may invoke Kagami to
+generate the current data-model schema.
 
 ## Troubleshooting Rust Toolchain
 
@@ -14,28 +35,27 @@ Python: XKCD has a famous example of what that might look like:
 
 <div class="flex justify-center">
 
-<!-- FIXME untitled -->
-
-![Untitled](/img/install-troubles.png)
+![Python environment troubleshooting comic](/img/install-troubles.png)
 
 </div>
 
 ### Check Rust version
 
 In the interest of preserving both your and our sanity, make sure that you
-have the right version of `cargo` paired with the right version of `rustc`
-(1.57 and 1.57) respectively. To show the versions, do
+have the right version of `cargo` paired with the right version of `rustc`.
+The current upstream workspace declares `rust-version = "1.92"` and pins the
+toolchain channel in `rust-toolchain.toml`. To show the versions, do
 
 ```bash
 $ cargo -V
-$ cargo 1.60.0 (d1fd9fe 2022-03-01)
+$ cargo 1.93.1 (...)
 ```
 
 and then
 
 ```bash
 $ rustc --version
-$ rustc 1.60.0 (7737e0b5c 2022-04-04)
+$ rustc 1.93.1 (...)
 ```
 
 If you have higher versions, you're fine. If you have lower versions, you
@@ -137,7 +157,7 @@ $ rustup toolchain install stable
 
 ## Troubleshooting Python toolchain
 
-When you install the Python Wheel package using pip on the "[client setup](/guide/tutorials/python#_1-iroha-2-client-setup)" step, you may encounter an error like:
+When you install the Python Wheel package using pip during [Python client setup](/guide/tutorials/python.md), you may encounter an error like:
 "iroha_python-*.whl is not a supported wheel on this platform".
 
 This error means that pip is outdated, so you need to update it.

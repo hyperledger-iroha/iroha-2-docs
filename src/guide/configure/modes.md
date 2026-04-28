@@ -1,12 +1,12 @@
 # Public and Private Blockchains
 
-Iroha can be ran in a variety of configurations. As the administrator of
-your own network, you can use different permission sets to decide what
-criteria must be met in order for some transaction to be accepted.
+Iroha can run in a variety of configurations. As the administrator of your
+own network, you decide which executor and permission policy determine
+whether a transaction is accepted.
 
-We provide two major sets of permissions: called a _private_ and _public_
-permission sets. These need to be added into the `genesis.json` before you
-start an Iroha peer.
+The common profiles are _private_ permissioned networks and more open
+_public_ networks. Both are configured through genesis state and executor
+policy, not through separate node binaries.
 
 Below we outline the major differences in these two use cases.
 
@@ -14,8 +14,8 @@ Below we outline the major differences in these two use cases.
 
 In a _public_ blockchain, most accounts have the same set of permissions.
 In a _private_ blockchain, most accounts are assumed not to be able to do
-anything outside of their own account or domain unless explicitly granted
-said permission.
+anything outside the authority granted to them unless explicitly granted
+the relevant permission.
 
 ::: info
 
@@ -27,8 +27,9 @@ more details.
 
 ## Peers
 
-Any peer can join a _public_ blockchain. For a _private_ blockchain,
-automatic discovery of peers is turned off.
+In a _public_ blockchain, peer admission is part of chain policy. For a
+_private_ blockchain, deployments usually pin the trusted peer set in
+configuration and genesis.
 
 ::: info
 
@@ -43,12 +44,10 @@ Depending on how you decide to set up your
 an account might go one of two ways. To understand why, let's talk about
 permission first.
 
-By default, Iroha allows **all** instructions to go through, until a
-permission validator that can restrict instruction execution has been
-registered. You can add permission validators to your genesis block by
-registering built-in [permission tokens](/blockchain/permissions.md)
-that we thought would be useful for `private` and `public` blockchain
-use-cases. However, in that case, the process of registering accounts is
+The selected executor defines which permission checks apply. You can grant
+the default [permission tokens](/blockchain/permissions.md) in genesis to
+shape a private, administrator-managed network or a more open network.
+Once those permissions are active, the process of registering accounts is
 different.
 
 When it comes to registering accounts, public and private blockchain have
@@ -56,7 +55,8 @@ the following differences:
 
 - In a _public_ blockchain, anyone should be able to register an
   account[^1]. So, in theory, all that you need is a suitable client, a way
-  to generate a private key of a suitable type (`ED25519`), and that's it.
+  to generate a private key for a supported algorithm, and permission
+  policy that accepts the registration.
 
 - In a _private_ blockchain, you can have _any_ process for setting up an
   account: it could be that the registering instruction has to be submitted
@@ -69,16 +69,14 @@ the following differences:
   processes for registering accounts, you need an account to register
   another account.
 
-Built-in permission validators for private blockchains cover the `_typical_
-private blockchain use-case.
+The default permission validators cover the typical private blockchain
+use case.
 
 ::: info
 
-<!-- Check: a reference about future releases or work in progress -->
-
-As of writing, the set of public blockchain permissions is incomplete, and
-as such Iroha source code needs to be modified to run it in the _public_
-mode.
+Public and private modes are policy profiles rather than separate node
+binaries. Review the executor and genesis permissions you ship before
+running an open network.
 
 :::
 
@@ -87,5 +85,6 @@ Refer to the section on
 details about `Register<Account>` instructions.
 
 [^1]:
-    In fact, once we have finished with our key-centric address scheme for
-    accounts, you don't register an account as much as claim it.
+    Current account IDs are canonical and derive from the account
+    controller. The docs still use "register an account" when describing
+    the `Register<Account>` instruction.

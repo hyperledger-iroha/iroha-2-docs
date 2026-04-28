@@ -1,213 +1,100 @@
-# Event Triggers by Example
+# Event Trigger Example
 
-Now that we've gotten the theory out of the way, we want to sit down with
-the Mad Hatter, the March Hare, and the Dormouse and see if we can spin.
-Let's start with an event trigger that shows the basics.
+This example describes the shape of an event trigger in the current Iroha
+model without depending on older `account@domain` or `asset#domain` literals.
 
-## 1. Register accounts
+Suppose a network has:
 
-We have `mad_hatter@wonderland`, `dormouse@wonderland`,
-`march_hare@wonderland` all of which share the fixed-point asset of
-`tea#wonderland`. The Mad Hatter has the tea pot, while the rest have a
-single cup of tea. When `alice@wonderland` had arrived, she got a nice cup
-of tea as well.
+- a canonical account controlled by Alice's key
+- a canonical account controlled by the Mad Hatter's key
+- an asset definition projected as `tea` under `wonderland.universal`
+- a balance of that asset held by each account
 
-The way we get them in Rust code looks like this:
+The goal is to register a trigger that observes Alice's tea balance and
+submits a transfer from the Mad Hatter account when the matching data event is
+emitted.
 
-```rust
-let tea = AssetDefinitionId::new("tea", "wonderland")?;
-let mad_hatter = AccountId::new("mad_hatter", "wonderland")?;
-let dormouse = AccountId::new("dormouse", "wonderland")?;
-let march_hare = AccountId::new("march_hare", "wonderland")?;
-vec![
-  RegisterBox::new(IdentifiableBox::from(NewAccount::new(mad_hatter.clone()))),
-  RegisterBox::new(IdentifiableBox::from(NewAccount::new(march_hare.clone()))),
-  RegisterBox::new(IdentifiableBox::from(NewAccount::new(dormouse.clone()))),
-  RegisterBox::new(IdentifiableBox::from(AssetDefinition::new_fixed(tea.clone()))),
-  MintBox::new(Value::Fixed(100.0_f64.try_into()?), IdBox::AssetId(AssetId::new(tea.clone(), mad_hatter.clone())))
-  MintBox::new(Value::Fixed(1.0_f64.try_into()?), IdBox::AssetId(AssetId::new(tea.clone(), march_hare.clone())))
-  MintBox::new(Value::Fixed(1.0_f64.try_into()?), IdBox::AssetId(AssetId::new(tea.clone(), dormouse.clone())))
-  MintBox::new(Value::Fixed(1.0_f64.try_into()?), IdBox::AssetId(AssetId::new(tea.clone(), alice.clone())))
-]
+## 1. Prepare accounts and assets
+
+Register the participating accounts and the asset definition first. In
+current Iroha, account IDs come from account controllers, while projected
+domains use `domain.dataspace` form:
+
+```text
+domain: wonderland.universal
+asset definition projection: tea in wonderland.universal
+holder accounts: AccountId(controller=alice_key), AccountId(controller=mad_hatter_key)
 ```
 
-## 2. Register a trigger
+The asset definition still has a canonical opaque address. Store or query that
+address after registration and use it in the trigger action.
 
-We want a smart contract that transfers some `tea` from
-`mad_hatter@wonderland` to `alice@wonderland` when her tea reduces by a
-single cup.
+## 2. Choose the trigger authority
 
-For that we need to register a trigger. The boilerplate is straightforward:
+Set the trigger's technical account to a dedicated account when possible. A
+dedicated account makes it clear which permissions are required for trigger
+execution and avoids coupling the trigger to an operator's personal signing
+key.
 
-```rust
-let id = TriggerId::new(Name::new("refresh_tea"));
+The technical account must already exist and must have permission to submit the
+instructions in the trigger executable.
 
-let metadata = Metadata::new();
+## 3. Define the executable
 
-let executable = vec![
-    TransferBox::new(
-      IdBox::AssetId(AssetId::new(tea.clone(), mad_hatter.clone())),
-      Value::Fixed(1_f64.try_into()?),
-      IdBox::AssetId(AssetId::new(alice.clone(), mad_hatter.clone())),
-    )
-];
+The executable is the instruction sequence the trigger submits when the event
+filter matches. For this example, it contains one transfer:
 
-let repeats = Repeats::Indefinitely;
-
-let technical_account = mad_hatter.clone();
-
-let filter = _ // ...
+```text
+Transfer(
+  source = AssetId(tea_definition, mad_hatter_account),
+  value = Numeric(1),
+  destination = AssetId(tea_definition, alice_account)
+)
 ```
 
-## 3. Define an event filter
+Use the SDK's current typed builders for the final transaction payload. Avoid
+hard-coding old textual IDs in trigger code; parse or query canonical IDs
+before building the executable.
 
-The event filter is where we need to spend some time and think. So far
-we've seen the `Pipeline` variety of filters. This time around, the filter
-is a `Data` kind. This type of filter is a tuple with a single variant,
-which is a `FilterOpt` of an `EntityFilter`:
+## 4. Define the event filter
 
-- `FilterOpt` stands for Optional Filter. It can either `AcceptAll` or
-  accept `BySome` of another `Filter`.
-- An `EntityFilter` is a filter that matches `ByAccount` in our case, but
-  can match by many other means. It wraps an `AccountFilter`, which matches
-  various events produced on accounts.
+Use a data-event filter that narrows events to the object you care about:
 
-What we want to do is create an event filter for when `alice@wonderland`
-drinks some of her tea, or, in other words, reduces the `tea` asset by any
-amount. To do this with the current API, we need to work bottom up.
-
-An `IdFilter` is a filter that `.matches(event) == true` if and only if the
-identities are exactly the same. Everything that has an `Id` has a
-corresponding `IdFilter`.
-
-::: info
-
-An `IdFilter` is a parametric structure, an `IdFilter` that works on
-`Peer`s has the type `IdFilter<PeerId>` and is not the same type as an
-`IdFilter` that works with `AccountId`; `IdFilter<AccountId`.
-
-:::
-
-Now if we wanted a filter that will `match` whenever `tea` gets reduced,
-either through a `Transfer` or a `Burn` instruction, we need an
-`AssetFilter`. It needs to look at what the `Id` of the asset is, hence
-`IdFilter<AssetDefinitionId>` and `ByRemoved`.
-
-```rust
-use FilterOpt::{BySome, AcceptAll};
-
-let asset_filter = AssetFilter::new(BySome(IdFilter(tea.clone())), BySome(AssetEventFilter::ByRemoved));
+```text
+EventFilterBox::Data(
+  DataEventFilter for asset changes involving
+  AssetId(tea_definition, alice_account)
+)
 ```
 
-So far so good?
+Keep filters as specific as practical. An `AcceptAll` filter is useful for
+debugging, but it makes every matching event pay the cost of trigger
+evaluation.
 
-Next, we want a filter that looks for changes in an asset for an account.
-Specifically:
+## 5. Register the trigger
 
-```rust
-let account_filter = AccountFilter::new(BySome(IdFilter(alice.clone())), BySome(asset_filter));
-```
+Register the trigger with:
 
-Now, because of the way that `parity_scale_codec` works, we need to wrap
-this in various boxes.
+- a stable `TriggerId`
+- the executable instruction sequence
+- `Repeats::Indefinitely` or `Repeats::Exactly(n)`
+- the technical account
+- the event filter
+- optional metadata
 
-```rust
-let filter = EventFilter::Data(BySome(EntityFilter::ByAccount(account_filter)));
-```
+Trigger registration itself is a normal transaction, so the registering
+account needs permission to register triggers. The technical account needs the
+permissions required by the trigger executable.
 
-## 4. Create a `Trigger` instance
+## Execution order
 
-After this somewhat laborious filter combination, we can create an `Action`
+When a block executes:
 
-```rust
-let action = Action {
-    executable, repeats, technical_account, filter, metadata
-}
-```
+1. Normal transaction instructions run first.
+2. Data events produced by those instructions are collected.
+3. Triggers whose filters match those events are scheduled.
+4. Trigger-produced effects are handled in the block execution pipeline without
+   allowing unbounded recursive trigger execution.
 
-Which allows us to create an instance of a `Trigger`.
-
-```rust
-let trigger = Trigger::new(id, action);
-```
-
-## 5. Create a transaction
-
-Finally, in order to get said trigger onto the blockchain, we create a
-transaction with the following single instruction:
-
-```rust
-Instruction::Register(RegisterBox::new(IdentifiableBox::Trigger(Box::new(trigger))));
-```
-
-## How it works
-
-The technical details of the created transaction are summarised as follows:
-
-- The (normal) instructions that either got submitted from WASM or directly
-  from the client get executed. If there were any triggers that should have
-  been registered, they get registered.
-- Using the total set of events that got generated during the execution of
-  instructions, the triggers (including some that got registered just this
-  round) get executed.
-- The events produced in the previous step get scheduled for execution in
-  the next block.
-
-::: info
-
-The reason why the events caused by the execution of triggers get processed
-in the next block is that we don't want two triggers to inadvertently cause
-an infinite loop of instruction execution and break consensus.
-
-:::
-
-Now each time Alice drinks some tea, the Mad Hatter pours in a whole new
-cup. The keen eyed among you will have noticed that the amount that Alice
-drinks is irrelevant to how much tea will be transferred. Alice may take a
-tiny sip and still be poured a whole new cup's worth.
-
-::: info
-
-We intend to address this issue in the future so that an emitted event also
-has an attached `Value`. We also intend to provide more event filter types.
-For example, we will have filters that match when the asset:
-
-- Decreases by any amount (current behaviour)
-- Decreases by more than (or exactly) the specific amount in one
-  instruction
-- Decreases to below a certain threshold
-
-<!-- Check: a reference about future releases or work in progress -->
-
-Only the first type of event filter is implemented now, and the other two
-can be emulated using a WASM smart contract as the `Executable`.
-
-:::
-
-::: details Why not WASM
-
-The above observation can be generalised. WASM can do any logic that a
-Turing complete machine could, using the data available via queries. So in
-theory for event-based triggers, you could create an `AcceptAll` event
-filter and do all of the processing using the key-value store as persistent
-storage, and then, determining if you want to execute using
-easy-to-understand Rust code, and not our admittedly cumbersome,
-`EventFilters`.
-
-We don't want that. WASM takes up significantly more space, and takes
-longer to execute compared to plain ISI, which are slower than
-`EventFilters`. We want you to want to use the `EventFilters` because they
-would make the process much more efficient, and we are working tirelessly
-to make the experience of using event filters much less gruelling.
-
-However, as was mentioned previously on several occasions, implementing a
-feature properly takes time and effort. Ergonomics must be balanced against
-safety and reliability, so we cannot just make things easier to use. We
-want them to retain many of the advantages of strong typing.
-
-<!-- Check: a reference about future releases or work in progress -->
-
-This is all a work in progress. Our code is in flux. We need time to play
-around with a particular implementation to optimise it.
-
-:::
+If a trigger uses `Repeats::Exactly(n)`, register a new trigger when the count
+is exhausted and the same behavior is needed again.

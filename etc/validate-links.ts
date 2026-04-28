@@ -161,9 +161,8 @@ const ANCHORS_QUERY = cssSelect.compile('main [id]')
 const LINKS_QUERY = cssSelect.compile('main a[href]')
 
 /**
- * TODO: Here we only look into `<main>`. There are also links in `<aside>` and `<header>`, but unlike `<main>`, they
- *       repeat from page to page. Current scan-validate logic doesn't handle such repetition and the report will
- *       look cumbersome.
+ * This scans `<main>` only. Links in `<aside>` and `<header>` repeat from
+ * page to page; validating them here would make duplicate reports noisy.
  */
 function scanLinksAndAnchorsInHTML(html: string): {
   links: string[]

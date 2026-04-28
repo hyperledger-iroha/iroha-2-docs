@@ -165,6 +165,9 @@ function renderSegment(segment: Segment, segmentName: string): string {
         segmentProp('Some', tyMdLink(ty)),
       ),
     )
+    .with({ Result: P.select() }, ({ ok, err }) =>
+      joinDouble(segmentType('Result'), segmentProp('Ok', tyMdLink(ok)), segmentProp('Err', tyMdLink(err))),
+    )
     .with(P.string, (alias) =>
       joinDouble(
         // .

@@ -111,7 +111,7 @@ export function concurrentTasks<T>(data: T[], fn: (data: T) => Promise<void>, ma
  * - `(./config.md#some_hash)` -> `(<base>/config.md#some_hash)`
  * - `(../../client)` -> `(<base with applied ../../>/client)`
  *
- * FIXME: unused
+ * Currently unused; kept for source snippets that need link rebasing.
  */
 export function rewriteMdLinks(base: string): (markdown: string) => string {
   return (markdown) =>

@@ -32,8 +32,188 @@
   min-height: 320px;
 }
 
+.VPHome .VPHero {
+  padding-bottom: 48px;
+}
+
+.VPHome .VPFeatures {
+  padding-top: 28px;
+}
+
+.VPHome .VPFeature {
+  border-color: transparent;
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.VPHome .VPFeature:hover {
+  border-color: var(--vp-c-brand-soft);
+  transform: translateY(-2px);
+}
+
+.VPHome .VPFeature .icon {
+  opacity: 0.92;
+}
+
+.nexus-build {
+  max-width: 1152px;
+  margin: 48px auto 0;
+  padding: 0 24px;
+}
+
+.nexus-build__panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: end;
+  min-height: 240px;
+  padding: 44px;
+  overflow: hidden;
+  color: #ffffff;
+  text-decoration: none;
+  background:
+    linear-gradient(120deg, transparent 0 58%, rgba(255, 255, 255, 0.12) 58% 75%, transparent 75%),
+    linear-gradient(135deg, #a6192e 0%, #521723 46%, #171923 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(20, 20, 28, 0.22);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.vp-doc .nexus-build__panel,
+.vp-doc .nexus-build__panel:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.vp-doc .nexus-build__panel * {
+  text-decoration: none;
+}
+
+.nexus-build__panel:hover {
+  color: #ffffff;
+  text-decoration: none;
+  border-color: rgba(255, 255, 255, 0.34);
+  box-shadow: 0 28px 68px rgba(20, 20, 28, 0.28);
+  transform: translateY(-2px);
+}
+
+.nexus-build__panel:focus-visible {
+  outline: 3px solid var(--vp-c-brand-1);
+  outline-offset: 4px;
+}
+
+.nexus-build__copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 14px;
+  max-width: 760px;
+}
+
+.nexus-build__eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.78);
+  text-transform: uppercase;
+}
+
+.nexus-build__title {
+  max-width: 720px;
+  font-size: 3.7rem;
+  font-weight: 760;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.nexus-build__details {
+  max-width: 620px;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.nexus-build__action {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 0 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #171923;
+  white-space: nowrap;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.nexus-build__panel:hover .nexus-build__action {
+  color: #a6192e;
+  transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+  .nexus-build {
+    margin-top: 36px;
+  }
+
+  .nexus-build__panel {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    min-height: 0;
+    padding: 32px;
+  }
+
+  .nexus-build__title {
+    font-size: 2.45rem;
+    line-height: 1.08;
+  }
+
+  .nexus-build__action {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .nexus-build {
+    padding: 0 20px;
+  }
+
+  .nexus-build__panel {
+    padding: 28px 26px;
+  }
+
+  .nexus-build__title {
+    font-size: 2rem;
+  }
+
+  .nexus-build__details {
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+}
+
 .vp-doc {
   div[class*="language-"] {
+    margin-right: 0;
+    margin-left: 0;
+
     pre {
       font-size: 14px;
       font-variant-ligatures: none;
@@ -50,7 +230,18 @@
 
   p {
     line-height: 1.75;
-    font-weight: 300;
+    font-weight: 400;
+  }
+
+  li {
+    font-weight: 400;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
   }
 
   tr.transposed-table:nth-child(2n+1) {
@@ -68,5 +259,33 @@
 
   section.footnotes {
     font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .VPHome .VPHero {
+    padding-bottom: 28px;
+  }
+
+  .VPHome .VPFeatures {
+    padding-top: 16px;
+  }
+
+  .vp-doc {
+    div[class*="language-"] {
+      border-radius: 0;
+
+      pre {
+        font-size: 12px;
+      }
+    }
+
+    code {
+      overflow-wrap: anywhere;
+    }
+
+    table code {
+      font-size: 0.75em;
+    }
   }
 }

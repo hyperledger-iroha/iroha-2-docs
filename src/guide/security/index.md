@@ -1,10 +1,10 @@
 # Security
 
-When utilizing Iroha 2—or any other blockchain ledger for that matter—security is paramount for financial organizations, as it forms the foundation of trust in an industry where sensitive financial data and transactions are routine. A successful security breach performed by a malicious party can lead to devastating consequences for you. Therefore establishing preemptive security measures is essential to protect the integrity and confidentiality of your sensitive data.
+When utilizing Iroha—or any other blockchain ledger for that matter—security is paramount for financial organizations, as it forms the foundation of trust in an industry where sensitive financial data and transactions are routine. A successful security breach performed by a malicious party can lead to devastating consequences for you. Therefore establishing preemptive security measures is essential to protect the integrity and confidentiality of your sensitive data.
 
 ### Navigation
 
-In this section you can learn about various aspects of securing your Iroha 2 network. To learn more, choose one of the following topics:
+In this section you can learn about various aspects of securing your Iroha network. To learn more, choose one of the following topics:
 
 - [Security Principles](./security-principles):
 
@@ -24,7 +24,7 @@ In this section you can learn about various aspects of securing your Iroha 2 net
 
   - [Generating Cryptographic Keys](./generating-cryptographic-keys.md):
 
-    Instructions on how to generate cryptographic keys and use `kagami` (a supporting tool shipped alongside Iroha 2).
+    Instructions on how to generate cryptographic keys and use `kagami` (a supporting tool shipped alongside Iroha).
 
   - [Storing Cryptographic Keys](./storing-cryptographic-keys.md):
 

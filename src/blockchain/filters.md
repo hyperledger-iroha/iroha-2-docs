@@ -1,303 +1,84 @@
 # Filters
 
-Iroha uses _filter-map paradigm_ to monitor [events](./events.md). Let's
-look at different types of filters that can be used in Iroha.
+Filters narrow event streams and trigger conditions. The current top-level
+event filter is `EventFilterBox`, which can match these event families:
 
-## Data Filters
+- `Pipeline`
+- `Data`
+- `Time`
+- `ExecuteTrigger`
+- `TriggerCompleted`
 
-A data filter is a tuple with a single variant, which is a `FilterOpt` of
-an `EntityFilter`:
+Use the narrowest filter that matches the workflow. Broad filters such as
+`DataEventFilter::Any` are useful for diagnostics, but they make every event
+pay the cost of trigger or subscriber matching.
 
-```mermaid
-classDiagram
+## Data Event Filters
 
-class EntityFilter {
-    <<enumeration>>
-    ByPeer(FilterOpt~PeerFilter~)
-    ByDomain(FilterOpt~DomainFilter~)
-    ByAccount(FilterOpt~AccountFilter~)
-    ByAssetDefinition(FilterOpt~AssetDefinitionFilter~)
-    ByAsset(FilterOpt~AssetFilter~)
-    ByTrigger(FilterOpt~TriggerFilter~)
-    ByRole(FilterOpt~RoleFilter~)
-}
+`DataEventFilter` matches ledger data events. Its current variants include:
 
-class FilterOpt~F: Filter~{
-    <<enumeration>>
-    AcceptAll
-    BySome(F)
-}
+| Variant | Event family |
+| --- | --- |
+| `Any` | Any data event |
+| `Peer` | Peer lifecycle events |
+| `Domain` | Domain lifecycle and metadata events |
+| `Account` | Account lifecycle, metadata, alias, and identity events |
+| `Asset` | Asset balance and metadata events |
+| `AssetDefinition` | Asset definition lifecycle, policy, and metadata events |
+| `Nft` | NFT lifecycle and metadata events |
+| `Rwa` | Real-world-asset lifecycle events |
+| `Trigger` | Trigger lifecycle and metadata events |
+| `Role` | Role lifecycle events |
+| `Configuration` | On-chain configuration events |
+| `Executor` | Runtime executor events |
+| `Proof` | Proof verification lifecycle events |
+| `Confidential` | Confidential asset events |
+| `VerifyingKey` | Verifying-key registry events |
+| `RuntimeUpgrade` | Runtime upgrade events |
+| `Soradns` | Resolver directory governance events |
+| `Sorafs` | SoraFS gateway compliance events |
+| `SpaceDirectory` | Space Directory manifest lifecycle events |
+| `Escrow` | Native asset escrow lifecycle events |
+| `Offline` | Offline settlement events |
+| `Oracle` | Oracle feed events |
+| `Social` | Viral incentive events |
+| `Bridge` | Bridge events |
+| `Governance` | Governance events when the governance feature is enabled |
 
-class EventFilter {
-    FilterOpt~EntityFilter~
-}
+Most concrete filters also allow an optional ID matcher and an event-set mask.
+For example, an asset filter can match one asset or one class of asset events,
+while a trigger filter can match a trigger ID and a trigger event set.
 
-FilterOpt .. EventFilter
-FilterOpt .. EntityFilter
-EntityFilter .. EventFilter
-```
+## Pipeline Filters
 
-`FilterOpt` stands for Optional Filter. It can either `AcceptAll` or accept
-`BySome` of another `Filter`. An `EntityFilter` is a filter that matches
-events produced by a certain type entity, e.g. by account or domain.
+Pipeline filters match processing events such as block, transaction, merge,
+and witness events. Use them for operational subscriptions, block-processing
+dashboards, and triggers that react to pipeline state rather than ledger data
+objects.
 
-Here is the list of `EntityFilter`s in Iroha:
+## Trigger Filters
 
-```mermaid
-classDiagram
+Triggers store their condition as an `EventFilterBox`. A trigger action also
+stores:
 
-direction LR
+- an executable
+- a repetition policy
+- an authority account
+- an optional time-trigger retry policy
+- metadata
 
-class TriggerFilter {
-    type EventType = TriggerEvent
-    type EventFilter = TriggerEventFilter
-}
+The trigger authority must have the permissions required by the executable.
+Prefer dedicated technical accounts for long-lived triggers.
 
-class TriggerEventFilter {
-    <<enumeration>>
-    ByCreated
-    ByDeleted
-    ByExtended
-    ByShortened
-}
+## Query Filters
 
-class TriggerEvent {
-    <<enumeration>>
-    Created(TriggerId)
-    Deleted(TriggerId)
-    Extended(TriggerNumberOfExecutionsChanged)
-    Shortened(TriggerNumberOfExecutionsChanged)
-}
+Query filters are separate from event filters. Iterable queries can expose
+predicate and selector support. Use query-specific typed filters from the SDK
+so the filter input matches the query output type.
 
-class TriggerNumberOfExecutionsChanged {
-    trigger_id: TriggerId
-    by: u32
-}
+See also:
 
-TriggerFilter .. TriggerEvent
-TriggerEvent .. TriggerNumberOfExecutionsChanged
-TriggerFilter .. TriggerEventFilter
-
-
-class RoleFilter {
-    type EventType = RoleEvent
-    type EventFilter = RoleEventFilter
-}
-
-class RoleEventFilter {
-    <<enumeration>>
-    ByCreated
-    ByDeleted
-}
-
-class RoleEvent {
-    <<enumeration>>
-    Created(RoleId)
-    Deleted(RoleId)
-    PermissionRemoved(PermissionRemoved)
-}
-
-class PermissionRemoved {
-    role_id: RoleId
-    permission_definition_id: PermissionTokenDefinitionId
-}
-
-RoleFilter .. RoleEvent
-RoleEvent .. PermissionRemoved
-RoleFilter .. RoleEventFilter
-
-
-class PeerFilter {
-    type EventType = PeerEvent
-    type EventFilter = PeerEventFilter
-}
-
-class PeerEventFilter {
-    <<enumeration>>
-    ByAdded
-    ByRemoved
-}
-
-class PeerEvent {
-    <<enumeration>>
-    Added(PeerId)
-    Removed(PeerId)
-}
-
-PeerFilter .. PeerEvent
-PeerFilter .. PeerEventFilter
-
-
-
-
-class AssetDefinitionFilter {
-    type EventType = AssetDefinitionEvent
-    type EventFilter = AssetDefinitionEventFilter
-}
-
-class AssetDefinitionEventFilter {
-    <<enumeration>>
-    ByCreated
-    ByDeleted
-    ByMintabilityChanged
-    ByMetadataInserted
-    ByMetadataRemoved
-}
-
-class AssetDefinitionEvent {
-    <<enumeration>>
-    Created(AssetDefinitionId)
-    MintabilityChanged(AssetDefinitionId)
-    Deleted(AssetDefinitionId)
-    MetadataInserted(AssetDefinitionMetadataChanged)
-    MetadataRemoved(AssetDefinitionMetadataChanged)
-}
-
-class AssetDefinitionMetadataChanged {
-    target_id: AssetDefinitionId
-    key: Name
-    value: Box~Value~
-}
-
-AssetDefinitionFilter .. AssetDefinitionEvent
-AssetDefinitionEvent .. AssetDefinitionMetadataChanged
-AssetDefinitionFilter .. AssetDefinitionEventFilter
-
-
-
-class AssetFilter {
-    type EventType = AssetEvent
-    type EventFilter = AssetEventFilter
-}
-
-class AssetEventFilter {
-    <<enumeration>>
-    ByCreated
-    ByDeleted
-    ByAdded
-    ByRemoved
-    ByMetadataInserted
-    ByMetadataRemoved
-}
-
-class AssetEvent {
-    <<enumeration>>
-    Created(AssetId)
-    Deleted(AssetId)
-    Added(AssetChanged)
-    Removed(AssetChanged)
-    MetadataInserted(AssetMetadataChanged)
-    MetadataRemoved(AssetMetadataChanged)
-}
-
-class AssetChanged {
-    asset_id: AssetId
-    amount: AssetValue
-}
-
-class AssetMetadataChanged {
-    target_id: AssetId
-    key: Name
-    value: Box~Value~
-}
-
-AssetFilter .. AssetEvent
-AssetEvent .. AssetChanged
-AssetEvent .. AssetMetadataChanged
-AssetFilter .. AssetEventFilter
-
-
-
-class DomainFilter {
-    type EventType = DomainEvent
-    type EventFilter = DomainEventFilter
-}
-
-class DomainEventFilter {
-    <<enumeration>>
-    ByAccount(FilterOpt~AccountFilter~)
-    ByAssetDefinition(FilterOpt~AssetDefinitionFilter~)
-    ByCreated
-    ByDeleted
-    ByMetadataInserted
-    ByMetadataRemoved
-}
-
-class DomainEvent {
-    <<enumeration>>
-    Account(AccountEvent)
-    AssetDefinition(AssetDefinitionEvent)
-    Created(DomainId)
-    Deleted(DomainId)
-    MetadataInserted(DomainMetadataChanged)
-    MetadataRemoved(DomainMetadataChanged)
-}
-
-class DomainMetadataChanged {
-    target_id: DomainId
-    key: Name
-    value: Box~Value~
-}
-
-DomainFilter .. DomainEvent
-DomainEvent .. DomainMetadataChanged
-DomainFilter .. DomainEventFilter
-
-
-class AccountFilter {
-    type EventType = AccountEvent
-    type EventFilter = AccountEventFilter
-}
-
-class AccountEventFilter {
-    <<enumeration>>
-    ByAsset(FilterOpt~AssetFilter~)
-    ByCreated
-    ByDeleted
-    ByAuthenticationAdded
-    ByAuthenticationRemoved
-    ByPermissionAdded
-    ByPermissionRemoved
-    ByRoleRevoked
-    ByRoleGranted
-    ByMetadataInserted
-    ByMetadataRemoved
-}
-
-class AccountEvent {
-    <<enumeration>>
-    Asset(AssetEvent)
-    Created(AccountId)
-    Deleted(AccountId)
-    AuthenticationAdded(AccountId)
-    AuthenticationRemoved(AccountId)
-    PermissionAdded(AccountPermissionChanged)
-    PermissionRemoved(AccountPermissionChanged)
-    RoleRevoked(AccountRoleChanged)
-    RoleGranted(AccountRoleChanged)
-    MetadataInserted(AccountMetadataChanged)
-    MetadataRemoved(AccountMetadataChanged)
-}
-
-class AccountPermissionChanged {
-    account_id: AccountId
-    permission_id: PermissionTokenId
-}
-
-class AccountRoleChanged {
-    account_id: AccountId
-    role_id: RoleId
-}
-
-class AccountMetadataChanged {
-    target_id: AccountId
-    key: Name
-    value: Box~Value~
-}
-
-AccountFilter .. AccountEvent
-AccountEvent .. AccountPermissionChanged
-AccountEvent .. AccountRoleChanged
-AccountEvent .. AccountMetadataChanged
-AccountFilter .. AccountEventFilter
-```
+- [Events](/blockchain/events.md)
+- [Triggers](/blockchain/triggers.md)
+- [Queries](/blockchain/queries.md)
+- [Query reference](/reference/queries.md)

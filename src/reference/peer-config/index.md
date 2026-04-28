@@ -1,7 +1,8 @@
 # Configuring Iroha
 
-Local peer configuration is set via Environment and/or TOML files. Note that this is different from On-Chain
-Configuration set via `SetParameter` instruction (TODO refer to ISI reference).
+Local peer configuration is set via Environment and/or TOML files. Note that this is different from on-chain
+configuration changed through [`SetParameter`](/blockchain/instructions.md#setparameter)
+instructions.
 
 Use [`--config`](../irohad-cli#arg-config) CLI argument to specify the path to the configuration file.
 

@@ -1,83 +1,83 @@
 # Assets
 
-Iroha has been built with few underlying assumptions about what the assets
-need to be.
+An Iroha asset is a numeric balance held by an account. Every concrete
+balance points to an `AssetDefinition`, and the definition describes how that
+asset can be named, minted, displayed, and partitioned.
 
-The assets can be **fungible** (every £1 is exactly the same as every other
-£1) or **non-fungible** (a £1 bill signed by the Queen of Hearts is not the
-same as a £1 bill signed by the King of Spades).
+## Asset Definition
 
-The assets can also be **mintable** (you can make more of them) and
-**non-mintable** (you can only specify their initial quantity in the
-[genesis block](/guide/configure/genesis.md)).
+An `AssetDefinition` contains:
 
-## Value Types
+- `id`: the canonical asset definition address
+- `name`: a human-readable display name
+- `description`: optional human-readable description
+- `alias`: optional alias in `<name>#<domain>.<dataspace>` or
+  `<name>#<dataspace>` form
+- `spec`: numeric precision and constraints for balances
+- `mintable`: the mintability policy
+- `logo`: optional `SoraFS` URI
+- `metadata`: arbitrary key-value metadata
+- `balance_scope_policy`: whether balances are global or dataspace-restricted
+- `owned_by`: the account that registered or owns the definition
+- `total_quantity`: total issued quantity
+- `confidential_policy`: policy for shielded asset operations
 
-Additionally, the assets have different underlying value types.
-Specifically, we have `AssetValueType.Quantity`, which is effectively an
-unsigned 32-bit integer, a `BigQuantity`, which is an unsigned 128-bit
-integer, and `Fixed`, which is a positive (though signed) 64-bit
-fixed-precision number with nine significant digits after the decimal
-point. All three types can be registered as either **mintable** or
-**non-mintable**.
+Asset definition IDs are canonical opaque addresses. When a definition is
+constructed from a domain and a name, Iroha can keep that domain/name
+projection for UX and queries, but the canonical text form is the generated
+address.
 
-There is also the `Store` asset type, which is used for storing key-values
-in object's metadata. We talk in detail about `Store` asset in the chapter
-related to [metadata](metadata.md).
+## Asset Balance
 
-## Asset Structure
+An `Asset` contains:
 
-```mermaid
-classDiagram
+- `id`: an `AssetId`, which combines the asset definition, holder account, and
+  optional balance scope
+- `value`: a `Numeric` balance
 
-class Asset
-class AssetDefinition
+The holder account is canonical and domainless. The asset definition may be
+projected under a dataspace-qualified domain, for example
+`payments.universal`.
 
-class Id {
-  definition_id
-  account_id
-}
+## Mintability
 
-class Mintable {
-  <<enumeration>>
-  Infinitely
-  Once
-  Not
-}
+Asset definitions support these mintability modes:
 
-class AssetValue {
-  <<enumeration>>
-  Quantity
-  BigQuantity
-  Fixed
-  Store
-}
+| Mode | Meaning |
+| --- | --- |
+| `Infinitely` | Elastic supply. The asset can be minted and burned repeatedly. |
+| `Once` | Fixed-supply token. It can be minted once and then burned. |
+| `Not` | Fixed-supply token that can be burned but not minted again. |
+| `Limited(n)` | Minting is allowed for a limited number of additional operations. |
 
-Asset -- AssetDefinition
-Asset -- Id
-AssetDefinition -- Mintable
-AssetDefinition -- AssetValue 
-AssetDefinition -- Id
+Use `Infinitely` for normal elastic assets and `Once` or `Limited(n)` for
+fixed-supply or bounded-supply assets. Do not use `Not` as an initial policy
+unless the asset supply is already established.
 
-Asset : id {Id}
-Asset : value
+## Balance Scope
 
-AssetDefinition : id {Id}
-AssetDefinition : value_type {AssetValueType}
-AssetDefinition : mintable {Mintable}
-AssetDefinition : metadata
-```
+The `balance_scope_policy` controls how balances are bucketed:
+
+- `Global`: one balance bucket per account and asset definition
+- `DataspaceRestricted`: balances are partitioned by dataspace context
+
+Dataspace-restricted balances are useful when the same asset definition is
+used across multiple Nexus dataspaces but balances must remain isolated.
 
 ## Instructions
 
-Assets can be [registered](./instructions.md#un-register),
-[minted or burned](./instructions.md#mint-burn), and transferred.
+Assets can be registered, minted, burned, and transferred with Iroha Special
+Instructions:
 
-Refer to one of the language-specific guides to walk you through the
-process of registering and minting assets in a blockchain:
+- [`Register` and `Unregister`](/blockchain/instructions.md#un-register)
+- [`Mint` and `Burn`](/blockchain/instructions.md#mint-burn)
+- [`Transfer`](/blockchain/instructions.md#transfer)
+- [`SetKeyValue` and `RemoveKeyValue`](/blockchain/instructions.md#setkeyvalue-removekeyvalue)
 
-- [CLI](/get-started/operate-iroha-2-via-cli.md#_6-register-and-mint-assets)
-- [Rust](/guide/tutorials/rust.md#_5-registering-and-minting-assets)
-- [Kotlin/Java](/guide/tutorials/kotlin-java.md#_5-registering-and-minting-assets)
-- [Python](/guide/tutorials/python.md#_5-registering-and-minting-assets)
-- [JavaScript/TypeScript](/guide/tutorials/javascript.md#_5-registering-and-minting-assets)
+See also:
+
+- [CLI guide](/get-started/operate-iroha-2-via-cli.md)
+- [Rust tutorial](/guide/tutorials/rust.md)
+- [Python tutorial](/guide/tutorials/python.md)
+- [JavaScript/TypeScript tutorial](/guide/tutorials/javascript.md)
+- [Data model](/blockchain/data-model.md)

@@ -42,10 +42,16 @@ practice, inspect:
 
 - `crates/iroha_cli`
 - `crates/iroha/README.md`
-- `crates/iroha_cli/CommandLineHelp.md`
+- `crates/iroha_cli/README.md`
+
+You can regenerate a local CLI help snapshot with:
+
+```bash
+cargo run -p iroha_cli --bin iroha -- tools markdown-help > crates/iroha_cli/CommandLineHelp.md
+```
 
 ## Notes
 
 - The CLI currently provides better coverage than the standalone crate docs.
-- The workspace targets `std`; WASM/no-std builds are not the default path.
+- The workspace targets `std`; IVM/no-std builds are not the default path.
 - For operator-style flows, the CLI documentation is the most current source.

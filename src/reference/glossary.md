@@ -112,8 +112,11 @@ as run-time configuration updates.
 
 ### Kura (Warehouse)
 
-Persistence-related logic. It handles storing the blocks, log rotation,
-block storage folder rotation, etc.
+Persistent block storage. Kura stores signed blocks, block hashes, height
+indexes, recovery sidecars, and commit-roster metadata on disk. The
+[World State View](#world-state-view-wsv) is rebuilt from Kura blocks when a
+state snapshot is unavailable or behind the local block store. See
+[Kura storage](/blockchain/world.md#kura-storage).
 
 ### Kagami(Teacher and Exemplar and/or looking glass)
 
@@ -203,9 +206,11 @@ Usually this entails the election of a new [Leader](#leader).
 
 ## World state view (WSV)
 
-In-memory representation of the current blockchain state. This includes all
-currently loaded blocks, with all of their contents, as well as [peers](#peer)
-elected for the current epoch.
+In-memory representation of the current blockchain state. The WSV contains
+the `World`, committed block hashes, transaction indexes, consensus topology,
+and derived indexes used by queries. It is updated only through committed
+blocks and can be reconstructed from [Kura](#kura-warehouse). See
+[World State View](/blockchain/world.md#world-state-view-wsv).
 
 ## Leader
 

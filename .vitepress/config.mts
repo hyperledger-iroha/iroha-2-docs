@@ -57,6 +57,10 @@ function sidebarStart(): DefaultTheme.SidebarItem[] {
           link: '/get-started/operate-iroha-2-via-cli',
         },
         {
+          text: 'Connect to SORA Nexus Dataspaces',
+          link: '/get-started/sora-nexus-dataspaces',
+        },
+        {
           text: 'Iroha 3 vs. Iroha 2',
           link: '/get-started/iroha-2',
         },
@@ -103,12 +107,36 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [
         {
+          text: 'Configuration Overview',
+          link: '/guide/configure/overview.md',
+        },
+        {
           text: 'Genesis',
           link: '/reference/genesis.md',
         },
         {
+          text: 'Client Configuration',
+          link: '/guide/configure/client-configuration.md',
+        },
+        {
+          text: 'Keys for Deployment',
+          link: '/guide/configure/keys-for-network-deployment.md',
+        },
+        {
+          text: 'Peer Management',
+          link: '/guide/configure/peer-management.md',
+        },
+        {
+          text: 'Metadata Storage Choices',
+          link: '/guide/configure/metadata-and-store-assets.md',
+        },
+        {
           text: 'Torii Endpoints',
           link: '/reference/torii-endpoints.md',
+        },
+        {
+          text: 'Performance and Metrics',
+          link: '/guide/advanced/metrics.md',
         },
         {
           text: 'Binaries',
@@ -128,6 +156,93 @@ function sidebarChain(): DefaultTheme.SidebarItem[] {
         {
           text: 'Iroha 3 Overview',
           link: '/blockchain/iroha-explained',
+        },
+        {
+          text: 'World, WSV, and Kura',
+          link: '/blockchain/world',
+        },
+        {
+          text: 'Data Model',
+          link: '/blockchain/data-model',
+        },
+      ],
+    },
+    {
+      text: 'Ledger Objects',
+      items: [
+        {
+          text: 'Domains',
+          link: '/blockchain/domains',
+        },
+        {
+          text: 'Accounts',
+          link: '/blockchain/accounts',
+        },
+        {
+          text: 'Assets',
+          link: '/blockchain/assets',
+        },
+        {
+          text: 'Metadata',
+          link: '/blockchain/metadata',
+        },
+      ],
+    },
+    {
+      text: 'Transactions and Queries',
+      items: [
+        {
+          text: 'Transactions',
+          link: '/blockchain/transactions',
+        },
+        {
+          text: 'Anonymous Transactions',
+          link: '/blockchain/anonymous-transactions',
+        },
+        {
+          text: 'Instructions',
+          link: '/blockchain/instructions',
+        },
+        {
+          text: 'Queries',
+          link: '/blockchain/queries',
+        },
+        {
+          text: 'Filters',
+          link: '/blockchain/filters',
+        },
+        {
+          text: 'Expressions',
+          link: '/blockchain/expressions',
+        },
+      ],
+    },
+    {
+      text: 'Runtime',
+      items: [
+        {
+          text: 'Permissions',
+          link: '/blockchain/permissions',
+        },
+        {
+          text: 'Events',
+          link: '/blockchain/events',
+        },
+        {
+          text: 'Triggers',
+          link: '/blockchain/triggers',
+        },
+        {
+          text: 'Trigger Examples',
+          link: '/blockchain/trigger-examples',
+        },
+        {
+          text: 'Smart Contracts',
+          link: '/blockchain/wasm',
+        },
+        {
+          text: 'Consensus',
+          link: '/blockchain/consensus',
         },
       ],
     },

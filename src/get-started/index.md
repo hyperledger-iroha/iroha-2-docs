@@ -1,9 +1,9 @@
 # Iroha 3
 
 Iroha 3 is the Nexus-oriented deployment track shipped from the main
-Hyperledger Iroha workspace. It keeps the same core building blocks as Iroha 2
-while adding the Nexus model for data spaces, multi-lane execution, and
-SORA-specific deployment profiles.
+Hyperledger Iroha workspace. It keeps the same core building blocks as
+Iroha 2 while adding the Nexus model for data spaces, multi-lane execution,
+and SORA-specific deployment profiles.
 
 At a high level, Iroha 3 combines:
 
@@ -20,6 +20,7 @@ If you are starting from scratch, follow these pages in order:
 1. [Install Iroha 3](/get-started/install-iroha-2.md)
 2. [Launch Iroha 3](/get-started/launch-iroha-2.md)
 3. [Operate Iroha 3 via CLI](/get-started/operate-iroha-2-via-cli.md)
+4. [Connect to SORA Nexus dataspaces](/get-started/sora-nexus-dataspaces.md)
 
 If you are migrating an existing deployment or mental model, read
 [Iroha 3 vs. Iroha 2](/get-started/iroha-2.md) first.
@@ -41,6 +42,7 @@ The pages you will use most often while running a network are:
 - [Working with Iroha binaries](/reference/binaries.md)
 - [Genesis reference](/reference/genesis.md)
 - [Torii endpoints](/reference/torii-endpoints.md)
+- [Connect to SORA Nexus dataspaces](/get-started/sora-nexus-dataspaces.md)
 - [Compatibility matrix](/reference/compatibility-matrix.md)
 
 ## Learn More

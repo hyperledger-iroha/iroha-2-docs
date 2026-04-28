@@ -21,9 +21,12 @@ first**.
 
 Here's a quick explanation: It is not possible to differentiate the error
 messages that arise when peers' keys do not match the keys in the array of
-trusted peers (TODO link to config guide)
-because it would expose the peers' public key. As such, if you have Helm
-charts or K8s deployed with keys defined via the environment variables, you
-should check for Key definitions.
+trusted peers because it would expose the peers' public key. As such, if you
+have Helm charts or Kubernetes deployments with keys defined via environment
+variables, compare the configured
+[`public_key`](/reference/peer-config/params.md#param-public-key),
+[`private_key`](/reference/peer-config/params.md#param-private-key), and
+[`trusted_peers`](/reference/peer-config/params.md#param-trusted-peers)
+values before investigating higher-level failures.
 
 If in doubt, [generate a new pair of keys](/guide/security/generating-cryptographic-keys.md).

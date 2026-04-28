@@ -1,26 +1,56 @@
-# Choosing Between the Store and Metadata Assets
+# Metadata and Ledger Storage Choices
 
-The `Store` and `metadata` assets allow for the storage of several parameters with different types and string keys. Despite the similarity, their use cases differ.
+Older Iroha documentation described a separate `Store` asset type for arbitrary
+key-value data. The current data model does not use that asset type. Use the
+following options instead.
 
-In most cases, you should only use `metadata` if you want something to use specific quantities and not be editable by other users. There are a few other practical considerations we'll discuss below.
+## Metadata
 
-You must use a `Store` asset if the data exists in the blockchain and a default number type is not applicable. It lets you record data sequences and works as a dictionary, where the keys are strings, while the values are  `Value` type instances that assume many types from `String` to `Ipv6Addr`.
+Use [metadata](/blockchain/metadata.md) for small JSON fields that belong to a
+ledger object:
 
-Let’s discuss some use cases to make it more clear.
+- display names and labels
+- integration IDs
+- small policy flags
+- hashes, URIs, CIDs, or SoraFS paths that point to larger payloads
 
-Let’s say, for example, you have a clinic. Here, generic user data, such as birthdays, can be added to `metadata`. The `Store` asset instances record the appointments, treatments suggested by the doctors, and medical test results.
+Metadata is part of world state and is returned with the object that owns it.
+Keep keys stable, values compact, and permissions explicit. Do not store large
+documents, logs, or high-churn application state directly in metadata.
 
-Suppose you’re using Iroha for a large-scale IoT network to monitor the machines in your factory. In this case, you want to use the `Store` asset instances to record each manufacturing process on each manufacturing device so you can analyze the factors involved in the manufacturing process to understand the “health” of your machines and reduce the possibility of downtime by making repairs when needed.
+## Numeric Assets and NFTs
 
-Finally, imagine a network of organizations that trade specific goods or resources. Here, the `Store` assets would record every trade agreement, including the trade cost and a signature. This approach applies to many cases, starting with someone’s services and ending with NFTs.
+Use assets when the state is value-bearing:
 
-There are also some pitfalls in choosing between metadata and `Store` assets.
+- numeric assets for fungible balances
+- NFTs for uniquely owned records
+- RWA and other domain-specific objects when the active data model exposes them
 
-Let's look at what happens when we define something in the metadata at the system level, such as the number of queries users can perform at a given time. Theoretically, this is correct since metadata is a key-value store. However, the default settings allow users to edit their metadata. In the development phase, this isn't a significant problem. However, once deployed, users could change the number of queries they can perform in this configuration, rendering any imposed restrictions ineffective.
+Assets and NFTs have their own IDs, lifecycle events, transfer behavior, and
+permission checks. They are better than metadata when ownership, scarcity,
+or transfer history matters.
 
-With a new account schema, the user's metadata becomes global information: you cannot restrict access to it and say that this is related to a domain. On the other hand, the storage asset can belong to a single user. Some optimizations prevent domain-specific triggers from acting only on domain-specific data. Using metadata would cause these optimizations not to work. Instead, each user within a domain can get a copy of the metadata. This approach works like metadata, except that you'd give them memory access but not necessarily allow them to create new key-value pairs. They can see how many queries they have left, but they can't easily change that number with a simple statement.
+## Off-Chain Data
 
-Instead of thinking about data ownership, think about the location of the data and the function that data serves and the flow of information. So instead of storing in the user's metadata the number of queries they're allowed to make, the number of tokens they have created, or their NFTs, you should put each category in its own `Store` asset.
+Use off-chain storage for large or mutable payloads. Store only a stable
+reference on-chain, such as:
 
-Think about what the smartcontract is supposed to do and how much extra data you must load and ignore. If your service participates using the metadata and another one does, and so on, the metadata size becomes enormous. Whenever you have queries related to it, you'll copy a lot of excess information and slow your code down. There's another catch: when the metadata belongs to an account, it essentially depends on another entity. When the said entity is removed or replaced, it requires glue code to handle the metadata transfer.
+- a content hash
+- a URI
+- a SoraFS path or manifest reference
+- a compact commitment used by an application proof
 
+This keeps the WSV small while still allowing applications to verify that the
+off-chain payload matches the on-chain reference.
+
+## Choosing a Location
+
+Use this rule of thumb:
+
+- If it is a compact attribute of a ledger object, use metadata.
+- If it is value-bearing or transferable, model it as an asset, NFT, or
+  domain-specific object.
+- If it is large, high-churn, or application-private, store it outside the WSV
+  and put a verifiable reference on-chain.
+
+For metadata permissions, see [Permission Tokens](/reference/permissions.md).

@@ -1,6 +1,6 @@
 # Troubleshooting Configuration Issues
 
-This section offers troubleshooting tips for issues with Iroha 2
+This section offers troubleshooting tips for issues with Iroha 2 and Iroha 3
 configuration. Make sure you
 [checked the keys](./overview.md#check-the-keys) first, as it is the most
 common source of issues in Iroha.
@@ -8,38 +8,37 @@ common source of issues in Iroha.
 If the issue you are experiencing is not described here, contact us via
 [Telegram](https://t.me/hyperledgeriroha).
 
-## Outdated genesis on a Docker-compose setup
+## Outdated genesis on a Docker Compose setup
 
-When you are using the Docker-compose version of Iroha, you might encounter
+When you are using the Docker Compose version of Iroha, you might encounter
 the issue of one of the peer containers failing with the
-`Failed to deserialize raw genesis block` error. This happens if there is a
-mismatch between Iroha versions, meaning an Iroha peer cannot be
-initialized with the given genesis file.
+`Failed to deserialize raw genesis block` error. This usually means the peer,
+signed genesis transaction, and generated configuration were produced by
+different Iroha revisions or profiles.
 
-If one of the peers is failing and it's been a while since you pulled the
-Iroha code for the first time, it's safe to assume the outdated genesis
-file is the cause. Here is how you can make sure Iroha is working
-incorrectly for exactly this reason:
+Check the failure with these steps:
 
 1. Use `docker ps` to check the current containers. Depending on the
-   version, you will see either `hyperledger/iroha2:dev` or
-   `hyperledger/iroha2:lts` containers. Check the number of Iroha peer
-   containers in the `docker ps` output. By default, there are 4 peers
-   configured in `docker-compose.yml` for Iroha, although you may have
-   changed that value. You will see that the first container that should
-   have been running Iroha just exited with an error, while three other
-   containers remain active.
+   generated profile, you will usually see `hyperledger/iroha:dev`
+   containers. The default Docker Compose profile contains four peer
+   containers, although your generated `docker-compose.yml` may differ.
 
 2. Check the logs and look for the
    `Failed to deserialize raw genesis block` error. If you started your
    Iroha in daemon mode with `docker compose up -d`, use
    `docker compose logs` command.
 
-The way to troubleshoot such an issue depends on the use of Iroha.
+The way to troubleshoot such an issue depends on the use of Iroha. If this is a
+basic demo and you do not need to preserve peer data, regenerate a matching
+localnet or Docker Compose bundle with Kagami:
 
-If this is a basic demo and you don't need the peer data to be restored,
-you can simply reset the genesis file to its latest state. To do this, use
-the `git checkout configs/peer/genesis.json` command.
+```bash
+cargo run --bin kagami -- localnet --build-line iroha3 --peers 4 --out-dir ./localnet
+cargo run --bin kagami -- docker --peers 4 --config-dir ./localnet --image hyperledger/iroha:dev --out-file ./docker-compose.yml
+```
+
+Then remove the old container state and restart from the regenerated
+`genesis.signed.nrt`, peer `config.toml` files, and `client.toml`.
 
 If you need to restore the Iroha instance data, do the following:
 
@@ -47,13 +46,15 @@ If you need to restore the Iroha instance data, do the following:
    (failed) peer.
 2. Wait for the new peer to synchronize the data with the first peer.
 3. Leave the new peer active.
-4. Update the genesis file of the first peer.
+4. Update the genesis and configuration files of the first peer only as part of
+   a coordinated migration.
 
 ::: info
 
-The features needed to monitor the copying progress between peers and a
-migration tool to update the genesis file are to be implemented in future
-releases.
+There is no general automatic rewrite path for replacing genesis on a live
+network. Treat this as a coordinated migration: preserve the old state, bring
+up compatible peers, and only move validators to the new configuration after
+the operators agree on the migration plan.
 
 :::
 

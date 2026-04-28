@@ -4,7 +4,7 @@ Operational Security (OPSEC) is a systematic approach to security and risk manag
 
 <abbr title="Operational Security">OPSEC</abbr> is the standard practice for most companies to guarantee the availability and stability of their assets. This includes considering such factors as physical security (e.g., making sure that unattended post-it notes do not contain sensitive data), secure communication protocols (e.g., not sending sensitive data over unencrypted SMS), threat analysis (e.g., determining potential malicious parties, learning about the latest attack methods), personnel training (e.g., without employees following <abbr title="Operational Security">OPSEC</abbr> measures, they _will_, sooner or later, prove to be ineffective), and risk mitigation (e.g., encrypting your hard drives and USB devices).
 
-Since Iroha 2 is likely to be deployed as a financial ledger, <abbr title="Operational Security">OPSEC</abbr> measures and practices must be taken seriously. This topic describes strategies and approaches that individuals and organizations using Iroha 2 in their operations should consider as part of their extensive security protocol.
+Since Iroha is likely to be deployed as a financial ledger, <abbr title="Operational Security">OPSEC</abbr> measures and practices must be taken seriously. This topic describes strategies and approaches that individuals and organizations using Iroha in their operations should consider as part of their extensive security protocol.
 
 Following and adopting the guidelines in this topic is a necessary step towards achieving total security, however, it is not sufficient on its own. To further improve your security, learn more throughout the rest of the [Security](./index.md) section and specifically the following topics:
 
@@ -21,7 +21,7 @@ Following and adopting the guidelines in this topic is a necessary step towards 
 
 - Never leave portable devices with sensitive data unattended. A split second is enough to steal your device.
 
-- Verify the signatures on binary packages. This is not too different from the public key cryptography used inside Iroha v2.
+- Verify the signatures on binary packages. This is not too different from the public key cryptography used inside Iroha.
 
 - To prevent unauthorized access, always secure your laptop or personal computer when leaving it unattended. Use strong passwords, lock the screen, and follow best practices for securing your devices.
 
@@ -33,7 +33,7 @@ Following and adopting the guidelines in this topic is a necessary step towards 
 
 ## Using Browsers
 
-If an application connected to Iroha 2 features a web UI, your browser can either aid the security or pose a potential threat. It is essential to exercise caution, especially when it comes to the plugins you choose to install.
+If an application connected to Iroha features a web UI, your browser can either aid the security or pose a potential threat. It is essential to exercise caution, especially when it comes to the plugins you choose to install.
 
 Consider the following measures to enhance your browsing security:
 

@@ -31,32 +31,28 @@ sub-string methods like `begins_with` combined using logical operations.
 
 ## Create a query
 
-Use `QueryBox` to construct a query. For example, a query to find all
-accounts would be created like this:
+Use typed query builders from the SDK or CLI. For example, the current data
+model exposes `FindAccounts` for listing accounts:
 
 ```rust
-let query = QueryBox::FindAllAccounts(FindAllAccounts {});
+let query = FindAccounts;
 ```
 
 Here is an example of a query that finds Alice's assets:
 
 ```rust
-let alice_id =
-    AccountId::from_str("alice@wonderland")?;
-let query = QueryBox::FindAssetsByAccountId(
-    FindAssetsByAccountId::new(alice_id)
-  );
+let alice_id = load_canonical_account_id_from_client_config()?;
+let query = FindAssetsByAccountId::new(alice_id);
 ```
 
 ## Pagination
 
-For both a `Vec<Z>` and just `Z` as the return type, you can use
-`client.request(query)` to submit a query and get the full result in one
-go.
+For singular queries and small iterable queries, you can use `client.request`
+to submit a query and get the result in one go.
 
-However, some queries, particularly the ones with "All" in their names, can
-return exorbitant amounts of data. As such, we highly recommend you
-consider _pagination_ to reduce the load on the system.
+However, broad iterable queries such as `FindAccounts`, `FindAssets`, or
+`FindBlocks` can return large result sets. Use pagination to reduce load on
+the peer and client.
 
 To construct a `Pagination`, you need to call
 `client.request_with_pagination(query, pagination)`, where the `pagination`
@@ -73,11 +69,14 @@ let pagination = Pagination::new(Some(starting_result), Some(limit));
 When you create a query, you can use a filter to only return the results
 that match the specified filter.
 
-<!-- TODO: add example -->
+Filters are query-specific. For example, account queries can be narrowed by
+account identity or metadata, while asset queries can be narrowed by asset
+definition, holder account, or domain projection. Use the SDK's typed query
+builders where possible so the filter type matches the query output type.
 
 ## Sorting
 
-Iroha 2 can sort items with [metadata](/blockchain/metadata.md)
+Iroha can sort items with [metadata](/blockchain/metadata.md)
 lexicographically if you provide a key to sort by during the construction
 of the query. A typical use case is for accounts to have a `registered-on`
 metadata entry, which, when sorted, allows you to view the account
