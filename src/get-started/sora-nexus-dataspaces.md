@@ -84,6 +84,146 @@ curl -fsS https://taira.sora.org/status \
 
 Use the same command with `https://minamoto.sora.org/status` for mainnet.
 
+## Taira MCP for Agents
+
+Taira also exposes a Torii-native Model Context Protocol (MCP) bridge for
+agent runtimes. Use it when an agent needs live testnet reads, scripted
+diagnostics, or tightly reviewed write rehearsals without building a custom
+Torii client first.
+
+| Setting | Value |
+| --- | --- |
+| MCP endpoint | `https://taira.sora.org/v1/mcp` |
+| Network root | `https://taira.sora.org` |
+| Intended use | Taira testnet reads and faucet-funded write rehearsals |
+| Production equivalent | Do not point this entry at Minamoto unless a mainnet MCP endpoint and release controls are explicitly approved |
+
+Check the bridge metadata before adding signing material:
+
+```bash
+curl -fsS https://taira.sora.org/v1/mcp \
+  | jq '{protocolVersion, server: .serverInfo.name, tools: .capabilities.tools.count}'
+```
+
+Configure the URL as a user-local MCP server in the agent runtime. Do not
+commit agent MCP config, API tokens, forwarded auth headers, `authority`, or
+`private_key` values into this docs repo or an application repo.
+
+Agent prompt rules that work well with Taira:
+
+- Discover tools from the MCP server before calling them; re-discover if the
+  server reports `listChanged`.
+- Prefer the curated `iroha.*` tools over raw `torii.*` tools.
+- Start read-only: inspect status, accounts, assets, aliases, blocks,
+  governance state, and transaction status before proposing writes.
+- Require an explicit human instruction before live testnet mutations. For
+  pre-signed transaction envelopes, use `iroha.transactions.submit_and_wait`
+  so the agent waits for the result instead of only submitting.
+- Summarize transaction hashes, final status, and server validation errors in
+  the agent response.
+
+### Development Workflow With Agents
+
+Use agents as development helpers for Iroha clients, transaction builders,
+diagnostic scripts, and testnet runbooks. Keep the agent's authority narrow:
+it can inspect code, read Taira state, propose changes, and run local tests,
+but it should not mutate a live network until a human approves the exact
+operation.
+
+A practical workflow is:
+
+1. Ask the agent to inspect the relevant docs, SDK code, CLI command, or MCP
+   tool schema before it writes code.
+2. Have the agent write the smallest client path first: status check, account
+   lookup, alias resolution, or balance lookup.
+3. Add transaction-building code only after read-only calls work against
+   Taira.
+4. Keep live-network tests opt-in, for example behind `TAIRA_LIVE=1`, so a
+   normal unit test run never spends testnet funds or depends on network
+   availability.
+5. Require the agent to report the network root, chain, authority account,
+   instruction summary, fee asset, and expected state change before it submits
+   any transaction.
+6. Review generated code for secret handling, retry behavior, idempotency, and
+   rejection handling before promoting it to CI or mainnet workflows.
+
+Useful read-only MCP tools for development include account asset lookups,
+alias resolution, block lookup, transaction lookup, transaction lists, and
+pipeline status checks. Use these to build confidence before submitting any
+signed payload.
+
+```text
+Use Taira MCP as a read-only inspector while developing this Iroha feature.
+Inspect available iroha.* tools, verify the target account and asset state,
+then update the client code. Do not submit transactions unless I explicitly
+say "submit this transaction".
+```
+
+### Transaction Workflow Through Agents
+
+The MCP bridge can submit a signed Iroha transaction, but it does not remove
+the normal transaction requirements. A transaction still needs a correct
+authority, permissions, fee funding, chain ID, metadata, and signature.
+
+For raw Iroha transactions, build and sign the transaction envelope with an
+SDK or CLI first, then give the agent only the canonical signed transaction
+bytes encoded as `body_base64`. The agent can submit the envelope with
+`iroha.transactions.submit_and_wait`, or submit with
+`iroha.transactions.submit` and poll with `iroha.transactions.wait`.
+
+Do not paste private keys into an agent prompt. If an agent needs to build a
+transaction, point it at local code that loads secrets from the user's runtime
+environment, keychain, hardware signer, or ignored testnet config file. The
+agent should never write the key material into Markdown, fixtures, logs, or
+commits.
+
+Before submitting a transaction, make the agent produce a short transaction
+plan:
+
+- `network`: Taira testnet root and chain ID
+- `authority`: account that signs and pays fees
+- `instructions`: register, mint, burn, transfer, metadata, permission, or
+  contract call summary
+- `fee asset`: asset that will be charged on Taira
+- `preflight reads`: account, asset balance, permissions, alias, or block
+  checks already performed
+- `expected result`: the state that should be visible after confirmation
+- `idempotency`: what happens if the same request is retried
+
+After submission, make the agent wait for a terminal status, then verify the
+state change with a read query. A useful completion report includes:
+
+- transaction hash
+- terminal status such as `Committed`, `Applied`, `Rejected`, or `Expired`
+- block or explorer detail when available
+- verification read results
+- rejection message and whether the failure looks like permissions, fees,
+  validation, stale state, or endpoint availability
+
+Example guarded prompt:
+
+```text
+Prepare a Taira transaction plan, but do not submit yet. Use MCP reads to
+verify the authority account, fee balance, target asset or alias, and current
+transaction status if a hash already exists. Show the exact instructions and
+expected post-state. Wait for my explicit "submit" message before calling
+iroha.transactions.submit_and_wait.
+```
+
+When the signed envelope is already prepared:
+
+```text
+Submit this pre-signed Taira transaction envelope with
+iroha.transactions.submit_and_wait. Use the provided body_base64 only; do not
+ask for private keys. Wait for a terminal status, then verify the resulting
+state with read-only iroha.* tools and report the hash, status, and
+verification result.
+```
+
+Treat Taira MCP as a public testnet control surface. Taira keys, testnet XOR,
+faucet accounts, and canary signers are disposable and must stay separate from
+Minamoto keys and production release workflows.
+
 ## Toy Examples You Can Try Now
 
 These examples are read-only unless noted. They work before you generate
@@ -316,6 +456,10 @@ Fetch the puzzle:
 ```bash
 curl -fsS https://taira.sora.org/v1/accounts/faucet/puzzle | jq .
 ```
+
+The faucet is a public testnet service. If the puzzle or claim endpoint
+returns `502`, a timeout, or another gateway-level error, wait and retry
+before changing your keys or client config.
 
 The response has this shape:
 

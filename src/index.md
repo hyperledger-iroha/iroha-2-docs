@@ -4,39 +4,49 @@ layout: home
 hero:
   name: Hyperledger Iroha 3
   text: Documentation
-  tagline: Deterministic blockchain platform for SORA Nexus, SDKs, and operator workflows
+  tagline:
+    Deterministic blockchain platform for SORA Nexus, SDKs, and operator
+    workflows
   image:
     src: /icon.svg
     alt: Hyperledger Iroha 3 logo
   #actions:
   #- theme: alt
   #  text: View on GitHub
-  #  link: https://github.com/hyperledger-iroha/iroha/
+  #  link: https://github.com/hyperledger-iroha/iroha/tree/i23-features
 
 features:
   - icon:
-     dark: /start.svg
-     light: /start-light.svg
+      dark: /start.svg
+      light: /start-light.svg
     title: Get Started
-    details: Build the current workspace, launch a local network, and start using the Iroha 3 CLI
+    details:
+      Build the current workspace, launch a local network, and start using
+      the Iroha 3 CLI
     link: /get-started/
   - icon:
-     dark: /build.svg
-     light: /build-light.svg
-    title: SDKs
-    details: Find the current Rust, Python, JavaScript, Android, and Swift entry points
-    link: /guide/tutorials/
+      dark: /build.svg
+      light: /build-light.svg
+    title: Guide
+    details:
+      Find SDKs, best practices, configuration, security, and operator
+      workflows
+    link: /guide/
   - icon:
-     dark: /explained.svg
-     light: /explained-light.svg
+      dark: /explained.svg
+      light: /explained-light.svg
     title: Architecture
-    details: Understand Torii, Sumeragi, Norito, IVM, and the Nexus data-space model
+    details:
+      Understand Torii, Sumeragi, Norito, IVM, and the Nexus data-space
+      model
     link: /blockchain/iroha-explained
   - icon:
-     dark: /reference.svg
-     light: /reference-light.svg
+      dark: /reference.svg
+      light: /reference-light.svg
     title: Reference
-    details: Consult the current binary, genesis, Torii, and compatibility reference pages
+    details:
+      Consult the current binary, genesis, Torii, and compatibility
+      reference pages
     link: /reference/
   # - title: Cookbook # (TBA)
 

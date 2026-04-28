@@ -1,32 +1,11 @@
 {
   "source": {
-    "kind": "local-snapshot",
-    "repo": "../iroha",
+    "repo": "hyperledger-iroha/iroha",
+    "repo_url": "https://github.com/hyperledger-iroha/iroha",
     "branch": "i23-features",
-    "commit": "6be123546b7c",
-    "dirty": true,
-    "generated_at": "2026-04-28",
-    "basis": [
-      "SDK READMEs, in-tree tests, fixtures, and module layout in ../iroha.",
-      "Uncommitted genesis, schema, and Python SDK changes were present when this snapshot was generated."
-    ],
-    "dirty_files": [
-      "crates/iroha_data_model/src/events/mod.rs",
-      "crates/iroha_genesis/src/lib.rs",
-      "crates/iroha_kagami/src/genesis/sign.rs",
-      "crates/iroha_kagami/src/schema.rs",
-      "docs/source/references/peer.template.toml",
-      "python/iroha_python/DESIGN.md",
-      "python/iroha_python/README.md",
-      "python/iroha_python/iroha_python_rs/Cargo.toml",
-      "python/iroha_python/iroha_python_rs/src/lib.rs",
-      "python/iroha_python/src/iroha_python/__init__.py",
-      "python/iroha_python/src/iroha_python/crypto.py",
-      "python/iroha_python/tests/crypto_algorithms_test.py",
-      "python/iroha_torii_client/__pycache__/__init__.cpython-311.pyc",
-      "python/iroha_torii_client/__pycache__/client.cpython-311.pyc",
-      "python/norito_py/src/iroha_norito.egg-info/SOURCES.txt"
-    ]
+    "branch_url": "https://github.com/hyperledger-iroha/iroha/tree/i23-features",
+    "commit": "b530168a7468",
+    "generated_at": "2026-04-28"
   },
   "included_sdks": [
     {
@@ -65,7 +44,7 @@
           "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
           "status": "ok"
@@ -85,16 +64,16 @@
           "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
           "status": "ok"
@@ -146,7 +125,7 @@
           "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
           "status": "ok"
@@ -169,7 +148,7 @@
           "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
           "status": "ok"
@@ -241,7 +220,7 @@
           "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
           "status": "ok"
@@ -270,9 +249,6 @@
           "status": "ok"
         },
         {
-          "status": "no-data"
-        },
-        {
           "status": "ok"
         },
         {
@@ -282,7 +258,10 @@
           "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
+        },
+        {
+          "status": "ok"
         }
       ]
     },
@@ -293,16 +272,16 @@
           "status": "ok"
         },
         {
-          "status": "no-data"
-        },
-        {
-          "status": "no-data"
+          "status": "ok"
         },
         {
           "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
+        },
+        {
+          "status": "ok"
         },
         {
           "status": "ok"
@@ -342,22 +321,22 @@
       "name": "Live testnet smoke lane",
       "results": [
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
-          "status": "no-data"
+          "status": "ok"
         },
         {
           "status": "ok"

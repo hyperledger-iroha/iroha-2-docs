@@ -22,6 +22,20 @@ If the peer runs in Docker or Kubernetes, use the host or service address that
 is reachable from the client process. `127.0.0.1` inside a container is not
 the host machine.
 
+For public Taira tests, start with an unsigned endpoint probe:
+
+```bash
+curl -fsS https://taira.sora.org/status \
+  | jq '{blocks, txs_approved, txs_rejected, queue_size, peers}'
+
+curl -fsS 'https://taira.sora.org/v1/domains?limit=5' \
+  | jq -r '.items[].id'
+```
+
+If these commands fail with `502`, TLS, DNS, or timeout errors, fix network
+reachability or wait for the public testnet endpoint before debugging account
+keys or transaction payloads.
+
 ## Transactions are rejected
 
 Most transaction failures are caused by identity or authorization mismatch:

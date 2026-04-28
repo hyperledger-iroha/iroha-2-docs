@@ -3,11 +3,8 @@
 This repository contains the VitePress source for the public Hyperledger Iroha
 documentation site, updated for the Iroha 3 / SORA Nexus track.
 
-The implementation source of truth lives in the main
-[hyperledger-iroha/iroha](https://github.com/hyperledger-iroha/iroha/)
-repository. In this workspace the sibling `../iroha` checkout is used as the
-authoritative reference for binaries, configs, CLI help, genesis layout, and
-SDK surfaces.
+The implementation source of truth lives in the
+[`hyperledger-iroha/iroha` `i23-features` branch](https://github.com/hyperledger-iroha/iroha/tree/i23-features).
 
 The site focuses on:
 
@@ -91,9 +88,9 @@ VITE_COMPAT_MATRIX_URL=https://example.com/compat-matrix
 ```
 
 The compatibility matrix uses the bundled
-`src/public/compat-matrix.json` snapshot by default. That snapshot is generated
-from the local sibling `../iroha` checkout and should be refreshed when SDK
-coverage changes there.
+`src/public/compat-matrix.json` snapshot by default. That snapshot tracks the
+[`hyperledger-iroha/iroha` `i23-features` branch](https://github.com/hyperledger-iroha/iroha/tree/i23-features)
+and should be refreshed when SDK coverage changes there.
 
 Set `VITE_COMPAT_MATRIX_URL` only when you want to override the bundled
 snapshot with a live endpoint. The endpoint must return the compatibility

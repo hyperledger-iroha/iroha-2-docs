@@ -2,7 +2,7 @@
 
 The current JavaScript SDK is published as `@iroha/iroha-js`. It is the
 Node.js-first SDK for Torii, Norito builders, signing, pagination, Connect
-previews, and offline-envelope workflows.
+previews, and offline readiness plus QR stream workflows.
 
 ## Install
 
@@ -44,13 +44,56 @@ const keys = generateKeyPair();
 console.log(keys.publicKey);
 ```
 
+## Try Taira Read-Only
+
+Use built-in `fetch` in Node.js 18+ to probe Taira before adding signing and
+Norito transaction code:
+
+```js
+const root = "https://taira.sora.org";
+
+const status = await fetch(`${root}/status`).then((res) => res.json());
+console.log({
+  blocks: status.blocks,
+  queueSize: status.queue_size,
+  peers: status.peers,
+});
+
+const domains = await fetch(`${root}/v1/domains?limit=5`).then((res) =>
+  res.json(),
+);
+console.log(domains.items.map((domain) => domain.id));
+
+const assets = await fetch(`${root}/v1/assets/definitions?limit=5`).then((res) =>
+  res.json(),
+);
+for (const asset of assets.items) {
+  console.log(asset.id, asset.name, asset.total_quantity);
+}
+```
+
+Save it as `taira-readonly.mjs`, then run it:
+
+```bash
+node taira-readonly.mjs
+```
+
+Move to signed SDK calls only after these read-only checks work. Public Taira
+can temporarily return a saturated queue or gateway error, so keep live-network
+tests opt-in in CI.
+
 Useful subpath imports:
 
 ```js
 import { ToriiClient } from "@iroha/iroha-js/torii";
 import { noritoEncodeInstruction } from "@iroha/iroha-js/norito";
 import { generateKeyPair } from "@iroha/iroha-js/crypto";
-import { buildOfflineEnvelope } from "@iroha/iroha-js/offline";
+```
+
+Offline QR stream helpers are exported from the package root:
+
+```js
+import { OfflineQrStream } from "@iroha/iroha-js";
 ```
 
 For browser-only Connect bootstrap, use `@iroha/iroha-js/connect-browser`
@@ -65,7 +108,7 @@ The SDK focuses on:
 - Ed25519 signing and key generation
 - pagination and retry helpers
 - Connect browser bootstrap helpers
-- offline envelope tooling
+- Offline V2 readiness and QR stream tooling
 
 ## Upstream References
 

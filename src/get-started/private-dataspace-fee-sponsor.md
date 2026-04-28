@@ -342,6 +342,23 @@ iroha --config ./treasury.client.toml \
   --quantity 1000
 ```
 
+For Taira rehearsals, save the faucet helper from
+[Get Testnet XOR on Taira](/get-started/sora-nexus-dataspaces.md#_4-get-testnet-xor-on-taira)
+as `taira_faucet_claim.py`, then fund the sponsor with the public faucet
+instead of a treasury transfer:
+
+```bash
+export SPONSOR='<SPONSOR_TAIRA_I105_ACCOUNT_ID>'
+export XOR_ASSET=6TEAJqbb8oEPmLncoNiMRbLEK6tw
+
+python3 taira_faucet_claim.py "$SPONSOR"
+
+iroha --config ./sponsor.client.toml \
+  ledger asset get \
+  --definition "$XOR_ASSET" \
+  --account "$SPONSOR"
+```
+
 Check the sponsor's XOR balance:
 
 ```bash

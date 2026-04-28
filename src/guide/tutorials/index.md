@@ -19,12 +19,17 @@ from the upstream repository.
    complete client application reference.
 5. Use [Embed Kaigi](/guide/tutorials/kaigi.md) when you want to add
    wallet-backed audio/video meetings to your own app.
+6. Use [Musubi packages](/guide/tutorials/musubi.md) when you need reusable
+   Kotodama source libraries with pinned on-chain registry dependencies.
 
 ## Sample Apps
 
 We maintain sample applications for JavaScript desktop, Android, and iOS client
-flows. The JavaScript demo is the most complete current reference; the mobile
-demos are useful for point-app layout and historical context.
+flows. The JavaScript demo is the most complete external reference. Swift/iOS
+examples exist in the upstream workspace under `examples/ios/`, but their
+checked-in project manifests are currently out of sync with the package API and
+dependency layout. The external mobile point demos are useful mostly for layout
+and historical context.
 
 - [Sample apps overview](/guide/tutorials/sample-apps.md)
 - [Embed Kaigi in a JavaScript app](/guide/tutorials/kaigi.md)
@@ -38,6 +43,7 @@ All SDK pages here are derived from the current upstream workspace:
 - `javascript/iroha_js`
 - `java/iroha_android`
 - `IrohaSwift`
+- `crates/musubi`
 
 When in doubt, prefer the README and package metadata in those directories over
 older Iroha 2-era examples.

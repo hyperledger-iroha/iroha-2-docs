@@ -29,6 +29,28 @@ lexicographically on metadata keys. Filtering can be done on a variety of
 principles, from domain-specific (individual IP address filter masks) to
 sub-string methods like `begins_with` combined using logical operations.
 
+## Try It on Taira
+
+Taira exposes read-only query helpers over JSON for common resources. Use them
+to practice pagination and response handling before wiring an SDK:
+
+```bash
+TAIRA_ROOT=https://taira.sora.org
+
+curl -fsS "$TAIRA_ROOT/v1/accounts?limit=3" \
+  | jq '{total, ids: [.items[].id]}'
+
+curl -fsS "$TAIRA_ROOT/v1/domains?limit=3" \
+  | jq '{total, domains: [.items[].id]}'
+
+curl -fsS "$TAIRA_ROOT/v1/assets/definitions?limit=3" \
+  | jq '{total, assets: [.items[] | {id, name, total_quantity}]}'
+```
+
+For app diagnostics, keep these smoke checks separate from signed transaction
+tests. A read-only query failure usually points to endpoint availability,
+network reachability, or route compatibility before it points to signer setup.
+
 ## Create a query
 
 Use typed query builders from the SDK or CLI. For example, the current data

@@ -38,6 +38,43 @@ Norito RPC guidance, see the [Norito reference](/reference/norito.md).
 `/openapi` is the authoritative endpoint list for a running node. The exact
 surface depends on build features and runtime configuration, so generated
 clients should prefer the live OpenAPI document over a hand-copied route list.
+Use the [Torii API console](/reference/torii-api-console.md) to load that live
+document, test JSON routes, copy curl requests, and generate client code from
+the current schema.
+
+## Try Live Taira Routes
+
+The public Taira testnet exposes the same Torii JSON surface that application
+clients use for read-only exploration. These commands do not require keys:
+
+```bash
+TAIRA_ROOT=https://taira.sora.org
+
+curl -fsS "$TAIRA_ROOT/status" \
+  | jq '{blocks, txs_approved, txs_rejected, queue_size, peers}'
+
+curl -fsS "$TAIRA_ROOT/openapi.json" \
+  | jq -r '.paths | keys[]' \
+  | grep '^/v1/' \
+  | head -n 20
+
+curl -fsS "$TAIRA_ROOT/v1/node/capabilities" \
+  | jq '{abi_version, data_model_version, query: .query.aggregate.supported_resources}'
+```
+
+Try resource reads against the current world state:
+
+```bash
+curl -fsS "$TAIRA_ROOT/v1/domains?limit=5" \
+  | jq -r '.items[].id'
+
+curl -fsS "$TAIRA_ROOT/v1/assets/definitions?limit=5" \
+  | jq -r '.items[] | [.id, .name, .total_quantity] | @tsv'
+```
+
+If a public testnet route returns `502`, times out, or reports a saturated
+queue, treat it as an endpoint availability issue and retry later before
+debugging your client code.
 
 ## Consensus and Runtime Endpoints
 
@@ -102,6 +139,62 @@ families are not all enabled on every network profile.
 | `/v1/operator/*`, `/v1/mcp` | Operator authentication and native MCP JSON-RPC bridge |
 | `/v1/offline/*`, `/v1/repo/*`, `/v1/space-directory/*`, `/v1/ram-lfe/*` | Offline readiness, repository agreements, dataspace manifests, and RAM LFE helpers |
 | `/v1/kaigi/*`, `/v1/webhooks/*`, `/v1/notify/*`, `/v1/telemetry/*` | Collaboration, webhook, push notification, and live telemetry integrations |
+
+## ISO 20022 Bridge
+
+Torii exposes the ISO 20022 bridge under `/v1/iso20022/*` when the app-facing
+API and bridge runtime are enabled. The bridge is intentionally scoped: it is
+not a general-purpose ISO 20022 clearing gateway, but a supported subset for
+turning selected payment messages into signed Iroha transfers and for tracking
+their ledger status.
+
+### Torii Ingestion Endpoints
+
+| ISO 20022 message | Endpoint | Purpose |
+| --- | --- | --- |
+| `pacs.008.001.08` (`pacs.008`) | `POST /v1/iso20022/pacs008` | Submit an FI-to-FI customer credit transfer and build the matching Iroha asset transfer |
+| `pacs.009.001.10` (`pacs.009`) | `POST /v1/iso20022/pacs009` | Submit an FI-to-FI credit transfer used for PvP or securities-related cash funding |
+| `pacs.002`-style status | `GET /v1/iso20022/status/{msg_id}` | Read the bridge state for a submitted message, including the derived `pacs002_code`, transaction hash, rejection detail, and resolved ledger context |
+
+`pacs.008` submissions must provide the message ID, interbank settlement
+amount, currency, settlement date, debtor and creditor IBANs, and debtor and
+creditor BICs. When reference data is configured, the bridge also checks the
+BIC, IBAN, and ISO 4217 currency crosswalks before the generated transaction
+enters the pipeline.
+
+`pacs.009` submissions must provide the business message ID, message definition
+ID, creation time, interbank settlement amount, currency, settlement date,
+instructing and instructed agent BICs, and debtor and creditor IBANs. If the
+message includes `Purp`, the bridge currently accepts securities-purpose funding
+only: `Purp=SECU`.
+
+Both ingestion endpoints accept XML ISO envelopes or the flat field format used
+by the bridge tests. Optional `SplmtryData` fields can pin the target Iroha
+ledger, source and target account IDs or addresses, and asset definition ID.
+The response is `202 Accepted` with `message_id`, `transaction_hash`, `status`,
+`pacs002_code`, and the resolved ledger/account/asset context.
+
+### Parser and Mapping Support
+
+The IVM ISO helper also validates and materializes additional message families
+used by bridge tests, settlement mapping, or downstream reconciliation. These
+messages do not have standalone Torii ingestion endpoints unless listed above.
+
+| Message family | Current support |
+| --- | --- |
+| `head.001` | Business application header validation for ISO envelopes, including `BizMsgIdr`, `MsgDefIdr`, creation time, and optional sender/receiver BIC fields |
+| `pacs.002` | Payment status report parsing and status-code vocabulary used by `GET /v1/iso20022/status/{msg_id}` |
+| `pacs.004` | Payment return parsing for return/unwind flows |
+| `pacs.007`, `pacs.028`, `pacs.029` | Payment reversal, status request, and resolution/status scaffolding for investigation flows |
+| `pain.001`, `pain.002` | Customer payment initiation and payment status report validation scaffolding |
+| `camt.052`, `camt.053`, `camt.054`, `camt.056` | Account report, statement, notification, and cancellation-request validation scaffolding |
+| `sese.023`, `sese.025` | Securities settlement instruction and confirmation mapping for DvP/PvP flows |
+| `colr.007` | Collateral substitution confirmation mapping |
+
+Settlement choreography may refer to related market messages such as
+`sese.024`, `sese.030`, `sese.031`, `colr.010`, `colr.011`, `colr.012`, or
+`camt.029`. Treat those as integration-level workflow references until a Torii
+endpoint or IVM schema is added for the specific message.
 
 ## Kaigi Sessions
 
@@ -174,8 +267,9 @@ desktop demo for an end-to-end wallet test. The demo is an Electron and Vue
 application that talks directly to Torii through the local `@iroha/iroha-js`
 binding and includes a `/kaigi` route for browser-native one-to-one media.
 
-Prepare the demo beside a checkout of the Iroha source tree, because its
-`@iroha/iroha-js` dependency is loaded from `../iroha/javascript/iroha_js`:
+Use the demo with
+[`@iroha/iroha-js`](https://github.com/hyperledger-iroha/iroha/tree/i23-features/javascript/iroha_js)
+from the Iroha `i23-features` branch:
 
 ```bash
 git clone https://github.com/soramitsu/iroha-demo-javascript.git
@@ -315,5 +409,7 @@ iroha --config ./localnet/client.toml ops sumeragi collectors
 
 ## Upstream References
 
-- [README.md API and Observability](https://github.com/hyperledger-iroha/iroha/blob/main/README.md)
-- [docs/source/telemetry.md](https://github.com/hyperledger-iroha/iroha/blob/main/docs/source/telemetry.md)
+- [README.md API and Observability](https://github.com/hyperledger-iroha/iroha/blob/i23-features/README.md)
+- [docs/source/telemetry.md](https://github.com/hyperledger-iroha/iroha/blob/i23-features/docs/source/telemetry.md)
+- [ISO 20022 bridge implementation](https://github.com/hyperledger-iroha/iroha/blob/i23-features/crates/iroha_torii/src/iso20022_bridge.rs)
+- [Settlement ISO mapping](https://github.com/hyperledger-iroha/iroha/blob/i23-features/docs/portal/docs/finance/settlement-iso-mapping.md)

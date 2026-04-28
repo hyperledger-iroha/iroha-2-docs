@@ -22,5 +22,9 @@ export default {
       'CompatibilityMatrixTableIcon',
       defineAsyncComponent(async () => import('./components/CompatibilityMatrixTableIcon.vue')),
     )
+    app.component(
+      'ToriiApiConsole',
+      defineAsyncComponent(() => import('./components/ToriiApiConsole.vue')),
+    )
   },
 } satisfies import('vitepress').Theme

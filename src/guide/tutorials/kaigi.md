@@ -39,8 +39,9 @@ npm install
 npm run dev
 ```
 
-The demo loads `@iroha/iroha-js` from `../iroha/javascript/iroha_js`. If the
-native binding changes, rebuild it:
+Use the demo with
+[`@iroha/iroha-js`](https://github.com/hyperledger-iroha/iroha/tree/i23-features/javascript/iroha_js)
+from the Iroha `i23-features` branch. If the native binding changes, rebuild it:
 
 ```bash
 (cd node_modules/@iroha/iroha-js && npm run build:native)

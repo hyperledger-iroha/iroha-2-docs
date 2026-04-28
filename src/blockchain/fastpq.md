@@ -107,6 +107,119 @@ $$
 \operatorname{le64}(\operatorname{Hash}(D)[0..8])\bmod p
 $$
 
+Here `Hash` means Iroha's `iroha_crypto::Hash::new`, a 32-byte Blake2bVar
+digest, unless a formula explicitly names Poseidon2 or SHA-256.
+
+### Field Arithmetic
+
+The Rust code represents field elements as canonical `u64` values in
+`[0,p)`. Addition and subtraction are:
+
+$$
+a +_F b = (a+b)\bmod p
+$$
+
+$$
+a -_F b = (a-b)\bmod p
+$$
+
+Multiplication first computes the 128-bit product:
+
+$$
+a\cdot b = \operatorname{lo} + 2^{64}\operatorname{hi}
+$$
+
+Goldilocks reduction then uses the identity:
+
+$$
+2^{64}\equiv2^{32}-1\pmod p
+$$
+
+If:
+
+$$
+\operatorname{hi}=\operatorname{hi}_{lo}+2^{32}\operatorname{hi}_{hi}
+$$
+
+then the reducer computes:
+
+$$
+\operatorname{lo}
++2^{32}\operatorname{hi}_{lo}
+-\operatorname{hi}_{lo}
+-\operatorname{hi}_{hi}
+\pmod p
+$$
+
+The implementation conditionally adds or subtracts `p` until the result is
+canonical. Signed integers, such as balance deltas, are embedded by:
+
+$$
+\operatorname{field}(x)=x\bmod p,\qquad 0\leq\operatorname{field}(x)<p
+$$
+
+### Poseidon2 Permutation
+
+The Poseidon2 permutation state is:
+
+$$
+\mathbf{x}=(x_0,x_1,x_2)\in F^3
+$$
+
+Its S-box is:
+
+$$
+S(x)=x^5
+$$
+
+FastPQ uses four full rounds, fifty-seven partial rounds, then four more
+full rounds. A full round with round constants
+`c_r = (c_{r,0}, c_{r,1}, c_{r,2})` is:
+
+$$
+\mathbf{x}' =
+M\cdot
+\begin{bmatrix}
+S(x_0+c_{r,0})\\
+S(x_1+c_{r,1})\\
+S(x_2+c_{r,2})
+\end{bmatrix}
+$$
+
+A partial round is:
+
+$$
+\mathbf{x}' =
+M\cdot
+\begin{bmatrix}
+S(x_0+c_{r,0})\\
+x_1+c_{r,1}\\
+x_2+c_{r,2}
+\end{bmatrix}
+$$
+
+All additions and multiplications are in `F`. The canonical MDS matrix is:
+
+$$
+M=
+\begin{bmatrix}
+\texttt{0x982513a23d22b592} & \texttt{0xa3115db8cf1d9c90} & \texttt{0x46ba684b9eee84b7}\\
+\texttt{0xbe3dce25491db768} & \texttt{0xfb0a6f731943519f} & \texttt{0xfce5bd953cde1896}\\
+\texttt{0xe624719c41eb1a09} & \texttt{0xd2221b0f1aa2ebc4} & \texttt{0x1ab5e60d03ad44bc}
+\end{bmatrix}
+$$
+
+The field hash starts from zero state. For every complete rate-2 block
+`(u,v)`:
+
+$$
+(x_0,x_1,x_2)\leftarrow
+\operatorname{Poseidon2}(x_0+u,x_1+v,x_2)
+$$
+
+The final block appends the `1` padding element before one last
+permutation. The output is `x_0`.
+
 ### Public Input Binding
 
 The host encodes a dataspace id by writing its `u64` value into the first
@@ -581,6 +694,64 @@ $$
 
 and then evaluating `a'` on the evaluation domain.
 
+The CPU FFT is an iterative radix-2 Cooley-Tukey transform over
+bit-reversed inputs. At stage length `L`, half length `H=L/2`, and stage
+root:
+
+$$
+\omega_L=\omega^{N/L}
+$$
+
+each butterfly computes:
+
+$$
+u=x_j
+$$
+
+$$
+v=x_{j+H}\cdot\omega_L^j
+$$
+
+$$
+x_j'=u+v,\qquad x_{j+H}'=u-v
+$$
+
+The inverse FFT runs the same transform with `omega^{-1}` and scales by the
+inverse domain size:
+
+$$
+\operatorname{IFFT}(x)=N^{-1}\cdot\operatorname{FFT}_{\omega^{-1}}(x)
+$$
+
+Catalogue roots are validated before use:
+
+$$
+\omega^{2^k}=1
+$$
+
+$$
+\omega^{2^{k-1}}\ne1\qquad(k>0)
+$$
+
+For smaller domains derived from the catalogue root, the generator is:
+
+$$
+\omega_{\ell}=\omega_{\max}^{2^{k_{\max}-\ell}}
+$$
+
+### Row and Leaf Hashes
+
+After LDE, FastPQ hashes each row across all LDE columns. For `m` columns:
+
+$$
+r_i =
+H_F(i,m,x_{i,0},x_{i,1},\ldots,x_{i,m-1})
+$$
+
+If row hashes are still on the trace domain rather than the evaluation
+domain, the prover interpolates and extends that single row-hash column
+with the same coset LDE process.
+
 ### Merkle Openings
 
 LDE values are grouped into chunks of:
@@ -605,6 +776,29 @@ $$
 Odd levels duplicate the last node. Query paths verify by hashing left or
 right according to the query leaf index parity at each level.
 
+For a leaf at index `i`, a path `(s_0,\ldots,s_{d-1})` verifies against
+root `R` by the recurrence:
+
+$$
+y_0=L_i
+$$
+
+$$
+y_{k+1}=
+\begin{cases}
+H_F(\operatorname{seed}(\texttt{fastpq:v1:trace:node}),y_k,s_k),
+& \lfloor i/2^k\rfloor \equiv 0 \pmod 2\\
+H_F(\operatorname{seed}(\texttt{fastpq:v1:trace:node}),s_k,y_k),
+& \lfloor i/2^k\rfloor \equiv 1 \pmod 2
+\end{cases}
+$$
+
+The check passes only when:
+
+$$
+y_d=R
+$$
+
 AIR trace row leaves are:
 
 $$
@@ -616,6 +810,21 @@ AIR composition leaves are:
 
 $$
 L^{\text{comp}}_i = H_D(i\|A_i)
+$$
+
+The LDE query opening also checks that the value opened at evaluation index
+`i` is present in its authenticated chunk:
+
+$$
+\operatorname{chunk\_index}=\left\lfloor\frac{i}{B_{\text{lde}}}\right\rfloor
+$$
+
+$$
+\operatorname{chunk\_offset}=i\bmod B_{\text{lde}}
+$$
+
+$$
+\operatorname{chunk}[\operatorname{chunk\_offset}]=v_i
 $$
 
 ### FRI Folding
@@ -675,6 +884,83 @@ q = \operatorname{le64}(\text{digest chunk})\bmod N_{\text{eval}}
 $$
 
 The sampled set is returned in sorted order.
+
+### Verifier Replay
+
+The verifier first recomputes the batch commitment:
+
+$$
+\operatorname{commitment}_{expected}
+=\operatorname{trace\_commitment}(\operatorname{params},\operatorname{batch})
+$$
+
+and requires:
+
+$$
+\operatorname{commitment}_{expected}
+=\operatorname{proof.trace\_commitment}
+$$
+
+It also rebuilds public IO:
+
+$$
+\operatorname{PublicIO}=
+(\operatorname{dsid},\operatorname{slot},\operatorname{old\_root},
+\operatorname{new\_root},\operatorname{perm\_root},
+\operatorname{tx\_set\_hash},\operatorname{ordering\_hash},
+\operatorname{permission\_hashes})
+$$
+
+Every field must match the proof's public IO byte-for-byte. The verifier
+then reconstructs the same transcript and derives the same:
+
+$$
+\gamma,\quad \alpha_0,\alpha_1,\quad
+\beta_0,\ldots,\beta_{\ell-1},\quad
+q_0,\ldots,q_{t-1}
+$$
+
+For each sampled query `q`, it checks:
+
+$$
+\operatorname{MerkleVerify}(
+R_{\text{lde}},
+L_{\lfloor q/B_{\text{lde}}\rfloor},
+\lfloor q/B_{\text{lde}}\rfloor,
+\pi_{\text{lde}}
+)
+$$
+
+$$
+\operatorname{MerkleVerify}(
+R_{\text{air}},
+L^{\text{air}}_q,
+q,
+\pi_{\text{air,current}}
+)
+$$
+
+$$
+\operatorname{MerkleVerify}(
+R_{\text{air}},
+L^{\text{air}}_{q+1\bmod N_{\text{eval}}},
+q+1\bmod N_{\text{eval}},
+\pi_{\text{air,next}}
+)
+$$
+
+and:
+
+$$
+A_q =
+\operatorname{AIRComposition}(
+\operatorname{row}_q,\operatorname{row}_{q+1},\alpha_0,\alpha_1
+)
+$$
+
+The AIR composition opening must authenticate under `R_air_composition`.
+The FRI chain then starts from the same `A_q` and must end in an
+authenticated final FRI leaf under the terminal FRI root.
 
 ## What The Prover Checks
 
@@ -762,6 +1048,135 @@ height, block header hash, settlement hash, and manifest root. A relay is
 merge admissible only when it has both a QC and valid FastPQ proof
 material.
 
+### AXT Binding Math
+
+For Nexus AXT envelopes, `AxtFastpqBinding` is canonicalized before proof
+replay. Empty parameter values default to `fastpq-lane-balanced`; empty
+verifier id and version default to `fastpq` and `v1`; claim type is trimmed
+and lowercased.
+
+The AXT FastPQ public inputs are deterministic byte hashes:
+
+$$
+\operatorname{dsid}=\operatorname{dsid\_bytes}(\operatorname{source\_dsid})
+$$
+
+$$
+\operatorname{slot}=\operatorname{le64}(\operatorname{source\_tx\_commitment}[0..8])
+$$
+
+$$
+\operatorname{old\_root} =
+\operatorname{Hash}(
+\texttt{fastpq-json:old\_root}\|
+\operatorname{source\_tx\_commitment}\|
+\operatorname{policy\_commitment}\|
+\operatorname{effect\_type}
+)
+$$
+
+$$
+\operatorname{new\_root} =
+\operatorname{Hash}(
+\texttt{fastpq-json:new\_root}\|
+\operatorname{source\_tx\_commitment}\|
+\operatorname{claim\_digest}\|
+\operatorname{effect\_type}
+)
+$$
+
+$$
+\operatorname{perm\_root} =
+\operatorname{Hash}(
+\texttt{fastpq-json:perm\_root}\|
+\operatorname{policy\_commitment}\|
+\operatorname{verifier\_id}\|
+\operatorname{verifier\_version}
+)
+$$
+
+$$
+\operatorname{tx\_set\_hash} =
+\operatorname{Hash}(
+\texttt{fastpq-json:tx\_set\_hash}\|
+\operatorname{source\_tx\_commitment}\|
+\operatorname{claim\_digest}\|
+\operatorname{witness\_commitment}
+)
+$$
+
+AXT transition keys are:
+
+$$
+\operatorname{key}(\operatorname{prefix},x,y)=
+\operatorname{prefix}\|\texttt{/}\|x\|\texttt{/}\|y
+$$
+
+The `authorization` claim inserts a role-grant row:
+
+$$
+\operatorname{role\_id}=\operatorname{claim\_digest}
+$$
+
+$$
+\operatorname{permission\_id}=\operatorname{witness\_commitment}
+$$
+
+$$
+\operatorname{epoch}=
+\operatorname{le64}(\operatorname{policy\_commitment}[0..8])
+$$
+
+and a metadata row binding the authorization policy. The `compliance` claim
+inserts two metadata rows: one for policy and one for target dataspaces.
+
+For `tx_predicate` and `value_conservation`, an explicit effect amount is
+used when the binding contains a positive source or destination amount.
+Otherwise the code derives a bounded deterministic amount:
+
+$$
+\operatorname{bounded}(d,\min,\operatorname{span})
+=
+\min + (\operatorname{le64}(d[0..8])\bmod\max(\operatorname{span},1))
+$$
+
+Then the same transfer equations are used:
+
+$$
+\operatorname{sender\_after}=\operatorname{sender\_before}-a
+$$
+
+$$
+\operatorname{receiver\_after}=\operatorname{receiver\_before}+a
+$$
+
+The synthetic sender and receiver account ids are generated from key seeds:
+
+$$
+\operatorname{seed}=
+\operatorname{Hash}(\operatorname{label}\|\operatorname{entropy})[0..32]
+$$
+
+The transfer batch hash is:
+
+$$
+\operatorname{batch\_hash} =
+\operatorname{Hash}(
+\operatorname{label}\|
+\operatorname{corridor}\|
+\operatorname{source\_tx\_commitment}\|
+\operatorname{claim\_digest}
+)
+$$
+
+The AXT batch manifest digest is SHA-256 over the Norito encoding of the
+canonical binding:
+
+$$
+\operatorname{manifest\_digest} =
+\operatorname{SHA256}(E(\operatorname{canonical\_binding}))
+$$
+
 ## SCCP Transparent Message Proofs
 
 The SCCP helper crate also uses FastPQ for transparent cross-chain message
@@ -787,6 +1202,76 @@ Its public inputs are derived from the SCCP transparent inner proof:
 | `new_root`    | Commitment root                                            |
 | `perm_root`   | Finality block hash                                        |
 | `tx_set_hash` | Statement hash                                             |
+
+The SCCP canonical encoders write integers little-endian and encode
+variable-length byte arrays as:
+
+$$
+\operatorname{vec}(x)=\operatorname{le32}(|x|)\|x
+$$
+
+The transparent public input byte string is:
+
+$$
+P =
+\operatorname{version}\|
+\operatorname{message\_id}\|
+\operatorname{payload\_hash}\|
+\operatorname{le32}(\operatorname{target\_domain})\|
+\operatorname{commitment\_root}\|
+\operatorname{le64}(\operatorname{finality\_height})\|
+\operatorname{finality\_block\_hash}
+$$
+
+The transparent statement bytes are the concatenation of version, chain
+family, local and counterparty domains, security model, anchor governance,
+account codec, finality model, verifier target, verifier backend family,
+length-prefixed chain/backend/manifest fields, destination binding hash,
+account codec key, payload kind, public input bytes, and payload hash. The
+statement hash is:
+
+$$
+\operatorname{statement\_hash} =
+\operatorname{Blake2bVar}_{32}(
+\texttt{sccp:transparent:statement:v1}\|\operatorname{statement}
+)
+$$
+
+The FastPQ dataspace id for this proof path is the first sixteen bytes of
+another prefixed Blake2b digest:
+
+$$
+\operatorname{dsid} =
+\operatorname{Blake2bVar}_{32}(
+\texttt{sccp:transparent:fastpq:dsid:v1}\|\operatorname{statement\_hash}
+)[0..16]
+$$
+
+The SCCP FastPQ batch is exactly:
+
+$$
+(\texttt{sccp:transparent:v1:statement},\varnothing,\operatorname{statement},\operatorname{MetaSet})
+$$
+
+$$
+(\texttt{sccp:transparent:v1:context},\varnothing,E(\operatorname{inner\_proof}),\operatorname{MetaSet})
+$$
+
+$$
+(\texttt{sccp:transparent:v1:payload},\varnothing,\operatorname{canonical\_payload},\operatorname{MetaSet})
+$$
+
+then sorted by the same FastPQ ordering rule.
+
+The OpenVerify verifier commitment is SHA-256 over the SCCP message backend
+name and the canonical FastPQ verifier descriptor:
+
+$$
+\operatorname{vk\_hash} =
+\operatorname{SHA256}(
+\operatorname{message\_backend}\|\operatorname{verifier\_descriptor}
+)
+$$
 
 The raw FastPQ proof is Norito-encoded into a `StarkFriOpenProofV1`, then
 wrapped in an `OpenVerifyEnvelope` with backend `Stark`. SCCP verification
@@ -896,7 +1381,8 @@ signals listed in [Performance and Metrics](/guide/advanced/metrics.md).
 
 ## Related Reference
 
-- [Data Model Schema](/reference/data-model-schema.md) for generated type details
+- [Data Model Schema](/reference/data-model-schema.md) for generated type
+  details
 - `FastpqTransitionBatch`
 - `FastpqPublicInputs`
 - `TransferTranscript`

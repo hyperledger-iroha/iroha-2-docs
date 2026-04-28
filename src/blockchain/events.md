@@ -18,6 +18,32 @@ and status. The status can be either `Validating` (validation in progress),
 `Rejected`, or `Committed`. If an entity was rejected, the reason for the
 rejection is provided.
 
+### Try It on Taira
+
+Check that the public pipeline event stream is mounted:
+
+```bash
+curl -fsSI https://taira.sora.org/v1/events/sse \
+  | sed -n '1,12p'
+```
+
+For a snapshot you can inspect without keeping a stream open, read recent
+explorer transactions:
+
+```bash
+curl -fsS 'https://taira.sora.org/v1/explorer/transactions?page=1&per_page=5' \
+  | jq '{pagination, txs: [.items[] | {hash, block, status, executable}]}'
+```
+
+Open the SSE route in a terminal when you need live events:
+
+```bash
+curl -fsS -N https://taira.sora.org/v1/events/sse
+```
+
+If no transactions are submitted while the stream is open, the command can stay
+quiet even though the route is healthy.
+
 ## Data Events
 
 Data events are emitted when there is a change related to ledger data such
