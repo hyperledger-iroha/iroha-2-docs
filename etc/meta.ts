@@ -1,11 +1,6 @@
-export const IROHA_REV = 'v2.0.0-rc.2.0'
+import path from 'path'
 
-/**
- * hyperledger-iroha/iroha-javascript#iroha2 (rc13)
- */
-export const IROHA_JS_REV = '9c630fab14f063962b2508ac60e49789a160e443'
-
-/**
- * hyperledger-iroha/iroha-java#iroha2-dev
- */
-export const IROHA_JAVA_REV_DEV = 'e176225f935cc7f976d17384191ef0c0043ca0f6'
+export const IROHA_REV = process.env.IROHA_REV ?? '11d3d92d74d278583467461e52f3d390ec18ba64'
+export const IROHA_RAW_BASE =
+  process.env.IROHA_RAW_BASE ?? `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV}`
+export const IROHA_SOURCE_DIR = path.resolve(process.env.IROHA_SOURCE_DIR ?? path.resolve(__dirname, '../../iroha'))

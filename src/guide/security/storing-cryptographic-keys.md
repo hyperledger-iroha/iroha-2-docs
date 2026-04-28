@@ -8,7 +8,7 @@ For more information on <abbr title="Operational Security">OPSEC</abbr> and its 
 
 When it comes to protecting cryptographic keys digitally, mainly only two approaches—[SSH](https://www.ssh.com/) and [GPG](https://www.gnupg.org/)—are available. These methods provide layers of security to prevent unauthorized access to your cryptographic keys.
 
-Many of Iroha 2's architectural decisions have been influenced by the principles of the **Secure Shell** (`SSH`) protocol, which is why this section primarily focuses on the `SSH` approach, offering instructions on how to effectively implement the protocol for storing your cryptographic keys within the Iroha 2 ecosystem.
+Many Iroha architectural decisions have been influenced by the principles of the **Secure Shell** (`SSH`) protocol, which is why this section primarily focuses on the `SSH` approach, offering instructions on how to effectively implement the protocol for storing your cryptographic keys within the Iroha ecosystem.
 
 ### Using SSH and SSH Agent
 

@@ -132,7 +132,9 @@ List of all old parameters:
   - `QUERY_IDLE_TIME_MS`: became `torii.query_idle_time`
 - ~~`WSV`~~: removed[^1]
 
-[^1]: on-chain configuration removed from configuration file. TODO link reference.
+[^1]: on-chain configuration moved out of the local configuration file. Use
+    [`SetParameter`](/blockchain/instructions.md#setparameter) for parameter
+    changes that must be part of ledger state.
 
 ## Example
 

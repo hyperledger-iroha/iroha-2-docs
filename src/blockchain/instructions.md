@@ -4,20 +4,20 @@ When we spoke about [how Iroha operates](/blockchain/iroha-explained), we
 said that Iroha Special Instructions are the only way to modify the world
 state. So, what kind of special instructions do we have? If you've read the
 language-specific guides in this tutorial, you've already seen a couple of
-instructions: `Register<Account>` and `Mint<Quantity>`.
+instructions: `Register<Account>` and `Mint<Numeric>`.
 
 Here is the full list of Iroha Special Instructions:
 
 | Instruction                                               | Descriptions                                      |
 | --------------------------------------------------------- | ------------------------------------------------- |
 | [Register/Unregister](#un-register)                       | Give an ID to a new entity on the blockchain.     |
-| [Mint/Burn](#mint-burn)                                   | Mint/burn assets, triggers, or permission tokens. |
+| [Mint/Burn](#mint-burn)                                   | Mint/burn numeric assets or trigger repetitions.  |
 | [SetKeyValue/RemoveKeyValue](#setkeyvalue-removekeyvalue) | Update blockchain object metadata.                |
-| [NewParameter/SetParameter](#newparameter-setparameter)   | Create/set a chain-wide config parameter.         |
-| [Grant/Revoke](#grant-revoke)                             | Give or remove certain permissions from accounts. |
-| [Transfer](#transfer)                                     | Transfer assets between accounts.                 |
+| [SetParameter](#setparameter)                             | Set a chain-wide parameter.                       |
+| [Grant/Revoke](#grant-revoke)                             | Give or remove permissions and roles.             |
+| [Transfer](#transfer)                                     | Transfer ownership or asset value.                |
 | [ExecuteTrigger](#executetrigger)                         | Execute triggers.                                 |
-| [If, Pair, Sequence](#composite-instructions)             | Use to create composite instructions.             |
+| [Log/Custom/Upgrade](#other-instructions)                 | Log, extend, or upgrade runtime behavior.         |
 
 Let's start with a summary of Iroha Special Instructions; what objects each
 instruction can be called for and what instructions are available for each
@@ -26,8 +26,9 @@ object.
 ## Summary
 
 For each instruction, there is a list of objects on which this instruction
-can be run on. For example, only assets can be transferred, while minting
-can refer to assets, triggers, and permission tokens.
+can be run on. For example, transfer variants cover ownable ledger objects
+and numeric assets, while minting covers numeric assets and trigger
+repetitions.
 
 Some instructions require a destination to be specified. For example, if
 you transfer assets, you always need to specify to which account you are
@@ -36,28 +37,27 @@ all you need is the object that you want to register.
 
 | Instruction                                               | Objects                                                                                                               | Destination |
 | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------- |
-| [Register/Unregister](#un-register)                       | accounts, domains, asset definitions, triggers, roles, peers                                                          |             |
-| [Mint/Burn](#mint-burn)                                   | assets, triggers (trigger repetitions), permission tokens                                                             | accounts    |
-| [SetKeyValue/RemoveKeyValue](#setkeyvalue-removekeyvalue) | any objects that have [metadata](./metadata.md): accounts, domains, assets, asset definitions, triggers, transactions |             |
-| [NewParameter/SetParameter](#newparameter-setparameter)   | Iroha configuration parameters                                                                                        |             |
-| [Grant/Revoke](#grant-revoke)                             | [roles, permission tokens](/blockchain/permissions.md)                                                          | accounts    |
-| [Transfer](#transfer)                                     | assets                                                                                                                | accounts    |
+| [Register/Unregister](#un-register)                       | domains, accounts, asset definitions, NFTs, roles, triggers, peers                                                    |             |
+| [Mint/Burn](#mint-burn)                                   | numeric assets, trigger repetitions                                                                                   | accounts or triggers |
+| [SetKeyValue/RemoveKeyValue](#setkeyvalue-removekeyvalue) | objects that have [metadata](./metadata.md): domains, accounts, asset definitions, NFTs, triggers                     |             |
+| [SetParameter](#setparameter)                             | chain parameters                                                                                                      |             |
+| [Grant/Revoke](#grant-revoke)                             | [roles, permission tokens](/blockchain/permissions.md)                                                                | accounts or roles |
+| [Transfer](#transfer)                                     | domains, asset definitions, numeric assets, NFTs                                                                      | accounts    |
 | [ExecuteTrigger](#executetrigger)                         | triggers                                                                                                              |             |
-| [If, Pair, Sequence](#composite-instructions)             | any instructions                                                                                                      |             |
+| [Log/Custom/Upgrade](#other-instructions)                 | logs, executor-specific payloads, executor upgrades                                                                   |             |
 
-There is also another way of looking at ISI, i.e. in terms of the target of
-each instruction. For example, when you register an account, you do so
-within a certain domain. This means that the _target_ of the
-`Register<Account>` instruction would be the domain within which it is
-being registered.
+There is also another way of looking at ISI, in terms of the ledger object
+they touch:
 
 | Target  | Instructions                                                                                                                                                                |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Account | (un)register assets, mint/burn account public key, mint/burn account signature condition check, update account metadata, grant/revoke a permission token, grant/revoke role |
-| Domain  | (un)register accounts, (un)register asset definitions, update asset metadata, update domain metadata                                                                        |
-| Asset   | update metadata, mint/burn, transfer                                                                                                                                        |
-| Trigger | (un)register, mint/burn trigger repetitions, execute trigger                                                                                                                |
-| World   | (un)register domains, peers, roles                                                                                                                                          |
+| Account | register/unregister accounts, receive assets, update account metadata, grant/revoke permissions and roles                                                                   |
+| Domain  | register/unregister domains, transfer domain ownership, update domain metadata                                                                                              |
+| Asset definition | register/unregister definitions, transfer ownership, update metadata                                                                                                |
+| Asset   | mint/burn numeric quantity, transfer numeric quantity                                                                                                                       |
+| NFT     | register/unregister NFTs, transfer ownership, update metadata                                                                                                               |
+| Trigger | register/unregister, mint/burn trigger repetitions, execute trigger, update trigger metadata                                                                                |
+| World   | register/unregister peers and roles, set parameters, upgrade the executor                                                                                                   |
 
 ## (Un)Register
 
@@ -66,15 +66,18 @@ new entity on the blockchain.
 
 Everything that can be registered is both `Registrable` and `Identifiable`,
 but not everything that's `Identifiable` is `Registrable`. Most things are
-registered directly, like `Peer`s, but in some cases the representation in
-the blockchain has considerably more data. For security and performance
-reasons, we use builders for such data structures (e.g. `NewAccount`). As a
-rule, everything that can be registered, can also be un-registered, but
-that is not a hard and fast rule.
+registered directly, but in some cases the representation in the blockchain
+has considerably more data. For security and performance reasons, we use
+builders for such data structures (e.g. `NewAccount`), and peer
+registration has a dedicated proof-of-possession instruction. As a rule,
+everything that can be registered can also be unregistered, but that is not
+a hard and fast rule.
 
-You can register domains, accounts, asset definitions, peers, roles, and
-triggers. Check our [naming conventions](/reference/naming.md) to learn about the
-restrictions put on entity names.
+You can register domains, accounts, asset definitions, NFTs, peers, roles,
+and triggers. Peer registration uses `RegisterPeerWithPop`, which carries a
+proof of possession for the peer key. Check our
+[naming conventions](/reference/naming.md) to learn about the restrictions
+put on entity names.
 
 ::: info
 
@@ -98,9 +101,7 @@ We discuss these differences in great detail when we
 ::: info
 
 Registering a peer is currently the only way of adding peers that were not
-part of the original `TRUSTED_PEERS` array to the network.
-
-<!-- Check: a reference about future releases or work in progress -->
+part of the original trusted peer set to the network.
 
 :::
 
@@ -109,49 +110,45 @@ process of registering objects in a blockchain:
 
 | Language              | Guide                                                                                                                                                                                                  |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| CLI                   | Register a [domain](/get-started/operate-iroha-2-via-cli.md#_3-register-a-domain), an [account](/get-started/operate-iroha-2-via-cli.md#_4-register-an-account), an [asset](/get-started/operate-iroha-2-via-cli.md#_6-register-and-mint-assets)                      |
-| Rust                  | Register a [domain](/guide/tutorials/rust.md#_3-registering-a-domain), an [account](/guide/tutorials/rust.md#_4-registering-an-account), an [asset](/guide/tutorials/rust.md#_5-registering-and-minting-assets)                      |
-| Kotlin/Java           | Register a [domain](/guide/tutorials/kotlin-java.md#_3-querying-and-registering-domains), an [account](/guide/tutorials/kotlin-java.md#_4-registering-an-account), an [asset](/guide/tutorials/kotlin-java.md#_5-registering-and-minting-assets) |
-| Python                | Register a [domain](/guide/tutorials/python.md#_3-registering-a-domain), an [account](/guide/tutorials/python.md#_4-registering-an-account), an [asset](/guide/tutorials/python.md#_5-registering-and-minting-assets)                |
-| JavaScript/TypeScript | Register a [domain](/guide/tutorials/javascript.md#_3-registering-a-domain), an [account](/guide/tutorials/javascript.md#_4-registering-an-account), an [asset](/guide/tutorials/javascript.md#_5-registering-and-minting-assets)    |
+| CLI                   | Use the [Iroha CLI](/get-started/operate-iroha-2-via-cli.md) to register domains, accounts, and assets.                      |
+| Rust                  | Use the [Rust tutorial](/guide/tutorials/rust.md).                      |
+| Kotlin/Java           | Use the [Kotlin/Java tutorial](/guide/tutorials/kotlin-java.md). |
+| Python                | Use the [Python tutorial](/guide/tutorials/python.md).                |
+| JavaScript/TypeScript | Use the [JavaScript/TypeScript tutorial](/guide/tutorials/javascript.md).    |
 
 ## Mint/Burn
 
-Minting and burning can refer to assets, triggers (if the trigger has a
-limited number of repetitions), and temporary permission tokens. Some
-assets can be declared as non-mintable, meaning that they can be minted
-only once after registration.
+Minting and burning can refer to numeric assets and triggers with a limited
+number of repetitions. Some assets can be declared as non-mintable, meaning
+that they can be minted only once after registration.
 
-Assets and permission tokens need to be minted to a specific account,
-usually the one that registered the asset in the first place. All assets
-are assumed to be non-negative as well, so you can never have $-1.0$ of
-`time` or `Burn` a negative amount and get a `Mint`.
+Assets are minted to a specific account, usually the one that registered
+the asset in the first place. Asset quantities are non-negative, so you can
+never have `$-1.0` of an asset or burn a negative amount and get a mint.
 
 Refer to one of the language-specific guides to walk you through the
 process of minting assets in a blockchain:
 
-- [CLI](/get-started/operate-iroha-2-via-cli.md#_6-register-and-mint-assets)
-- [Rust](/guide/tutorials/rust.md#_5-registering-and-minting-assets)
-- [Kotlin/Java](/guide/tutorials/kotlin-java.md#_5-registering-and-minting-assets)
-- [Python](/guide/tutorials/python.md#_5-registering-and-minting-assets)
-- [JavaScript/TypeScript ](/guide/tutorials/javascript.md#_5-registering-and-minting-assets)
+- [CLI](/get-started/operate-iroha-2-via-cli.md)
+- [Rust](/guide/tutorials/rust.md)
+- [Kotlin/Java](/guide/tutorials/kotlin-java.md)
+- [Python](/guide/tutorials/python.md)
+- [JavaScript/TypeScript](/guide/tutorials/javascript.md)
 
 Here are examples of burning assets:
 
-- [CLI](/get-started/operate-iroha-2-via-cli.md#_8-burn-assets)
-- [Rust](/guide/tutorials/rust.md#_7-burning-assets)
+- [CLI](/get-started/operate-iroha-2-via-cli.md)
+- [Rust](/guide/tutorials/rust.md)
 
 ## Transfer
 
-Similar to mint and burn instructions, transferring refers to assets. You
-can transfer assets between different accounts.
+Transfers move ownership or value between accounts. Current transfer
+variants cover domains, asset definitions, numeric assets, and NFTs.
 
 To do this, an account have to be granted the
 [permission to transfer assets](/reference/permissions.md).
 Refer to an example on how to
-transfer assets with [CLI](/get-started/operate-iroha-2-via-cli.md#_7-transfer-assets) or [Rust](/guide/tutorials/rust.md#_6-transferring-assets).
-
-<!--TODO: add links to transferring assets example in which guide after https://github.com/hyperledger-iroha/iroha-2-docs/issues/81 is addressed -->
+transfer assets with [CLI](/get-started/operate-iroha-2-via-cli.md) or [Rust](/guide/tutorials/rust.md).
 
 ## Grant/Revoke
 
@@ -165,28 +162,24 @@ be used carefully.
 
 ## `SetKeyValue`/`RemoveKeyValue`
 
-These instructions are used with the key/value
-[`Store` asset type](/blockchain/metadata.md#store-asset). This use
-case has not received much attention so far, because storing data in the
-blockchain is a rather advanced topic that we shall cover separately.
+These instructions update object [metadata](/blockchain/metadata.md). Use
+`SetKeyValue` to insert or replace a metadata entry and `RemoveKeyValue` to
+delete one.
 
-## `NewParameter`/`SetParameter`
+## `SetParameter`
 
-With these instructions, you can create (`NewParameter`) and change
-(`SetParameter`) chain-wide
-[configuration parameters](/guide/configure/client-configuration.md) for
-Iroha.
+`SetParameter` changes chain-wide parameters exposed by the active data
+model and executor.
 
 ## `ExecuteTrigger`
 
 This instruction is used to execute [triggers](./triggers.md).
 
-## Composite instructions
+## Other instructions
 
-Iroha also offers composite instructions (`If`, `Pair`, `Sequence`) to
-execute instructions in a certain way:
+Iroha also exposes lower-level instructions for runtime and executor
+integration:
 
-- `If`: execute one of the two given instructions based on a given
-  condition
-- `Sequence`: execute a provided vector of instructions in a given order
-- `Pair`: execute both provided instructions in a specified order
+- `Log`: emit a log entry during execution
+- `CustomInstruction`: carry executor-specific JSON payloads
+- `Upgrade`: activate an executor upgrade

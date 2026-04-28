@@ -16,7 +16,10 @@ import ParamTable from './ParamTable.vue';
 
 Chain ID that must be included in each transaction. Used to prevent replay attacks.
 
-[//]: # (TODO: explain what replay attacks are)
+A replay attack is an attempt to submit a valid transaction to a different
+network than the one it was intended for. Because the `chain_id` is part of
+the signed transaction payload, a transaction signed for one chain is rejected
+by peers that use another chain ID.
 
 <param-table type=string env=CHAIN_ID />
 
@@ -285,7 +288,7 @@ API_ADDRESS=0.0.0.0:8080
 ### `torii.max_content_len` {#param-torii-max-content-len}
 
 The maximum number of bytes in a raw request body accepted by the
-[Transaction Endpoint](/reference/torii-endpoints#transaction).
+[Torii endpoints](/reference/torii-endpoints.md).
 
 This limit is used to prevent DOS attacks.
 
@@ -395,7 +398,7 @@ LOG_LEVEL=INFO
 
 ::: tip Runtime update
 
-This parameter is subject for [runtime configuration update](/reference/torii-endpoints#configuration-update).
+This parameter is subject to runtime configuration update through Torii operator endpoints.
 
 :::
 
@@ -448,7 +451,7 @@ set will be `info,iroha_core=debug` (i.e. `info` for all modules, `debug` for `i
 
 ::: tip Runtime update
 
-This parameter is subject for [runtime configuration update](/reference/torii-endpoints#configuration-update).
+This parameter is subject to runtime configuration update through Torii operator endpoints.
 
 :::
 
@@ -637,7 +640,9 @@ transaction_time_to_live_ms = 43_200_000
 
 ### `sumeragi.debug.force_soft_fork` <Badge type="warning" text="debug" /> {#param-sumeragi-debug-force-soft-fork}
 
-TODO
+Debug-only switch for exercising Sumeragi soft-fork handling paths. Leave this
+disabled outside controlled tests; changing it on a running production network
+can make peers disagree about consensus behavior.
 
 <param-table type=bool default-value=false />
 
@@ -655,7 +660,11 @@ force_soft_fork = true
 This module is responsible for reading and writing snapshots of the
 [World State View](/blockchain/world#world-state-view-wsv).
 
-TODO: explain the purpose of snapshots, file formats, etc
+Snapshots store a serialized checkpoint of the World State View so a peer can
+restart without replaying every block from Kura. Kura remains the durable block
+history and the source of truth for replay; snapshots are an acceleration path.
+On startup, Iroha checks snapshot metadata against the configured chain and the
+stored blocks before deciding whether to load a snapshot or fall back to replay.
 
 ::: tip Wipe Snapshots
 
@@ -733,7 +742,9 @@ SNAPSHOT_STORE_DIR="/path/to/storage"
 
 ## Telemetry {#telemetry}
 
-TODO
+Telemetry exports peer diagnostics to an external telemetry collector. Configure
+both `telemetry.name` and `telemetry.url` when a peer should report to a
+collector; omit the section when telemetry is not used.
 
 `name` and `url` must be paired.
 
@@ -756,7 +767,7 @@ name = "iroha"
 
 ### `telemetry.url` {#param-telemetry-url}
 
-The url of the telemetry. TODO update example value
+The WebSocket URL of the telemetry collector.
 
 <param-table type=string />
 
@@ -764,7 +775,7 @@ The url of the telemetry. TODO update example value
 
 ```toml [Config File]
 [telemetry]
-url = "ws://substrate.telemetry.iroha"
+url = "ws://telemetry.example.com/submit"
 ```
 
 :::

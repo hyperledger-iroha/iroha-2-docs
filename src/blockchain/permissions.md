@@ -6,8 +6,8 @@ to mint or burn assets.
 There is a difference between a public and a private blockchain in terms of
 permissions granted to users. In a public blockchain, most accounts have
 the same set of permissions. In a private blockchain, most accounts are
-assumed not to be able to do anything outside of their own account or
-domain unless explicitly granted said permission.
+assumed not to be able to do anything outside the authority granted to them
+unless explicitly granted the relevant permission.
 
 Having a permission to do something means having a `PermissionToken` to do
 so. There are two ways for users to receive permission tokens: they can be
@@ -18,46 +18,36 @@ removed using `Revoke` instruction.
 
 ## Permission Tokens
 
-Permission token definitions have parameters. When a new permission token
-is registered, the names of the parameters and their types are checked
-against their names and types in the token definition. The token
-registration fails if there are too few parameters, if the parameter types
-don't match the definition, or parameters with unrecognised names.
+Permission tokens are typed objects defined by the active executor. Some
+tokens are global, such as `CanManagePeers`, and others are scoped to a
+specific ledger object, such as an account, asset, asset definition, domain,
+NFT, role, or trigger.
 
 Here are some examples of parameters used for various permission tokens:
 
-- A token that grants permission to change the values associated to keys in
-  a `Store` asset needs the `asset_definition_id` parameter of type `Id`:
+- A token that grants permission to modify metadata for a specific account
+  carries an `account` field:
 
   ```json
-    "params": {
-       "asset_definition_id": "Id"
+  {
+    "account": "<AccountId>"
   }
   ```
 
-- By contrast, the permission token that grants the permission to set keys
-  to values in user _metadata_ needs the `account_id` parameter of type
-  `Id`:
+- A token that grants permission to transfer assets for a specific asset
+  definition carries an `asset_definition` field:
 
   ```json
-  "params": {
-    "account_id": "Id"
+  {
+    "asset_definition": "<AssetDefinitionId>"
   }
   ```
 
-- The permission token that grants the permission to transfer assets only a
-  fixed number of times per some time period, needs these two parameters:
+- A global token such as `CanManagePeers` has no fields:
 
   ```json
-  "params": {
-    "count": "U32",
-    "period": "U128"
-  }
+  {}
   ```
-
-  Where the `period` is specified as a standard Duration since the UNIX
-  epoch in milliseconds (more details about
-  [time in Rust](https://doc.rust-lang.org/std/time/struct.SystemTime.html)).
 
 ### Pre-configured Permission Tokens
 
@@ -71,7 +61,9 @@ roles can be granted using the `Grant` instruction and revoked using the
 
 Before granting a role to an account, the role should be registered first.
 
-<!-- TODO: add more info about roles -->
+Roles are useful when several accounts should receive the same permission
+set. Register the role once, grant permissions to the role, and then grant or
+revoke the role for individual accounts.
 
 ### Register a new role
 
@@ -80,10 +72,11 @@ access to the [metadata](/blockchain/metadata.md) in Mouse's account:
 
 ```rust
 let role_id = RoleId::from_str("ACCESS_TO_MOUSE_METADATA")?;
-let role = iroha_data_model::role::Role::new(role_id)
-    .add_permission(CanSetKeyValueInUserMetadata::new(mouse_id))
-    .add_permission(CanRemoveKeyValueInUserMetadata::new(mouse_id));
-let register_role = RegisterBox::new(role);
+let role = iroha_data_model::role::Role::new(role_id.clone(), mouse_id.clone())
+    .add_permission(CanModifyAccountMetadata {
+        account: mouse_id.clone(),
+    });
+let register_role = Register::role(role);
 ```
 
 ### Grant a role
@@ -91,54 +84,40 @@ let register_role = RegisterBox::new(role);
 After the role is registered, Mouse can grant it to Alice:
 
 ```rust
-let grant_role = GrantBox::new(role_id, alice_id);
-let grant_role_tx =
-    Transaction::new(mouse_id, vec![grant_role.into()].into(), 100_000)
-    .sign(mouse_key_pair)?;
+let grant_role = Grant::account_role(role_id, alice_id);
+let grant_role_tx = TransactionBuilder::new(chain_id, mouse_id)
+    .with_instructions([grant_role])
+    .sign(mouse_private_key);
 ```
 
 ## Permission Validators
 
-Permissions exist so that only those accounts that have a required
-permission token to perform a certain action could do so.
+Permissions exist so that only accounts with the required permission token
+can perform a protected action. The default executor checks permissions
+during instruction, query, and expression execution.
 
-The `Judge` trait is used to check permissions. The `Judge` decides whether
-a certain operation (instruction, query, or expression) could be performed
-based on the verdicts of multiple validators.
+The default validator surface is grouped by ledger area:
 
-Each validator returns one of the following verdicts: `Deny` (with the
-exact reason to deny an operation), `Skip` (if an operation is not
-supported or has no meaning in a given context), or `Allow`.
+- peer management
+- domains and accounts
+- assets, NFTs, and escrows
+- triggers
+- roles and permissions
+- executor/runtime, proofs, bridges, and SORA/Nexus modules
 
-There are several implementations of the `Judge` trait in Iroha 2, such as:
-
-| Judge                        | Description                                                                                                                                                                          |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `AtLeastOneAllow`            | The judge that succeeds only if there is at least one `Allow` verdict. The execution is stopped once there is a first `Allow` verdict.                                               |
-| `NoDenies`                   | The judge that succeeds only if there is no `Deny` verdict. All validators are checked.                                                                                              |
-| `NoDeniesAndAtLeastOneAllow` | The judge that succeeds only if there is no `Deny` verdict and at least one `Allow` verdict. The execution is stopped once there is a `Deny` verdict or all validators were checked. |
-| `AllowAll`                   | For tests and simple cases. All operations are allowed to be executed for all possible values.                                                                                       |
-| `DenyAll`                    | For tests and simple cases. All operations are disallowed to be executed for all possible for all possible values.                                                                   |
-
-You can also build a custom permission validator by combining multiple
-validators, all of which should be of the same type (for checking
-instructions, queries, or expressions).
+The exact token list is source-backed in the
+[Permission Tokens reference](/reference/permissions.md).
 
 ### Runtime Validators
 
-Currently Iroha 2 has only built-in validators. In the future, built-in
-validators will be completely replaced with **runtime validators** that use
-WASM.
+Permission checks are enforced by the active executor. The default
+executor provides the built-in permission validators and token definitions,
+and a network can change policy by upgrading the executor it uses.
 
-The **chain** of runtime validators is used to validate operations that
-require permissions. It works similarly to the
-[`Chain of responsibility`](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern).
-
-All runtime validators return **validation verdict**. By default, all
-operations are considered **valid** unless proven otherwise. Validators
-check whether or not an operation is not allowed: each validator either
-allows an operation and passes it to the following validator, or denies the
-operation. The validation stops at the first `Deny` verdict.
+Validators return a **validation verdict**. A validator can allow an
+operation, deny it with a reason, or skip it if the operation is outside of
+that validator's scope. The selected judge combines those verdicts to
+decide whether the instruction, query, or expression may proceed.
 
 ## Supported Queries
 
@@ -146,12 +125,10 @@ Permission tokens and roles can be queried.
 
 Queries for roles:
 
-- [`FindAllRoles`](/reference/queries.md#findallroles)
-- [`FindAllRoleIds`](/reference/queries.md#findallroleids)
-- [`FindRoleByRoleId`](/reference/queries.md#findrolebyroleid)
-- [`FindRolesByAccountId`](/reference/queries.md#findrolesbyaccountid)
+- [`FindRoles`](/reference/queries.md#accounts-and-permissions)
+- [`FindRoleIds`](/reference/queries.md#accounts-and-permissions)
+- [`FindRolesByAccountId`](/reference/queries.md#accounts-and-permissions)
 
 Queries for permission tokens:
 
-- [`FindAllPermissionTokenDefinitions`](/reference/queries.md#findallpermissiontokendefinitions)
-- [`FindPermissionTokensByAccountId`](/reference/queries.md#findpermissiontokensbyaccountid)
+- [`FindPermissionsByAccountId`](/reference/queries.md#accounts-and-permissions)

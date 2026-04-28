@@ -33,7 +33,7 @@ const contact = ref('')
 const feedbackTextPlaceholder = computed<string>(() => {
   switch (feedbackKind.value) {
     case 'bug':
-      return 'Report any bugs or issues you found in Iroha 2 documentation'
+      return 'Report any bugs or issues you found in the Iroha 3 documentation'
     default:
       return 'What can we do to improve the overall documentation browsing experience?'
   }
@@ -119,7 +119,7 @@ function doSubmit() {
         >
           <div class="p-4 space-y-4">
             <DialogDescription class="text-sm">
-              Please take a moment to help us improve the Iroha 2 Documentation. We take your input very seriously.
+              Please take a moment to help us improve the Iroha 3 documentation. We take your input very seriously.
             </DialogDescription>
 
             <div>

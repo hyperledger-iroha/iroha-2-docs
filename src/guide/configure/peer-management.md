@@ -5,23 +5,15 @@ well-functioning network that people will want to join.
 
 ## Public Blockchain
 
-Naturally, in a public blockchain, joining is a matter of installing the
-correct software and waiting until your node gets discovered.
-
-::: info
-
-Peer discovery is
-[under construction](https://github.com/hyperledger-iroha/iroha/issues/1375 '#1375').
-
-<!-- Check: a reference about future releases or work in progress -->
-
-:::
+In an open network, peer admission is still a chain policy decision. A node
+can run the correct software and connect to Torii, but it only participates
+in consensus after the network admits its peer identity.
 
 ## Private Blockchain
 
 In a bank setting, allowing everyone to join at their leisure is a security
-nightmare. For safety, automatic discovery of peers is turned off for Iroha
-2 in the private blockchain configuration.
+risk. For safety, private Iroha deployments usually pin the peer topology in
+configuration and genesis instead of relying on open discovery.
 
 ### Registering peers
 
@@ -43,9 +35,8 @@ doesn't need to (or want to) spend time setting up a new peer.
 
 ::: info
 
-Permissions for registering a peer are under construction.
-
-<!-- Check: a reference about future releases or work in progress -->
+The default executor uses the `CanManagePeers` permission token for
+registering and unregistering peers.
 
 :::
 
@@ -57,15 +48,15 @@ We discuss permissions and roles with more detail in a
 After a new peer was granted permissions, it must be set up.
 
 It's a good idea to request information about the peers' configuration in
-the network. Your best friend is the `configuration` endpoint of the API
-socket. Thus far querying is done manually. Until the
+the network. Torii exposes node parameter and capability endpoints for this.
+Thus far querying is done manually. Until the
 [bootstrapping procedure](https://github.com/hyperledger-iroha/iroha/issues/1184 '#1184')
 is implemented, you'll have to manually check that the timeouts and batch
 sizes match.
 
 To simplify the process, you can ask the network administrator for a
-redacted version of `config.json`, which excludes privileged information,
-such as `PRIVATE_KEY`s.
+redacted version of `config.toml`, which excludes privileged information,
+such as peer private keys.
 
 #### 3. Submit the instruction
 
@@ -75,7 +66,7 @@ chatting with the network.
 
 ::: tip
 
-Submitting a `Register<Peer>` instruction **does not** (and cannot)
+Submitting a peer registration instruction **does not** (and cannot)
 instantiate a _new peer process_.
 
 :::

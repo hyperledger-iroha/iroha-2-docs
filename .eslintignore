@@ -1,3 +1,4 @@
 .vitepress/dist
 .vitepress/cache
+.vercel
 src/snippets

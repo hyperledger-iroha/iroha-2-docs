@@ -14,19 +14,25 @@ This encryption process not only ensures the privacy and confidentiality of sens
 
 ## Keys on the Client Side
 
-Since every transaction must be signed on behalf of a peer, every operation requires a private key that is kept secret (hence the name). Therefore, the client program must handle both the storage and secure signing of transactions.
+Every transaction must be signed by an account authority. The private key or
+controller material for that authority must stay secret, so client software is
+responsible for secure storage and signing.
 
 ::: warning
 
-All clients are different, but `iroha` binary is the least secure in this regard, as it stores a peer's private key in the `multihash` format saved to a plain text file that could be overridden with an environment variable.
+All clients are different, but plain-text client configuration is only suitable
+for development and controlled test networks. Production integrations should
+use a secret manager, hardware-backed key storage, or another audited signing
+boundary.
 
 **This is currently a reference implementation that will _not_ be a part of the production release.**
 
 :::
 
-One needs to register a user on behalf of another already registered user (just like you need to already have a pair of scissors to cut off the tag from a new one). Suppose that we want to register a user on behalf of `mad_hatter@wonderland`.
-
-This entails generating a new private key, and sending its public key to the network so that said network can verify that it's indeed the trustworthy `mad_hatter@wonderland`, and not some impostor (e.g. `mad_hatter@wünderbar`). In this case, the client application must prompt you, the user, to provide a key pair and verify the authenticity of the transactions:  belonging to `mad_hatter@wonderland` and having a signature derived from the appropriate public key.
+Registering a new account entails generating controller material, such as an
+Ed25519 key pair, and submitting the public part to the network. Later
+transactions from that account must be signed by the matching private key or by
+the configured account controller policy.
 
 For public key cryptography to work effectively, avoid re-using keys when you need to specify a new key. While there's nothing stopping you from doing that, the public keys are _public_, which means that if an attacker sees the same public key being used, they will know that the private keys are also identical.
 

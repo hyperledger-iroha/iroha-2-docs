@@ -20,11 +20,11 @@ rejection is provided.
 
 ## Data Events
 
-Data events are emitted when there is a change related to one of the
-following entities: peers, domains, accounts, asset definitions, assets,
-triggers, roles, permission tokens, permission validators, or Iroha
-configuration. These types of events are used in
-[entity filters](./filters.md).
+Data events are emitted when there is a change related to ledger data such
+as peers, domains, accounts, assets, asset definitions, NFTs, triggers,
+roles, on-chain configuration, executor state, proofs, confidential assets,
+bridges, or SORA/Nexus-specific objects. These types of events are used in
+[data event filters](./filters.md#data-event-filters).
 
 ## Time Events
 
@@ -35,4 +35,5 @@ Time events are emitted when the world state view is ready to handle
 
 Trigger execution events are emitted when the
 [`ExecuteTrigger`](./instructions.md#executetrigger) instruction is
-executed
+executed. Trigger completion events are emitted after a trigger action
+finishes.

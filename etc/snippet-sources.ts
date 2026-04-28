@@ -1,144 +1,71 @@
+import { spawnSync } from 'child_process'
 import type { SnippetSourceDefinition } from './types'
-import { IROHA_JAVA_REV_DEV, IROHA_JS_REV, IROHA_REV } from './meta'
+import { IROHA_RAW_BASE, IROHA_SOURCE_DIR } from './meta'
 import { render as renderDataModelSchema } from './schema'
 
-// *****
+const ANSI_ESCAPE_PATTERN = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, 'g')
+const IROHA_SCHEMA_PATH = 'docs/source/references/schema.json'
 
-const javascriptSnippets = [
-  {
-    src: 'packages/docs-recipes/src/1.client-install.ts',
-    local: '1-client-install.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/2.1.1.key-pair.ts',
-    local: '2-1-1-key-pair.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/2.1.2.signer.ts',
-    local: '2-1-2-signer.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/2.2.1.torii-usage-example.ts',
-    local: '2-2-1-torii-usage-example.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/2.2.2.torii-pre-node.ts',
-    local: '2-2-2-torii-pre-node.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/2.2.3.torii-pre-web.ts',
-    local: '2-2-3-torii-pre-web.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/2.3.client.ts',
-    local: '2-3-client.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/3.register-domain.ts',
-    local: '3-register-domain.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/4.register-account.ts',
-    local: '4-register-account.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/5.1.register-asset.ts',
-    local: '5-1-register-asset.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/5.2.mint-registered-asset.ts',
-    local: '5-2-mint-asset.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/6.transfer-assets.ts',
-    local: '6-transfer-assets.ts',
-  },
-  {
-    src: 'packages/docs-recipes/src/7.query-domains-accounts-assets.ts',
-    local: '7-querying.ts',
-  },
-  {
-    src: 'packages/client/test/integration/test-web/src/main.ts',
-    local: '8-main.ts',
-  },
-  {
-    src: 'packages/client/test/integration/config/client_config.json',
-    local: '8-config.json',
-  },
-  {
-    src: 'packages/client/test/integration/test-web/src/App.vue',
-    local: '8-App.vue',
-  },
-  {
-    src: 'packages/client/test/integration/test-web/src/client.ts',
-    local: '8-client.ts',
-  },
-  {
-    src: 'packages/client/test/integration/test-web/src/crypto.ts',
-    local: '8-crypto.ts',
-  },
-  {
-    src: 'packages/client/test/integration/test-web/src/components/CreateDomain.vue',
-    local: '8-components-CreateDomain.vue',
-  },
-  {
-    src: 'packages/client/test/integration/test-web/src/components/StatusChecker.vue',
-    local: '8-components-StatusChecker.vue',
-  },
-  {
-    src: 'packages/client/test/integration/test-web/src/components/EventListener.vue',
-    local: '8-components-EventListener.vue',
-  },
-  {
-    src: 'packages/docs-recipes/src/9.blocks-stream.ts',
-    local: '9-blocks-stream.ts',
-  },
-].map<SnippetSourceDefinition>(({ src, local }) => ({
-  src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha-javascript/${IROHA_JS_REV}/${src}`,
-  filename: `js-sdk-${local}`,
-}))
+function irohaRawSource(...segments: string[]): string {
+  return `${IROHA_RAW_BASE.replace(/\/$/, '')}/${segments.join('/')}`
+}
 
-// *****
+function generateDataModelSchema(): string {
+  const command = spawnSync('cargo', ['run', '-p', 'iroha_kagami', '--', 'advanced', 'schema'], {
+    cwd: IROHA_SOURCE_DIR,
+    encoding: 'utf8',
+  })
+
+  if (command.status !== 0 || command.error) {
+    throw new Error(
+      [`Failed to generate data-model schema from ${IROHA_SOURCE_DIR}.`, command.error?.message, command.stderr]
+        .filter(Boolean)
+        .join('\n'),
+    )
+  }
+
+  return command.stdout
+}
+
+function renderCurrentDataModelSchema(source: string): string {
+  let schema = source
+  if (source.trim() === '') {
+    try {
+      schema = generateDataModelSchema()
+    } catch (error) {
+      const message = (error instanceof Error ? error.message : String(error)).replace(ANSI_ESCAPE_PATTERN, '')
+      const detail = message.length > 4000 ? message.slice(-4000) : message
+      return [
+        '> [!WARNING]',
+        '> The Iroha data-model schema snapshot is currently unavailable.',
+        `> \`${irohaRawSource(IROHA_SCHEMA_PATH)}\` is empty, and \`kagami advanced schema\` failed against \`${IROHA_SOURCE_DIR}\`.`,
+        '>',
+        '> Refresh this page with `pnpm get-snippets` after the upstream schema generator succeeds.',
+        '',
+        '```text',
+        detail,
+        '```',
+        '',
+      ].join('\n')
+    }
+  }
+
+  return renderDataModelSchema(JSON.parse(schema))
+}
 
 export default [
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV}/MAINTAINERS.md`,
-    filename: 'iroha-maintainers.md',
+    src: irohaRawSource(IROHA_SCHEMA_PATH),
+    filename: 'data-model-schema.md',
+    transform: renderCurrentDataModelSchema,
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV}/docs/source/references/schema.json`,
-    filename: `data-model-schema.md`,
-    transform: (source) => {
-      return renderDataModelSchema(JSON.parse(source))
-    },
+    src: irohaRawSource('docs/source/references/client.template.toml'),
   },
   {
-    src: './src/example_code/lorem.rs',
+    src: irohaRawSource('docs/source/references/peer.template.toml'),
   },
   {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV}/docs/source/references/client.template.toml`,
-  },
-  {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV}/docs/source/references/peer.template.toml`,
-  },
-  {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV}/defaults/genesis.json`,
-  },
-  {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha/${IROHA_REV}/crates/iroha/examples/tutorial.rs`,
-    filename: 'tutorial-snippets.rs',
-  },
-
-  ...javascriptSnippets,
-
-  {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha-java/${IROHA_JAVA_REV_DEV}/modules/test-tools/src/main/kotlin/jp/co/soramitsu/iroha2/testengine/IrohaConfig.kt`,
-    filename: 'IrohaConfig.kotlin',
-  },
-  {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha-java/${IROHA_JAVA_REV_DEV}/modules/client/src/test/kotlin/jp/co/soramitsu/iroha2/InstructionsTest.kt`,
-  },
-  {
-    src: `https://raw.githubusercontent.com/hyperledger-iroha/iroha-java/${IROHA_JAVA_REV_DEV}/modules/client/src/test/java/jp/co/soramitsu/iroha2/JavaTest.java`,
+    src: irohaRawSource('defaults/genesis.json'),
   },
 ] satisfies SnippetSourceDefinition[]
