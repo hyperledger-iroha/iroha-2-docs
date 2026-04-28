@@ -11,19 +11,24 @@ located in other repositories, where they are built, run, and tested.
 Snippet sources are defined in
 [`snippet_sources.ts`](https://github.com/hyperledger-iroha/iroha-2-docs/blob/main/etc/snippet-sources.ts).
 The `snippet_sources.ts` file is located in the documentation repository. By
-default, Iroha snippets are loaded from the sibling source checkout at
-`../iroha`; override this with `IROHA_SOURCE_DIR` when your source repository is
-elsewhere.
+default, Iroha snippets are loaded from pinned raw GitHub sources so CI and
+preview builds do not require a sibling checkout. Override `IROHA_REV` or
+`IROHA_RAW_BASE` to point snippets at another published revision. Set
+`IROHA_SOURCE_DIR` when the data-model schema snapshot is empty and you want to
+regenerate that page from a local Iroha source checkout.
 
 It has the following format:
 
 ```ts
-import path from 'path'
-import { IROHA_SOURCE_DIR } from './meta'
+import { IROHA_RAW_BASE } from './meta'
+
+function irohaRawSource(...segments: string[]): string {
+  return `${IROHA_RAW_BASE}/${segments.join('/')}`
+}
 
 export default [
   {
-    src: path.join(IROHA_SOURCE_DIR, 'defaults/client.toml'),
+    src: irohaRawSource('defaults/client.toml'),
   },
   {
     src: './src/example_code/lorem.rs',

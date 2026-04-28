@@ -35,7 +35,7 @@ The main instructions are:
   policy through governance.
 
 An asset definition also carries an
-[`AssetConfidentialPolicy`](/reference/data-model-schema.md#assetconfidentialpolicy).
+[`AssetConfidentialPolicy`](/reference/data-model-schema.md).
 The policy mode controls which flows are valid:
 
 | Mode              | Meaning                                                          |
@@ -305,8 +305,8 @@ relationship you are trying to protect.
 
 ## Related Reference
 
-- [`AssetConfidentialPolicy`](/reference/data-model-schema.md#assetconfidentialpolicy)
-- [`ConfidentialEvent`](/reference/data-model-schema.md#confidentialevent)
-- [`ProofAttachment`](/reference/data-model-schema.md#proofattachment)
-- [`SignedTransaction.attachments`](/reference/data-model-schema.md#signedtransaction)
+- [`AssetConfidentialPolicy`](/reference/data-model-schema.md)
+- [`ConfidentialEvent`](/reference/data-model-schema.md)
+- [`ProofAttachment`](/reference/data-model-schema.md)
+- [`SignedTransaction.attachments`](/reference/data-model-schema.md)
 - [Escrow and proof queries](/reference/queries.md#escrow-and-proof-records)

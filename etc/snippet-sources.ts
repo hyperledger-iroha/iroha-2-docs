@@ -1,13 +1,13 @@
-import path from 'path'
 import { spawnSync } from 'child_process'
 import type { SnippetSourceDefinition } from './types'
-import { IROHA_SOURCE_DIR } from './meta'
+import { IROHA_RAW_BASE, IROHA_SOURCE_DIR } from './meta'
 import { render as renderDataModelSchema } from './schema'
 
 const ANSI_ESCAPE_PATTERN = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, 'g')
+const IROHA_SCHEMA_PATH = 'docs/source/references/schema.json'
 
-function irohaSource(...segments: string[]): string {
-  return path.join(IROHA_SOURCE_DIR, ...segments)
+function irohaRawSource(...segments: string[]): string {
+  return `${IROHA_RAW_BASE.replace(/\/$/, '')}/${segments.join('/')}`
 }
 
 function generateDataModelSchema(): string {
@@ -37,8 +37,8 @@ function renderCurrentDataModelSchema(source: string): string {
       const detail = message.length > 4000 ? message.slice(-4000) : message
       return [
         '> [!WARNING]',
-        '> The local Iroha data-model schema snapshot is currently unavailable.',
-        `> \`${irohaSource('docs/source/references/schema.json')}\` is empty, and \`kagami advanced schema\` failed against \`${IROHA_SOURCE_DIR}\`.`,
+        '> The Iroha data-model schema snapshot is currently unavailable.',
+        `> \`${irohaRawSource(IROHA_SCHEMA_PATH)}\` is empty, and \`kagami advanced schema\` failed against \`${IROHA_SOURCE_DIR}\`.`,
         '>',
         '> Refresh this page with `pnpm get-snippets` after the upstream schema generator succeeds.',
         '',
@@ -55,17 +55,17 @@ function renderCurrentDataModelSchema(source: string): string {
 
 export default [
   {
-    src: irohaSource('docs/source/references/schema.json'),
+    src: irohaRawSource(IROHA_SCHEMA_PATH),
     filename: 'data-model-schema.md',
     transform: renderCurrentDataModelSchema,
   },
   {
-    src: irohaSource('docs/source/references/client.template.toml'),
+    src: irohaRawSource('docs/source/references/client.template.toml'),
   },
   {
-    src: irohaSource('docs/source/references/peer.template.toml'),
+    src: irohaRawSource('docs/source/references/peer.template.toml'),
   },
   {
-    src: irohaSource('defaults/genesis.json'),
+    src: irohaRawSource('defaults/genesis.json'),
   },
 ] satisfies SnippetSourceDefinition[]

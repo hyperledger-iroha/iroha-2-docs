@@ -70,4 +70,4 @@ See also:
 - [Instructions](/blockchain/instructions.md)
 - [Triggers](/blockchain/triggers.md)
 - [Permissions](/blockchain/permissions.md)
-- [Data model schema](/reference/data-model-schema.md#executable)
+- [Data model schema](/reference/data-model-schema.md)
