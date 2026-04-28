@@ -10,6 +10,9 @@ The important protocol change from older docs is simple:
 - many endpoints also support JSON when you send `Accept: application/json`
 - metrics are exposed in Prometheus format
 
+For format details, content negotiation, layout flags, schema hashes, and
+Norito RPC guidance, see the [Norito reference](/reference/norito.md).
+
 ## Common Endpoints
 
 | Endpoint | Format | Purpose |
@@ -100,6 +103,163 @@ families are not all enabled on every network profile.
 | `/v1/offline/*`, `/v1/repo/*`, `/v1/space-directory/*`, `/v1/ram-lfe/*` | Offline readiness, repository agreements, dataspace manifests, and RAM LFE helpers |
 | `/v1/kaigi/*`, `/v1/webhooks/*`, `/v1/notify/*`, `/v1/telemetry/*` | Collaboration, webhook, push notification, and live telemetry integrations |
 
+## Kaigi Sessions
+
+Kaigi provides paid, real-time audio/video rooms on SORA Nexus. Use it when
+an application needs ledger-backed session creation, roster changes, relay
+manifests, encrypted signaling, and usage metering instead of keeping all
+conferencing state off-chain.
+
+The ledger-facing lifecycle is:
+
+- `CreateKaigi`: create a call under a domain and store its policy,
+  schedule, metadata, and optional relay manifest.
+- `JoinKaigi` and `LeaveKaigi`: update the call roster. In private mode,
+  participants use commitments, nullifiers, and roster proofs instead of
+  exposing participant account IDs directly.
+- `RecordKaigiUsage`: append metered duration and gas totals.
+- `EndKaigi`: close the session and record the final timestamp.
+
+Torii exposes relay telemetry under `/v1/kaigi/relays`,
+`/v1/kaigi/relays/{relay_id}`, `/v1/kaigi/relays/health`, and
+`/v1/kaigi/relays/events` when the app API and telemetry features are enabled.
+Session state is reflected through Kaigi domain events such as
+`KaigiRosterSummary`, `KaigiRelayManifestUpdated`,
+`KaigiRelayHealthUpdated`, and `KaigiUsageSummary`.
+
+### CLI Smoke Test
+
+Start with the `iroha kaigi` CLI when you want to verify that a Torii endpoint
+accepts Kaigi transactions before connecting a UI. The quickstart command
+creates a temporary room against the active Torii endpoint and prints a summary
+with the call identifier, join command, and SoraNet spool hint:
+
+```bash
+iroha kaigi quickstart --auto-join-host --summary-out kaigi-summary.json
+```
+
+For scripted flows, manage the room lifecycle explicitly:
+
+```bash
+iroha kaigi create \
+  --domain streaming \
+  --call-name daily \
+  --host <i105-account-id> \
+  --privacy-mode transparent \
+  --room-policy authenticated
+
+iroha kaigi join --domain streaming --call-name daily --participant <i105-account-id>
+iroha kaigi leave --domain streaming --call-name daily --participant <i105-account-id>
+
+iroha kaigi record-usage \
+  --domain streaming \
+  --call-name daily \
+  --duration-ms 120000 \
+  --billed-gas 1500
+
+iroha kaigi end --domain streaming --call-name daily
+```
+
+Use `--room-policy public` for rooms that relays may expose without viewer
+tickets, or `--room-policy authenticated` when exits must require viewer
+authentication. Use `--privacy-mode zk-roster-v1` only after the network has
+the Kaigi roster and usage verifying keys configured; otherwise joins, leaves,
+and private usage records fail during deterministic verification.
+
+### Testing With the JavaScript Demo
+
+Use the
+[soramitsu/iroha-demo-javascript](https://github.com/soramitsu/iroha-demo-javascript)
+desktop demo for an end-to-end wallet test. The demo is an Electron and Vue
+application that talks directly to Torii through the local `@iroha/iroha-js`
+binding and includes a `/kaigi` route for browser-native one-to-one media.
+
+Prepare the demo beside a checkout of the Iroha source tree, because its
+`@iroha/iroha-js` dependency is loaded from `../iroha/javascript/iroha_js`:
+
+```bash
+git clone https://github.com/soramitsu/iroha-demo-javascript.git
+cd iroha-demo-javascript
+npm install
+npm run dev
+```
+
+Use Node.js 20 or newer and a Rust toolchain so the native `iroha_js_host`
+module can build. If you rebuild or update the SDK manually, refresh the
+native binding:
+
+```bash
+(cd node_modules/@iroha/iroha-js && npm run build:native)
+```
+
+For a controlled test, point the demo at a Kaigi-capable Torii endpoint:
+
+1. Start an Iroha node with the SORA/Kaigi app-facing APIs enabled, or use a
+   public endpoint that exposes the Kaigi surfaces you need.
+2. Check basic reachability with `/health`, then check the live route surface
+   with `/openapi` or `/openapi.json`. Some deployments also expose
+   `/v1/health`, but `/health` is the portable liveness check.
+3. For TAIRA, verify the relay telemetry routes before trying a live meeting:
+
+   ```bash
+   TAIRA=https://taira.sora.org
+   curl -fsS "$TAIRA/health"
+   curl -fsS "$TAIRA/v1/kaigi/relays"
+   curl -fsS "$TAIRA/v1/kaigi/relays/health"
+   ```
+
+   These checks prove that Torii and Kaigi relay telemetry are reachable. They
+   do not create a meeting; `CreateKaigi` and `JoinKaigi` still need funded
+   wallets and signed transaction submission.
+4. Open the demo, go to **Settings**, set the Torii URL, and let the app load
+   the chain ID and network prefix from the endpoint.
+5. Create or restore two local wallets in the demo. Use separate app windows,
+   profiles, or machines so the host and guest have separate wallet state.
+
+To test the Kaigi UI:
+
+1. In the host window, open **Kaigi**, choose **Start meeting**, set a title,
+   and choose **Private invite** or **Transparent invite**.
+2. Select **Turn on camera and mic** so WebRTC has local media.
+3. Select **Create meeting link**. A live wallet submits `CreateKaigi`; the
+   app then shows an `iroha://kaigi/join?call=...&secret=...` invite and a
+   `#/kaigi?...` fallback route.
+4. Keep the host window open and share the invite with the guest.
+5. In the guest window, open the invite or paste it in **Join meeting**, turn
+   on local media, and select **Join meeting**. A live wallet fetches the
+   encrypted host offer from Torii and submits `JoinKaigi` with encrypted
+   answer metadata.
+6. The host should auto-apply the first answer by streaming or polling Kaigi
+   call signals. Both windows should show connected media and updated
+   connection details.
+7. End the session from the host, or use the CLI `iroha kaigi end` command for
+   the same call ID.
+
+Private Kaigi needs shielded XOR to pay the private entrypoint fee. If the
+demo reports that private Kaigi needs shielded XOR, use the in-app
+self-shield prompt and retry the create or join action. If proof generation,
+private funding, or live signaling is unavailable, the demo can fall back to a
+transparent/manual flow. In that case, open **Advanced signaling**, copy the
+raw offer or answer packet, and paste it into the other window.
+
+For automated checks in the demo repo, run:
+
+```bash
+npm test -- tests/kaigiView.spec.ts tests/preloadKaigiBridge.spec.ts
+npm run e2e:ui
+npm run verify
+```
+
+The focused Vitest suites cover Kaigi meeting-link creation, compact invite
+loading, private create/join/end bridge calls, self-shield prompts, manual
+fallbacks, and answer polling. The UI smoke test includes the `/kaigi` route
+on desktop and mobile-sized viewports. Live media between two wallets still
+needs a manual two-window test because browser camera/microphone permissions
+and peer media streams are environment-specific.
+
+For sample integration code, see
+[Embed Kaigi in a JavaScript App](/guide/tutorials/kaigi.md).
+
 ## Status and Metrics
 
 The status and metrics endpoints are the first things to wire into dashboards:
@@ -125,6 +285,10 @@ This is especially useful for:
 - `/v1/sumeragi/qc`
 - `/v1/sumeragi/commit_qc/{hash}`
 
+When an endpoint accepts or returns typed Norito directly, use
+`application/x-norito` as the content type or preferred `Accept` value. See
+[Norito](/reference/norito.md#torii-and-norito-rpc) for the transport details.
+
 ## Telemetry Profiles
 
 Endpoint visibility depends on telemetry settings. The upstream docs describe
@@ -143,10 +307,10 @@ five profile levels:
 The `iroha` CLI already wraps many of these endpoints:
 
 ```bash
-iroha --config ./defaults/client.toml --output-format text ops sumeragi status
-iroha --config ./defaults/client.toml --output-format text ops sumeragi phases
-iroha --config ./defaults/client.toml ops sumeragi params
-iroha --config ./defaults/client.toml ops sumeragi collectors
+iroha --config ./localnet/client.toml --output-format text ops sumeragi status
+iroha --config ./localnet/client.toml --output-format text ops sumeragi phases
+iroha --config ./localnet/client.toml ops sumeragi params
+iroha --config ./localnet/client.toml ops sumeragi collectors
 ```
 
 ## Upstream References

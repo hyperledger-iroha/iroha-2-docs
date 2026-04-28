@@ -15,6 +15,19 @@ from the upstream repository.
    - [JavaScript / TypeScript](/guide/tutorials/javascript.md)
    - [Android, Kotlin, and Java](/guide/tutorials/kotlin-java.md)
    - [Swift and iOS](/guide/tutorials/swift.md)
+4. Review the [sample apps](/guide/tutorials/sample-apps.md) when you want a
+   complete client application reference.
+5. Use [Embed Kaigi](/guide/tutorials/kaigi.md) when you want to add
+   wallet-backed audio/video meetings to your own app.
+
+## Sample Apps
+
+We maintain sample applications for JavaScript desktop, Android, and iOS client
+flows. The JavaScript demo is the most complete current reference; the mobile
+demos are useful for point-app layout and historical context.
+
+- [Sample apps overview](/guide/tutorials/sample-apps.md)
+- [Embed Kaigi in a JavaScript app](/guide/tutorials/kaigi.md)
 
 ## Source of Truth
 

@@ -25,8 +25,8 @@ Check these items first:
 - `public_key` and `private_key` in the peer config belong to the same key
   pair.
 - `genesis.public_key` matches the key used to sign the genesis transaction.
-- `trusted_peers` contains every expected validator in `PUBLIC_KEY@ADDRESS`
-  form.
+- validator peer identities use BLS-Normal keys, and `trusted_peers_pop`
+  contains proof-of-possession entries for the local key and trusted peers.
 - ports for Torii and P2P are not already bound by another process.
 - the Kura store directory belongs to the same chain and was not copied from a
   different network profile.
@@ -39,15 +39,18 @@ cargo run --bin irohad -- --config ./config.toml --trace-config
 
 ## Docker and Compose
 
-The upstream repo ships a default compose file:
+Generate Compose from the current Kagami localnet output so the command-line
+arguments and config files match the checked-out code:
 
 ```bash
-docker compose -f defaults/docker-compose.yml up
+cargo run --bin kagami -- localnet --build-line iroha3 --peers 4 --out-dir ./localnet
+cargo run --bin kagami -- docker --peers 4 --config-dir ./localnet --image hyperledger/iroha:dev --out-file ./localnet/docker-compose.yml --force
+docker compose -f ./localnet/docker-compose.yml up
 ```
 
 If a compose deployment starts and then stalls, inspect the daemon logs for:
 
-- mismatched `chain_id`
+- mismatched `chain`
 - one peer using a different genesis transaction or manifest
 - advertised P2P addresses that only work inside the container network
 - local volume reuse after regenerating genesis

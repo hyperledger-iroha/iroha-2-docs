@@ -50,7 +50,7 @@ irohad --trace-config
 
 - **Type:** Boolean, either `--terminal-colors=false` or
   `--terminal-colors=true`
-- **Default:** Auto-detect
+- **Default:** auto-detect terminal support
 - **ENV:** `TERMINAL_COLORS`
 
 Whether to enable ANSI-colored output or not.

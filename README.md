@@ -90,6 +90,17 @@ Enable the compatibility matrix page:
 VITE_COMPAT_MATRIX_URL=https://example.com/compat-matrix
 ```
 
+The compatibility matrix uses the bundled
+`src/public/compat-matrix.json` snapshot by default. That snapshot is generated
+from the local sibling `../iroha` checkout and should be refreshed when SDK
+coverage changes there.
+
+Set `VITE_COMPAT_MATRIX_URL` only when you want to override the bundled
+snapshot with a live endpoint. The endpoint must return the compatibility
+matrix JSON expected by the docs site. The original service implementation
+lives in
+[`soramitsu/iroha2-docs-compat-matrix-service`](https://github.com/soramitsu/iroha2-docs-compat-matrix-service).
+
 ## License
 
 Iroha documentation files are available under the Creative Commons Attribution

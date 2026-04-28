@@ -33,11 +33,11 @@ curl -s "$TORII/metrics" > metrics.prom
 The same consensus snapshots are available through the CLI:
 
 ```bash
-iroha --config ./defaults/client.toml --output-format text ops sumeragi status
-iroha --config ./defaults/client.toml --output-format text ops sumeragi phases
-iroha --config ./defaults/client.toml --output-format text ops sumeragi rbc status
-iroha --config ./defaults/client.toml ops sumeragi params
-iroha --config ./defaults/client.toml ops sumeragi collectors
+iroha --config ./localnet/client.toml --output-format text ops sumeragi status
+iroha --config ./localnet/client.toml --output-format text ops sumeragi phases
+iroha --config ./localnet/client.toml --output-format text ops sumeragi rbc status
+iroha --config ./localnet/client.toml ops sumeragi params
+iroha --config ./localnet/client.toml ops sumeragi collectors
 ```
 
 Telemetry visibility depends on the configured profile. Use `extended` when you
@@ -117,7 +117,7 @@ Sumeragi timing is controlled by the effective Sumeragi parameters:
 Inspect them with:
 
 ```bash
-iroha --config ./defaults/client.toml ops sumeragi params
+iroha --config ./localnet/client.toml ops sumeragi params
 curl -s "$TORII/v1/sumeragi/params" | jq .
 ```
 
@@ -140,7 +140,7 @@ but it also increases traffic. Compare the collector plan with latency and
 backpressure metrics before changing these values:
 
 ```bash
-iroha --config ./defaults/client.toml ops sumeragi collectors
+iroha --config ./localnet/client.toml ops sumeragi collectors
 ```
 
 ### Network Conditions
@@ -217,7 +217,7 @@ the same run artefacts as the Prometheus scrape.
 2. Record the effective configuration:
 
    ```bash
-   iroha --config ./defaults/client.toml --output-format json ops sumeragi params \
+   iroha --config ./localnet/client.toml --output-format json ops sumeragi params \
      > artifacts/sumeragi-params.json
    curl -s "$TORII/v1/sumeragi/collectors" \
      > artifacts/sumeragi-collectors.json

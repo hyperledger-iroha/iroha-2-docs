@@ -1,6 +1,6 @@
 # Configuring Iroha
 
-Local peer configuration is set via Environment and/or TOML files. Note that this is different from on-chain
+Local peer configuration is set via environment variables and/or TOML files. Note that this is different from on-chain
 configuration changed through [`SetParameter`](/blockchain/instructions.md#setparameter)
 instructions.
 
@@ -18,8 +18,8 @@ For a detailed description of each parameter, please refer to the [Parameters](.
 
 ## Composing configuration files
 
-TOML configuration files has an additional `extends` field, pointing to other TOML file(s). It could be a single path or
-multiple paths:Example format:
+TOML configuration files have an additional `extends` field, pointing to other TOML file(s). It could be a single path or
+multiple paths:
 
 ::: code-group
 
@@ -46,7 +46,7 @@ address = "0.0.0.0:8080"
 ```
 
 ```toml [a.toml]
-chain_id = "whatever"
+chain = "whatever"
 ```
 
 ```toml [b.toml]
@@ -57,7 +57,7 @@ max_content_len = 2048
 
 :::
 
-The resulting configuration will be `chain_id` from `a.toml`, `max_content_len` from `b.toml`, and `torii.address` from
+The resulting configuration will be `chain` from `a.toml`, `max_content_len` from `b.toml`, and `torii.address` from
 `config.toml` (overwrites `b.toml`).
 
 ## Troubleshooting

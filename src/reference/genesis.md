@@ -47,12 +47,13 @@ After editing and validating the JSON, sign it into a deployable `.nrt` block:
 
 ```bash
 cargo run -p iroha_kagami -- genesis sign genesis.json \
-  --public-key <PUBLIC_KEY> \
   --private-key <PRIVATE_KEY> \
   --out-file genesis.signed.nrt
 ```
 
-The result is the file that peers should reference from their config.
+`kagami genesis sign` reads the genesis public key from the manifest and uses
+the supplied private key, seed, and algorithm to produce the deployable signed
+block. The result is the file that peers should reference from their config.
 
 ## Configure `irohad`
 

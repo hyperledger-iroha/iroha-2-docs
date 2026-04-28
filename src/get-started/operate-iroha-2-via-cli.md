@@ -11,11 +11,11 @@ Start a local network first:
 
 - [Launch Iroha 3](./launch-iroha-2.md)
 
-The examples below assume the default client configuration from the upstream
-repository:
+The examples below assume the generated client configuration from the localnet
+created in [Launch Iroha 3](./launch-iroha-2.md):
 
 ```bash
-./defaults/client.toml
+./localnet/client.toml
 ```
 
 ## 2. Basic CLI Setup
@@ -23,19 +23,22 @@ repository:
 Show the top-level help:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml --help
+cargo run --bin iroha -- --config ./localnet/client.toml --help
 ```
 
 The CLI is organized into these top-level command groups:
 
 - `account` for account-oriented shortcuts
-- `tx` / `transaction` for transaction-level helpers
+- `tx` for transaction-level helpers
 - `ledger` for on-ledger reads and writes
 - `ops` for operator diagnostics
 - `app` for app API helpers
-- `contract` / `contracts` for contract deployment and calls
+- `contract` for contract deployment and calls
 - `tools` for diagnostics and developer utilities
 - `taira` for Taira and Nexus-oriented workflows
+
+The `ledger` group also contains domain-specific transaction helpers such as
+`ledger transaction`.
 
 Use `--output-format text` for human-readable operator output and `--machine`
 for strict automation mode.
@@ -45,27 +48,27 @@ for strict automation mode.
 List all domains:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger domain list all
+cargo run --bin iroha -- --config ./localnet/client.toml ledger domain list all
 ```
 
 Register a domain. Current Iroha IDs are dataspace-qualified, so use a domain
 such as `docs.universal` rather than a bare `docs` literal:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger domain register --id docs.universal
+cargo run --bin iroha -- --config ./localnet/client.toml ledger domain register --id docs.universal
 ```
 
 Send a simple ping transaction:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger transaction ping --msg "hello from iroha"
+cargo run --bin iroha -- --config ./localnet/client.toml ledger transaction ping --msg "hello from iroha"
 ```
 
 Read a recent block or subscribe to block events:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger blocks 1 --timeout 30s
-cargo run --bin iroha -- --config ./defaults/client.toml ledger events block
+cargo run --bin iroha -- --config ./localnet/client.toml ledger blocks 1 --timeout 30s
+cargo run --bin iroha -- --config ./localnet/client.toml ledger events block
 ```
 
 ## 4. Operator Commands
@@ -73,27 +76,27 @@ cargo run --bin iroha -- --config ./defaults/client.toml ledger events block
 Consensus status:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml --output-format text ops sumeragi status
+cargo run --bin iroha -- --config ./localnet/client.toml --output-format text ops sumeragi status
 ```
 
 Per-phase latency snapshot:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml --output-format text ops sumeragi phases
+cargo run --bin iroha -- --config ./localnet/client.toml --output-format text ops sumeragi phases
 ```
 
 RBC throughput and active sessions:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml --output-format text ops sumeragi rbc status
-cargo run --bin iroha -- --config ./defaults/client.toml --output-format text ops sumeragi rbc sessions
+cargo run --bin iroha -- --config ./localnet/client.toml --output-format text ops sumeragi rbc status
+cargo run --bin iroha -- --config ./localnet/client.toml --output-format text ops sumeragi rbc sessions
 ```
 
 Collector plan and on-chain consensus parameters:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ops sumeragi collectors
-cargo run --bin iroha -- --config ./defaults/client.toml ops sumeragi params
+cargo run --bin iroha -- --config ./localnet/client.toml ops sumeragi collectors
+cargo run --bin iroha -- --config ./localnet/client.toml ops sumeragi params
 ```
 
 ## 5. Where to Go Next

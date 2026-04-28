@@ -3,23 +3,41 @@
 This page walks through the current local-network flow for Iroha 3 using the
 default workspace assets from the upstream repository.
 
-## 1. Local Multi-Peer Network with Docker
+## 1. Generate a Local Multi-Peer Network
 
-The simplest way to start a network is the provided four-peer compose file:
+Generate a four-peer localnet from the current Kagami code:
 
 ```bash
-docker compose -f defaults/docker-compose.yml up
+cargo run --bin kagami -- localnet --build-line iroha3 --peers 4 --out-dir ./localnet
 ```
 
-The default stack exposes:
+The output directory contains matching peer configs, `genesis.json`,
+`genesis.signed.nrt`, `client.toml`, and helper scripts.
+
+For a native local smoke test, start the generated peers directly:
+
+```bash
+./localnet/start.sh
+```
+
+For a containerized run, generate Compose from the same localnet directory:
+
+```bash
+cargo run --bin kagami -- docker \
+  --peers 4 \
+  --config-dir ./localnet \
+  --image hyperledger/iroha:dev \
+  --out-file ./localnet/docker-compose.yml \
+  --force
+
+docker compose -f ./localnet/docker-compose.yml up
+```
+
+The default generated stack exposes:
 
 - peer P2P ports `1337` to `1340`
 - Torii HTTP ports `8080` to `8083`
-- a ready-made client config at `defaults/client.toml`
-
-The compose file signs the bundled genesis manifest with `kagami` before
-starting the first peer, so you do not need to prepare a signed genesis block
-manually for the default smoke test.
+- a ready-made client config at `./localnet/client.toml`
 
 ## 2. Verify That the Network Is Up
 
@@ -38,7 +56,7 @@ curl http://127.0.0.1:8080/status/blocks
 You can immediately point the CLI at the bundled client config:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger domain list all
+cargo run --bin iroha -- --config ./localnet/client.toml ledger domain list all
 ```
 
 ## 3. Nexus Profile
@@ -56,8 +74,16 @@ Use `defaults/nexus/client.toml` for CLI access to that profile.
 
 ## 4. Stop the Local Network
 
+For a native generated localnet:
+
 ```bash
-docker compose -f defaults/docker-compose.yml down
+./localnet/stop.sh
+```
+
+For the generated Compose stack:
+
+```bash
+docker compose -f ./localnet/docker-compose.yml down
 ```
 
 After the network is running, continue with

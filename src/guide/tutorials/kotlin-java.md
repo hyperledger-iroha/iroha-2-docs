@@ -35,9 +35,13 @@ dependencies {
 import org.hyperledger.iroha.android.address.AccountAddress;
 
 byte[] key = new byte[32];
-AccountAddress address = AccountAddress.fromAccount("default", key, "ed25519");
+AccountAddress address = AccountAddress.fromAccount(key, "ed25519");
 System.out.println(address.canonicalHex());
-System.out.println(address.toIH58(753));
+System.out.println(address.toI105(753));
+
+AccountAddress.DisplayFormats formats = address.displayFormats();
+System.out.println(formats.i105);
+System.out.println(formats.i105Warning);
 ```
 
 ## Current Coverage
@@ -46,9 +50,10 @@ The Android/JVM SDK currently focuses on:
 
 - key management and secure-storage backends
 - Norito encoding via the shared Java implementation
-- Torii client scaffolding
-- offline and subscription helpers
+- Torii HTTP, streaming, and Norito RPC clients
+- offline note, QR, and subscription helpers
 - account address and multisig utilities
+- generated instruction helpers for NFT and RWA flows
 
 ## Upstream References
 

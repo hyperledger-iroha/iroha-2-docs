@@ -228,6 +228,72 @@ Stop retrying if `iroha taira doctor` shows hard failures. Queue saturation
 and fee-admission rejections are transient public-testnet conditions; DNS,
 TLS, or `status = "fail"` diagnostics are not.
 
+## Generate a SORA Nexus Account ID
+
+A SORA Nexus account ID is a canonical I105 address derived from the
+account public key and the target network prefix. It is not the
+`[account].domain` value in client TOML. The same public key encodes to
+different IDs on Taira and Minamoto, and production users should generate a
+separate keypair for Minamoto.
+
+Generate or load the Ed25519 keypair that will control the account:
+
+```bash
+kagami keys --algorithm ed25519 --json
+```
+
+Convert the public key into a Taira account ID:
+
+```bash
+iroha tools address convert --network-prefix 369 <ED25519_PUBLIC_KEY_HEX>
+```
+
+Convert a Minamoto public key with the mainnet prefix:
+
+```bash
+iroha tools address convert --network-prefix 753 <ED25519_PUBLIC_KEY_HEX>
+```
+
+Use the resulting account ID wherever a Nexus API or CLI command asks for a
+canonical account ID, for example the Taira faucet `account_id`, balance
+queries, strict account fields, or alias bindings. Keep the matching
+private key in your client config, and keep `chain_discriminant` aligned
+with the same prefix: `369` for Taira and `753` for Minamoto.
+
+Generating the ID does not by itself create a funded on-chain account. On
+Taira, the faucet can create and fund the account for testnet writes. On
+Minamoto, use the approved mainnet onboarding, claim, or treasury flow.
+
+### Key Storage and Backup
+
+The account ID and public key can be shared. The matching private key,
+passphrase, seed, and recovery material must be treated as secret.
+
+Use these practices for SORA Nexus accounts:
+
+- Store private keys in an encrypted password manager, hardware-backed
+  keystore, or dedicated signing service. Do not commit keys to source
+  control or leave production keys in shell history, logs, chat, tickets,
+  or unencrypted backups.
+- Use a unique high-entropy passphrase for each vault or production signer.
+  Store passphrases in a password manager or split custody process, not in
+  the same file or backup bundle as the encrypted private key.
+- Keep Taira and Minamoto keys separate. Treat Taira keys as disposable
+  testnet material and Minamoto keys as production funds authority.
+- Back up the private key, public key, account ID, network prefix,
+  `chain_discriminant`, and any account recovery or custody notes needed to
+  restore the signer. A private key without the network context is easy to
+  misuse during recovery.
+- Keep at least one encrypted offline backup and one geographically
+  separate encrypted backup for production signers. Test recovery with a
+  small read-only operation before depending on the backup.
+- Rotate or replace a signer if the private key, passphrase, backup media,
+  or signing host may have been exposed.
+
+For more detail, see
+[Storing Cryptographic Keys](/guide/security/storing-cryptographic-keys.md)
+and [Password Security](/guide/security/password-security.md).
+
 ## 4. Get Testnet XOR on Taira
 
 Use the public faucet directly. The flow is:
@@ -602,6 +668,7 @@ smoke tests, monitoring, and governance evidence are complete.
 
 - [Install Iroha 3](/get-started/install-iroha-2.md)
 - [Operate Iroha 3 via CLI](/get-started/operate-iroha-2-via-cli.md)
+- [Sponsor fees for a private dataspace](/get-started/private-dataspace-fee-sponsor.md)
 - [Torii endpoints](/reference/torii-endpoints.md)
 - [Genesis reference](/reference/genesis.md)
 - [SORA Taira Testnet](https://medium.com/sora-xor/sora-taira-testnet-be8cfc924b58)
