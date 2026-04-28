@@ -1,8 +1,8 @@
 # Compatibility Matrix
 
 The compatibility matrix shows cross-SDK scenario coverage for the current
-Iroha 3 docs set. By default, the page loads the bundled snapshot generated
-from the local sibling `../iroha` checkout.
+Iroha 3 docs set. By default, the page loads the bundled snapshot for the
+[`hyperledger-iroha/iroha` `i23-features` branch](https://github.com/hyperledger-iroha/iroha/tree/i23-features).
 
 The matrix consists of:
 

@@ -5,8 +5,7 @@ repository contains the VitePress source for the public documentation site.
 
 Use this guide for documentation changes, site changes, and repository tooling
 changes. For implementation details, verify behavior against the
-[Hyperledger Iroha](https://github.com/hyperledger-iroha/iroha) source
-repository.
+[Hyperledger Iroha `i23-features` branch](https://github.com/hyperledger-iroha/iroha/tree/i23-features).
 
 ## Before You Start
 
@@ -34,9 +33,10 @@ corepack enable
 pnpm install
 ```
 
-The install step runs `pnpm get-snippets` after dependencies are installed. By
-default, snippet tooling expects the Iroha source checkout at `../iroha`. If your
-checkout is elsewhere, set `IROHA_SOURCE_DIR`:
+The install step runs `pnpm get-snippets` after dependencies are installed.
+Snippet tooling reads from a local checkout of the
+[`hyperledger-iroha/iroha` `i23-features` branch](https://github.com/hyperledger-iroha/iroha/tree/i23-features).
+Set `IROHA_SOURCE_DIR` when you need to point it at a specific checkout:
 
 ```bash
 IROHA_SOURCE_DIR=/path/to/iroha pnpm get-snippets

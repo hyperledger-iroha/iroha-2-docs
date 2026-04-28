@@ -10,9 +10,17 @@ In this section you can learn about various aspects of securing your Iroha netwo
 
   The core security principles that individuals and organizations can adopt to protect their data and decrease the chance of a breach and/or leak.
 
+- [Virtual Private Networks](./vpn.md):
+
+  How to use a VPN to restrict peer-to-peer, Torii, and operator access in private or consortium deployments.
+
 - [Operational Security](./operational-security.md):
 
   Best practices for securing the day-to-day operations of your network, including access controls, monitoring, incident responses, the use of browsers, etc.
+
+- [Fraud Monitoring](./fraud-monitoring.md):
+
+  How to use ledger events, queries, permissions, and operational signals to detect suspicious activity and preserve response evidence.
 
 - [Password Security](./password-security.md):
 

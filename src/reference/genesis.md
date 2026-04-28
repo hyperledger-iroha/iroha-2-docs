@@ -75,5 +75,5 @@ public_key = "<PUBLIC_KEY>"
 
 For the full upstream details, see:
 
-- [docs/genesis.md](https://github.com/hyperledger-iroha/iroha/blob/main/docs/genesis.md)
-- [crates/iroha_kagami/README.md](https://github.com/hyperledger-iroha/iroha/blob/main/crates/iroha_kagami/README.md)
+- [docs/genesis.md](https://github.com/hyperledger-iroha/iroha/blob/i23-features/docs/genesis.md)
+- [crates/iroha_kagami/README.md](https://github.com/hyperledger-iroha/iroha/blob/i23-features/crates/iroha_kagami/README.md)

@@ -30,6 +30,25 @@ curl -s "$TORII/v1/sumeragi/params" | jq .
 curl -s "$TORII/metrics" > metrics.prom
 ```
 
+You can try the same read-only pattern against public Taira:
+
+```bash
+TAIRA=https://taira.sora.org
+
+curl -fsS "$TAIRA/status" \
+  | jq '{blocks, txs_approved, txs_rejected, queue_size, peers}'
+
+curl -fsS "$TAIRA/v1/time/status" \
+  | jq '{healthy: .health.healthy, peers, samples_used, rtt_count: .rtt.count}'
+
+curl -fsS "$TAIRA/metrics" \
+  | grep -E '^(block_height|queue_size|sumeragi_tx_queue_depth|txs|view_changes)' \
+  | head -n 20
+```
+
+Public Taira metrics are useful for learning the signal names. Do not use them
+as production capacity numbers for your own deployment.
+
 The same consensus snapshots are available through the CLI:
 
 ```bash
@@ -251,6 +270,7 @@ Without these details, a TPS number should be treated as anecdotal.
 
 ## Related Pages
 
+- [Chaos Testing with Izanami](./chaos-testing.md)
 - [Torii endpoints](../../reference/torii-endpoints.md)
 - [Operate Iroha 3 via CLI](../../get-started/operate-iroha-2-via-cli.md)
 - [Peer configuration reference](../../reference/peer-config/params.md)

@@ -49,7 +49,7 @@ The pages you will use most often while running a network are:
 
 ## Learn More
 
-- [Main Iroha repository](https://github.com/hyperledger-iroha/iroha)
-- [Workspace docs index](https://github.com/hyperledger-iroha/iroha/blob/main/docs/README.md)
-- [Iroha 3 whitepaper](https://github.com/hyperledger-iroha/iroha/blob/main/docs/source/iroha_3_whitepaper.md)
-- [Iroha 2 whitepaper](https://github.com/hyperledger-iroha/iroha/blob/main/docs/source/iroha_2_whitepaper.md)
+- [Iroha `i23-features` branch](https://github.com/hyperledger-iroha/iroha/tree/i23-features)
+- [Workspace docs index](https://github.com/hyperledger-iroha/iroha/blob/i23-features/docs/README.md)
+- [Iroha 3 whitepaper](https://github.com/hyperledger-iroha/iroha/blob/i23-features/docs/source/iroha_3_whitepaper.md)
+- [Iroha 2 whitepaper](https://github.com/hyperledger-iroha/iroha/blob/i23-features/docs/source/iroha_2_whitepaper.md)

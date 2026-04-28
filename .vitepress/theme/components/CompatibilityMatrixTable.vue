@@ -15,7 +15,9 @@ interface Matrix {
 
 interface MatrixSource {
   repo?: string
+  repo_url?: string
   branch?: string
+  branch_url?: string
   commit?: string
   dirty?: boolean
   generated_at?: string
@@ -126,20 +128,32 @@ const table = computed(() => {
   return { headers, rows }
 })
 
-const sourceSummary = computed(() => {
+function toHttpUrl(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined
+
+  try {
+    const url = new URL(value)
+    return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : undefined
+  } catch {
+    return undefined
+  }
+}
+
+const matrixSource = computed(() => {
   if (!task.state.fulfilled) return null
 
   const { source } = task.state.fulfilled.value
   if (!source) return null
 
-  const parts: string[] = []
-  if (source.repo) parts.push(`Source: ${source.repo}`)
-  if (source.branch) parts.push(source.branch)
-  if (source.commit) parts.push(source.commit)
-  if (source.dirty) parts.push('dirty worktree')
-  if (source.generated_at) parts.push(`generated ${source.generated_at}`)
-
-  return parts.join(' | ')
+  return {
+    repo: source.repo,
+    repoUrl: toHttpUrl(source.repo_url),
+    branch: source.branch,
+    branchUrl: toHttpUrl(source.branch_url),
+    commit: source.commit,
+    dirty: source.dirty,
+    generatedAt: source.generated_at,
+  }
 })
 
 const rejectionReason = computed(() => {
@@ -180,10 +194,40 @@ const rejectionReason = computed(() => {
     </table>
 
     <p
-      v-if="sourceSummary"
+      v-if="matrixSource"
       class="compat-source"
     >
-      {{ sourceSummary }}
+      Source:
+      <a
+        v-if="matrixSource.repo && matrixSource.repoUrl"
+        :href="matrixSource.repoUrl"
+        target="_blank"
+        rel="noreferrer"
+      >
+        {{ matrixSource.repo }}
+      </a>
+      <span v-else-if="matrixSource.repo">{{ matrixSource.repo }}</span>
+      <template v-if="matrixSource.branch">
+        | branch
+        <a
+          v-if="matrixSource.branchUrl"
+          :href="matrixSource.branchUrl"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {{ matrixSource.branch }}
+        </a>
+        <span v-else>{{ matrixSource.branch }}</span>
+      </template>
+      <template v-if="matrixSource.commit">
+        | {{ matrixSource.commit }}
+      </template>
+      <template v-if="matrixSource.dirty">
+        | dirty worktree
+      </template>
+      <template v-if="matrixSource.generatedAt">
+        | generated {{ matrixSource.generatedAt }}
+      </template>
     </p>
   </div>
 

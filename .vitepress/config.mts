@@ -16,8 +16,8 @@ function nav(): DefaultTheme.NavItem[] {
       activeMatch: '/get-started/',
     },
     {
-      text: 'SDKs',
-      link: '/guide/tutorials/',
+      text: 'Guide',
+      link: '/guide/',
       activeMatch: '/guide/',
     },
     {
@@ -76,6 +76,17 @@ function sidebarStart(): DefaultTheme.SidebarItem[] {
 function sidebarGuide(): DefaultTheme.SidebarItem[] {
   return [
     {
+      text: 'Guide',
+      link: '/guide/',
+      collapsed: false,
+      items: [
+        {
+          text: 'Overview',
+          link: '/guide/',
+        },
+      ],
+    },
+    {
       text: 'SDK Tutorials',
       link: '/guide/tutorials/',
       collapsed: false,
@@ -109,8 +120,47 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           link: '/guide/tutorials/kaigi',
         },
         {
+          text: 'Musubi Packages',
+          link: '/guide/tutorials/musubi',
+        },
+        {
           text: 'Compatibility Matrix',
           link: '/reference/compatibility-matrix',
+        },
+      ],
+    },
+    {
+      text: 'Best Practices',
+      link: '/guide/best-practices/',
+      collapsed: false,
+      items: [
+        {
+          text: 'Overview',
+          link: '/guide/best-practices/',
+        },
+        {
+          text: 'Application Development',
+          link: '/guide/best-practices/application-development.md',
+        },
+        {
+          text: 'Data Modeling',
+          link: '/guide/best-practices/data-modeling.md',
+        },
+        {
+          text: 'Network Deployment',
+          link: '/guide/best-practices/network-deployment.md',
+        },
+        {
+          text: 'Operations',
+          link: '/guide/best-practices/operations.md',
+        },
+        {
+          text: 'Security and Access',
+          link: '/guide/best-practices/security-and-access.md',
+        },
+        {
+          text: 'Release Readiness',
+          link: '/guide/best-practices/release-readiness.md',
         },
       ],
     },
@@ -147,12 +197,63 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           link: '/reference/torii-endpoints.md',
         },
         {
+          text: 'Torii API Console',
+          link: '/reference/torii-api-console.md',
+        },
+        {
           text: 'Performance and Metrics',
           link: '/guide/advanced/metrics.md',
         },
         {
+          text: 'Chaos Testing',
+          link: '/guide/advanced/chaos-testing.md',
+        },
+        {
           text: 'Binaries',
           link: '/reference/binaries.md',
+        },
+      ],
+    },
+    {
+      text: 'Security',
+      link: '/guide/security/',
+      collapsed: false,
+      items: [
+        {
+          text: 'Overview',
+          link: '/guide/security/',
+        },
+        {
+          text: 'Security Principles',
+          link: '/guide/security/security-principles.md',
+        },
+        {
+          text: 'Virtual Private Networks',
+          link: '/guide/security/vpn.md',
+        },
+        {
+          text: 'Operational Security',
+          link: '/guide/security/operational-security.md',
+        },
+        {
+          text: 'Fraud Monitoring',
+          link: '/guide/security/fraud-monitoring.md',
+        },
+        {
+          text: 'Password Security',
+          link: '/guide/security/password-security.md',
+        },
+        {
+          text: 'Public Key Cryptography',
+          link: '/guide/security/public-key-cryptography.md',
+        },
+        {
+          text: 'Generating Cryptographic Keys',
+          link: '/guide/security/generating-cryptographic-keys.md',
+        },
+        {
+          text: 'Storing Cryptographic Keys',
+          link: '/guide/security/storing-cryptographic-keys.md',
         },
       ],
     },
@@ -197,6 +298,14 @@ function sidebarChain(): DefaultTheme.SidebarItem[] {
         {
           text: 'Assets',
           link: '/blockchain/assets',
+        },
+        {
+          text: 'NFTs',
+          link: '/blockchain/nfts',
+        },
+        {
+          text: 'Real-World Assets',
+          link: '/blockchain/rwas',
         },
         {
           text: 'Metadata',
@@ -287,6 +396,10 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
           link: '/reference/torii-endpoints.md',
         },
         {
+          text: 'Torii API Console',
+          link: '/reference/torii-api-console.md',
+        },
+        {
           text: 'Norito',
           link: '/reference/norito.md',
         },
@@ -350,6 +463,13 @@ export default defineConfig({
   vite: {
     plugins: [ViteUnoCSS('../uno.config.ts'), ViteSvgLoader()],
     envDir: resolve(__dirname, '../'),
+  },
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: (tag: string) => tag === 'rapi-doc',
+      },
+    },
   },
   lastUpdated: true,
 

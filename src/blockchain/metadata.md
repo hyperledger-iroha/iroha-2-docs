@@ -9,6 +9,8 @@ The following objects can carry metadata:
 - accounts
 - assets
 - asset definitions
+- NFTs
+- RWAs
 - triggers
 - transactions
 
@@ -16,8 +18,34 @@ Use metadata for small descriptive or indexing fields that belong in ledger
 state. Large payloads should be stored outside the WSV and referenced by a
 digest, URI, or SoraFS path.
 
-For guidance on choosing metadata, assets, NFTs, or off-chain storage, see
+For guidance on choosing metadata, assets, NFTs, RWAs, or off-chain
+storage, see
 [Metadata and Ledger Storage Choices](/guide/configure/metadata-and-store-assets.md).
+
+## Try It on Taira
+
+Metadata is visible through normal resource reads. This command lists Taira
+asset definitions that currently have metadata:
+
+```bash
+curl -fsS 'https://taira.sora.org/v1/assets/definitions?limit=100' \
+  | jq '.items[]
+    | select((.metadata | length) > 0)
+    | {id, name, metadata}'
+```
+
+Use the same pattern for domains and accounts:
+
+```bash
+curl -fsS 'https://taira.sora.org/v1/domains?limit=20' \
+  | jq '.items[] | select((.metadata // {} | length) > 0)'
+
+curl -fsS 'https://taira.sora.org/v1/accounts?limit=20' \
+  | jq '.items[] | select((.metadata // {} | length) > 0)'
+```
+
+Treat empty output as a valid result. It means the current page of Taira
+objects does not carry metadata, not that the endpoint failed.
 
 ## Updating Metadata
 
@@ -28,8 +56,8 @@ Metadata is changed with Iroha Special Instructions:
 - [`RemoveKeyValue`](/blockchain/instructions.md#setkeyvalue-removekeyvalue)
   removes a key
 
-The authority submitting the transaction must have the permission required by
-the active runtime validator. For the default permission surface, see
+The authority submitting the transaction must have the permission required
+by the active runtime validator. For the default permission surface, see
 [Permission Tokens](/reference/permissions.md).
 
 ## Events
@@ -66,9 +94,13 @@ matters to an integration.
 Metadata is returned as part of the queried object. For example, use
 [`FindAccountById`](/reference/queries.md#accounts-and-permissions),
 [`FindDomainById`](/reference/queries.md#domains-and-peers), or
-[`FindAssetDefinitionById`](/reference/queries.md#assets-nfts-and-rwas) and
-then read the object's `metadata` field.
+[`FindAssetDefinitionById`](/reference/queries.md#assets-nfts-and-rwas).
+Use [`FindNfts`](/reference/queries.md#assets-nfts-and-rwas) or
+[`FindNftsByAccountId`](/reference/queries.md#assets-nfts-and-rwas) for
+NFTs, and [`FindRwas`](/reference/queries.md#assets-nfts-and-rwas) for RWA
+lots. Then read the object's metadata field. NFT query responses expose the
+NFT `content` map as the record metadata.
 
 Metadata keys are part of the ledger state, so keep them stable and avoid
-encoding application-specific version churn into the key name when a JSON value
-can carry that version explicitly.
+encoding application-specific version churn into the key name when a JSON
+value can carry that version explicitly.

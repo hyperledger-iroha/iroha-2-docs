@@ -17,24 +17,48 @@ For the current state of the project, start with the reference CLI and the
 workspace itself:
 
 ```bash
-git clone https://github.com/hyperledger-iroha/iroha.git
+git clone --branch i23-features https://github.com/hyperledger-iroha/iroha.git
 cd iroha
 cargo build --workspace
 ```
 
-Run the reference client against a generated local network:
+Run the reference client with the checked-in default client config:
 
 ```bash
-cargo run --bin iroha -- --config ./localnet/client.toml ledger domain list all
+cargo run --bin iroha -- --config ./defaults/client.toml ledger domain list all
 ```
+
+## Try Taira Read-Only
+
+From the same workspace checkout, try the public Taira diagnostics helper:
+
+```bash
+cargo run --bin iroha -- taira doctor \
+  --public-root https://taira.sora.org \
+  --json
+```
+
+For route-level checks, use Torii's JSON API directly:
+
+```bash
+curl -fsS https://taira.sora.org/status \
+  | jq '{blocks, txs_approved, txs_rejected, queue_size, peers}'
+
+curl -fsS 'https://taira.sora.org/v1/assets/definitions?limit=5' \
+  | jq -r '.items[] | [.id, .name, .total_quantity] | @tsv'
+```
+
+After you create `taira.client.toml`, the same binary can run signed canary
+commands against Taira. Keep those separate from ordinary unit tests because
+they require a faucet-funded account and live testnet availability.
 
 ## Using the Rust Client Crate
 
-When developing inside the monorepo, depend on the local crate directly:
+For the current source state, depend on the `i23-features` branch directly:
 
 ```toml
 [dependencies]
-iroha = { path = "../iroha/crates/iroha" }
+iroha = { git = "https://github.com/hyperledger-iroha/iroha.git", branch = "i23-features", package = "iroha" }
 ```
 
 If you need the most complete examples of how the Rust surfaces are used in

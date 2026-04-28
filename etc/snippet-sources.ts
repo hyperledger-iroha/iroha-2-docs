@@ -11,6 +11,10 @@ function irohaRawSource(...segments: string[]): string {
 }
 
 function generateDataModelSchema(): string {
+  if (!IROHA_SOURCE_DIR) {
+    throw new Error('IROHA_SOURCE_DIR is not configured.')
+  }
+
   const command = spawnSync('cargo', ['run', '-p', 'iroha_kagami', '--', 'advanced', 'schema'], {
     cwd: IROHA_SOURCE_DIR,
     encoding: 'utf8',
@@ -18,7 +22,11 @@ function generateDataModelSchema(): string {
 
   if (command.status !== 0 || command.error) {
     throw new Error(
-      [`Failed to generate data-model schema from ${IROHA_SOURCE_DIR}.`, command.error?.message, command.stderr]
+      [
+        'Failed to generate data-model schema from the configured Iroha source checkout.',
+        command.error?.message,
+        command.stderr,
+      ]
         .filter(Boolean)
         .join('\n'),
     )
@@ -38,9 +46,9 @@ function renderCurrentDataModelSchema(source: string): string {
       return [
         '> [!WARNING]',
         '> The Iroha data-model schema snapshot is currently unavailable.',
-        `> \`${irohaRawSource(IROHA_SCHEMA_PATH)}\` is empty, and \`kagami advanced schema\` failed against \`${IROHA_SOURCE_DIR}\`.`,
+        `> \`${irohaRawSource(IROHA_SCHEMA_PATH)}\` is empty, and \`kagami advanced schema\` could not generate a replacement from the configured Iroha source checkout.`,
         '>',
-        '> Refresh this page with `pnpm get-snippets` after the upstream schema generator succeeds.',
+        '> Refresh this page with `pnpm get-snippets` after the upstream schema generator succeeds. Set `IROHA_SOURCE_DIR` if you need to generate the schema from a local checkout.',
         '',
         '```text',
         detail,

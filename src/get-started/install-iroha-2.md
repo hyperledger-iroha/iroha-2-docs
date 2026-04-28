@@ -15,7 +15,7 @@ Install these first:
 ## 2. Clone the Workspace
 
 ```bash
-git clone https://github.com/hyperledger-iroha/iroha.git
+git clone --branch i23-features https://github.com/hyperledger-iroha/iroha.git
 cd iroha
 ```
 

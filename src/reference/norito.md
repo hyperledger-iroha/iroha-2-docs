@@ -253,6 +253,6 @@ Norito so routing, billing, replay, and audit evidence stay reproducible.
 
 ## Upstream References
 
-- [Norito format specification](https://github.com/hyperledger-iroha/iroha/blob/main/norito.md)
-- [Norito crate README](https://github.com/hyperledger-iroha/iroha/blob/main/crates/norito/README.md)
-- [Norito streaming design notes](https://github.com/hyperledger-iroha/iroha/blob/main/docs/source/norito_streaming.md)
+- [Norito format specification](https://github.com/hyperledger-iroha/iroha/blob/i23-features/norito.md)
+- [Norito crate README](https://github.com/hyperledger-iroha/iroha/blob/i23-features/crates/norito/README.md)
+- [Norito streaming design notes](https://github.com/hyperledger-iroha/iroha/blob/i23-features/docs/source/norito_streaming.md)

@@ -35,29 +35,30 @@ you transfer assets, you always need to specify to which account you are
 transferring them. On the other hand, when you are registering something,
 all you need is the object that you want to register.
 
-| Instruction                                               | Objects                                                                                           | Destination          |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------- |
-| [Register/Unregister](#un-register)                       | domains, accounts, asset definitions, NFTs, roles, triggers, peers                                |                      |
-| [Mint/Burn](#mint-burn)                                   | numeric assets, trigger repetitions                                                               | accounts or triggers |
-| [SetKeyValue/RemoveKeyValue](#setkeyvalue-removekeyvalue) | objects that have [metadata](./metadata.md): domains, accounts, asset definitions, NFTs, triggers |                      |
-| [SetParameter](#setparameter)                             | chain parameters                                                                                  |                      |
-| [Grant/Revoke](#grant-revoke)                             | [roles, permission tokens](/blockchain/permissions.md)                                            | accounts or roles    |
-| [Transfer](#transfer)                                     | domains, asset definitions, numeric assets, NFTs                                                  | accounts             |
-| [ExecuteTrigger](#executetrigger)                         | triggers                                                                                          |                      |
-| [Log/Custom/Upgrade](#other-instructions)                 | logs, executor-specific payloads, executor upgrades                                               |                      |
+| Instruction                                               | Objects                                                                                                 | Destination          |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
+| [Register/Unregister](#un-register)                       | domains, accounts, asset definitions, NFTs, roles, triggers, peers                                      |                      |
+| [Mint/Burn](#mint-burn)                                   | numeric assets, trigger repetitions                                                                     | accounts or triggers |
+| [SetKeyValue/RemoveKeyValue](#setkeyvalue-removekeyvalue) | objects that have [metadata](./metadata.md): domains, accounts, asset definitions, NFTs, RWAs, triggers |                      |
+| [SetParameter](#setparameter)                             | chain parameters                                                                                        |                      |
+| [Grant/Revoke](#grant-revoke)                             | [roles, permission tokens](/blockchain/permissions.md)                                                  | accounts or roles    |
+| [Transfer](#transfer)                                     | domains, asset definitions, numeric assets, NFTs                                                        | accounts             |
+| [ExecuteTrigger](#executetrigger)                         | triggers                                                                                                |                      |
+| [Log/Custom/Upgrade](#other-instructions)                 | logs, executor-specific payloads, executor upgrades                                                     |                      |
 
 There is also another way of looking at ISI, in terms of the ledger object
 they touch:
 
-| Target           | Instructions                                                                                              |
-| ---------------- | --------------------------------------------------------------------------------------------------------- |
-| Account          | register/unregister accounts, receive assets, update account metadata, grant/revoke permissions and roles |
-| Domain           | register/unregister domains, transfer domain ownership, update domain metadata                            |
-| Asset definition | register/unregister definitions, transfer ownership, update metadata                                      |
-| Asset            | mint/burn numeric quantity, transfer numeric quantity                                                     |
-| NFT              | register/unregister NFTs, transfer ownership, update metadata                                             |
-| Trigger          | register/unregister, mint/burn trigger repetitions, execute trigger, update trigger metadata              |
-| World            | register/unregister peers and roles, set parameters, upgrade the executor                                 |
+| Target           | Instructions                                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| Account          | register/unregister accounts, receive assets, update account metadata, grant/revoke permissions and roles    |
+| Domain           | register/unregister domains, transfer domain ownership, update domain metadata                               |
+| Asset definition | register/unregister definitions, transfer ownership, update metadata                                         |
+| Asset            | mint/burn numeric quantity, transfer numeric quantity                                                        |
+| NFT              | register/unregister NFTs, transfer ownership, update metadata                                                |
+| RWA              | register lots, transfer quantity, hold/release, freeze/unfreeze, redeem, merge, update metadata and controls |
+| Trigger          | register/unregister, mint/burn trigger repetitions, execute trigger, update trigger metadata                 |
+| World            | register/unregister peers and roles, set parameters, upgrade the executor                                    |
 
 ## CLI Examples
 
@@ -80,11 +81,28 @@ export PEER_KEY="<BLS_PUBLIC_KEY_MULTIHASH>"
 export PEER_POP="<PROOF_OF_POSSESSION_HEX>"
 ```
 
-When targeting the public Taira testnet, use a Taira client configuration
-and attach the required gas asset metadata to write transactions:
+When targeting the public Taira testnet, use a Taira client configuration.
+Before running fee-paying examples, save the faucet helper from
+[Get Testnet XOR on Taira](/get-started/sora-nexus-dataspaces.md#_4-get-testnet-xor-on-taira)
+as `taira_faucet_claim.py`, then claim testnet XOR from the faucet:
 
 ```bash
-printf '{"gas_asset_id":"6TEAJqbb8oEPmLncoNiMRbLEK6tw"}\n' > taira.tx-metadata.json
+export TAIRA_ACCOUNT_ID="<TAIRA_I105_ACCOUNT_ID>"
+export TAIRA_FEE_ASSET="6TEAJqbb8oEPmLncoNiMRbLEK6tw"
+
+curl -fsS https://taira.sora.org/v1/accounts/faucet/puzzle | jq .
+python3 taira_faucet_claim.py "$TAIRA_ACCOUNT_ID"
+
+iroha --config ./taira.client.toml ledger asset get \
+  --definition "$TAIRA_FEE_ASSET" \
+  --account "$TAIRA_ACCOUNT_ID"
+```
+
+After the faucet-funded asset is visible, attach the required gas asset
+metadata to write transactions:
+
+```bash
+printf '{"gas_asset_id":"%s"}\n' "$TAIRA_FEE_ASSET" > taira.tx-metadata.json
 
 cargo run --bin iroha -- \
   --config ./taira.client.toml \
@@ -111,6 +129,10 @@ and triggers. Peer registration uses `RegisterPeerWithPop`, which carries a
 proof of possession for the peer key. Check our
 [naming conventions](/reference/naming.md) to learn about the restrictions
 put on entity names.
+
+RWA lots are created through the dedicated `RegisterRwa` instruction. The
+current code does not expose an `UnregisterRwa` instruction; use
+`RedeemRwa` to retire represented quantity.
 
 ::: info
 
@@ -288,8 +310,10 @@ cargo run --bin iroha -- --config ./defaults/client.toml \
 
 ## Transfer
 
-Transfers move ownership or value between accounts. Current transfer
-variants cover domains, asset definitions, numeric assets, and NFTs.
+Transfers move ownership or value between accounts. Generic transfer
+variants cover domains, asset definitions, numeric assets, and NFTs. RWA
+quantity movement uses the dedicated `TransferRwa` and `ForceTransferRwa`
+instructions described in [Real-World Assets](/blockchain/rwas.md).
 
 To do this, an account have to be granted the
 [permission to transfer assets](/reference/permissions.md). Refer to an
@@ -383,8 +407,8 @@ cargo run --bin iroha -- --config ./defaults/client.toml \
   ledger domain meta remove --id docs.universal --key environment
 ```
 
-The same pattern is available for accounts, asset definitions, NFTs, and
-triggers:
+The same pattern is available for accounts, asset definitions, NFTs, RWAs,
+and triggers:
 
 ```bash
 printf '{"display_name":"Alice"}\n' |

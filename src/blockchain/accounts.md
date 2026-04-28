@@ -47,6 +47,41 @@ See [client configuration](/guide/configure/client-configuration.md) and
 [key generation](/guide/security/generating-cryptographic-keys.md) for the
 current key formats.
 
+## Try It on Taira
+
+List a few canonical account IDs from the public Taira testnet:
+
+```bash
+curl -fsS 'https://taira.sora.org/v1/accounts?limit=5' \
+  | jq -r '.items[] | [.id, (.primary_alias // "-")] | @tsv'
+```
+
+To inspect account assets, copy an account ID from the first call and URL-encode
+it before placing it in the path. This Python snippet does that for the first
+listed account:
+
+```bash
+python3 - <<'PY'
+import json
+import urllib.parse
+import urllib.request
+
+root = "https://taira.sora.org"
+accounts = json.load(urllib.request.urlopen(f"{root}/v1/accounts?limit=1"))["items"]
+account_id = accounts[0]["id"]
+encoded = urllib.parse.quote(account_id, safe="")
+assets = json.load(
+    urllib.request.urlopen(f"{root}/v1/accounts/{encoded}/assets?limit=5")
+)
+
+print(json.dumps({"account_id": account_id, "assets": assets["items"]}, indent=2))
+PY
+```
+
+These are public reads. Creating or updating an account is a signed transaction
+and requires the faucet-funded Taira setup described in
+[Connect to SORA Nexus Dataspaces](/get-started/sora-nexus-dataspaces.md).
+
 ## Registration and permissions
 
 Accounts are registered and unregistered with the generic

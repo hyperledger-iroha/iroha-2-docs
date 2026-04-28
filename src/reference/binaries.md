@@ -3,9 +3,9 @@
 The current Iroha 2 and Iroha 3 operator workflow revolves around three
 primary binaries:
 
-- [`irohad`](https://github.com/hyperledger-iroha/iroha/tree/main/crates/irohad) for running a peer daemon
-- [`iroha`](https://github.com/hyperledger-iroha/iroha/tree/main/crates/iroha_cli) for CLI and operator commands
-- [`kagami`](https://github.com/hyperledger-iroha/iroha/tree/main/crates/iroha_kagami) for keys, genesis, localnets, and profiles
+- [`irohad`](https://github.com/hyperledger-iroha/iroha/tree/i23-features/crates/irohad) for running a peer daemon
+- [`iroha`](https://github.com/hyperledger-iroha/iroha/tree/i23-features/crates/iroha_cli) for CLI and operator commands
+- [`kagami`](https://github.com/hyperledger-iroha/iroha/tree/i23-features/crates/iroha_kagami) for keys, genesis, localnets, and profiles
 
 The source tree also exposes track-specific aliases:
 

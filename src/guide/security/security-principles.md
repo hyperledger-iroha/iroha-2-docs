@@ -4,7 +4,7 @@ Organisations and individual users need to work together to ensure secure intera
 
 ## General Security Principles
 
-1. Use a Virtual Private Network (VPN):
+1. Use a [Virtual Private Network](./vpn.md) (VPN):
 
     - Whenever accessing sensitive data or resources, especially over public networks, use a <abbr title="Virtual Private Network">VPN</abbr> to establish a secure connection that safeguards your information.
 

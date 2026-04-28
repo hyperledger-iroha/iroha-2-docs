@@ -10,12 +10,13 @@ located in other repositories, where they are built, run, and tested.
 
 Snippet sources are defined in
 [`snippet_sources.ts`](https://github.com/hyperledger-iroha/iroha-2-docs/blob/main/etc/snippet-sources.ts).
-The `snippet_sources.ts` file is located in the documentation repository. By
-default, Iroha snippets are loaded from pinned raw GitHub sources so CI and
-preview builds do not require a sibling checkout. Override `IROHA_REV` or
-`IROHA_RAW_BASE` to point snippets at another published revision. Set
-`IROHA_SOURCE_DIR` when the data-model schema snapshot is empty and you want to
-regenerate that page from a local Iroha source checkout.
+The `snippet_sources.ts` file is located in the documentation repository.
+By default, Iroha snippets are loaded from pinned raw GitHub sources so CI
+and preview builds do not depend on a local repository layout. Override
+`IROHA_REV` or `IROHA_RAW_BASE` to point snippets at another published
+revision. Set `IROHA_SOURCE_DIR` when the data-model schema snapshot is
+empty and you want to regenerate that page from a local Iroha source
+checkout.
 
 It has the following format:
 
@@ -39,8 +40,8 @@ export default [
 - `src` defines the source file location and could be either an HTTP(s) URI
   or a relative file path.
 - `filename` (optional) explicitly defines the local filename.
-- `transform` (optional) can derive a snippet from generated source data. The
-  data-model reference uses this to render the current schema.
+- `transform` (optional) can derive a snippet from generated source data.
+  The data-model reference uses this to render the current schema.
 
 ### Fetching Snippets
 
@@ -108,8 +109,8 @@ Let's add a code snippet from Iroha JavaScript SDK. For example, this one:
    ::: tip
 
    Since `snippet_sources.ts` is a TypeScript file, it can use small helper
-   functions. Keep those helpers focused: snippets should continue to reflect
-   built and tested source files, not hand-written copies.
+   functions. Keep those helpers focused: snippets should continue to
+   reflect built and tested source files, not hand-written copies.
 
    :::
 

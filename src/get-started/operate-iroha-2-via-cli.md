@@ -43,7 +43,74 @@ The `ledger` group also contains domain-specific transaction helpers such as
 Use `--output-format text` for human-readable operator output and `--machine`
 for strict automation mode.
 
-## 3. Basic Ledger Commands
+## 3. Try the Public Taira Testnet
+
+You can try read-only Taira checks before running a local peer or creating a
+signer. These commands use public Torii JSON routes and do not spend testnet
+XOR.
+
+Check Taira health:
+
+```bash
+curl -fsS https://taira.sora.org/status \
+  | jq '{blocks, txs_approved, txs_rejected, queue_size, peers}'
+```
+
+List public domains in the `universal` dataspace:
+
+```bash
+curl -fsS 'https://taira.sora.org/v1/domains?limit=10' \
+  | jq -r '.items[].id'
+```
+
+List a few asset definitions and their current supply:
+
+```bash
+curl -fsS 'https://taira.sora.org/v1/assets/definitions?limit=10' \
+  | jq -r '.items[] | [.id, .name, .mintable, .total_quantity] | @tsv'
+```
+
+If you have the current `iroha` binary, run the Taira diagnostics helper:
+
+```bash
+iroha taira doctor --public-root https://taira.sora.org --json
+```
+
+Create `taira.client.toml` only when you are ready to test signed commands.
+See [Connect to SORA Nexus Dataspaces](/get-started/sora-nexus-dataspaces.md)
+for the config, faucet, and canary flow. Do not run write commands against
+Taira until the account is funded with the faucet fee asset.
+
+For any fee-paying Taira CLI example, save the faucet helper from
+[Get Testnet XOR on Taira](/get-started/sora-nexus-dataspaces.md#_4-get-testnet-xor-on-taira)
+as `taira_faucet_claim.py`, then claim testnet XOR first:
+
+```bash
+export TAIRA_ACCOUNT_ID='<TAIRA_I105_ACCOUNT_ID>'
+export TAIRA_FEE_ASSET=6TEAJqbb8oEPmLncoNiMRbLEK6tw
+
+curl -fsS https://taira.sora.org/v1/accounts/faucet/puzzle | jq .
+python3 taira_faucet_claim.py "$TAIRA_ACCOUNT_ID"
+
+iroha --config ./taira.client.toml ledger asset get \
+  --definition "$TAIRA_FEE_ASSET" \
+  --account "$TAIRA_ACCOUNT_ID"
+```
+
+If the faucet puzzle or claim route returns `502`, wait and retry. That is a
+public testnet availability issue, not a signal to regenerate the account keys.
+
+After the balance is visible, attach the fee asset metadata to writes:
+
+```bash
+printf '{"gas_asset_id":"%s"}\n' "$TAIRA_FEE_ASSET" > taira.tx-metadata.json
+
+iroha --config ./taira.client.toml \
+  --metadata ./taira.tx-metadata.json \
+  ledger transaction ping --msg "hello from faucet-funded taira"
+```
+
+## 4. Basic Ledger Commands
 
 List all domains:
 
@@ -71,7 +138,7 @@ cargo run --bin iroha -- --config ./localnet/client.toml ledger blocks 1 --timeo
 cargo run --bin iroha -- --config ./localnet/client.toml ledger events block
 ```
 
-## 4. Operator Commands
+## 5. Operator Commands
 
 Consensus status:
 
@@ -99,12 +166,12 @@ cargo run --bin iroha -- --config ./localnet/client.toml ops sumeragi collectors
 cargo run --bin iroha -- --config ./localnet/client.toml ops sumeragi params
 ```
 
-## 5. Where to Go Next
+## 6. Where to Go Next
 
 - [SDK tutorials](/guide/tutorials/)
 - [Torii endpoints](/reference/torii-endpoints.md)
 - [Working with Iroha binaries](/reference/binaries.md)
-- [CLI README](https://github.com/hyperledger-iroha/iroha/blob/main/crates/iroha_cli/README.md)
+- [CLI README](https://github.com/hyperledger-iroha/iroha/blob/i23-features/crates/iroha_cli/README.md)
 
 To regenerate a full Markdown help snapshot from the source checkout, run:
 
