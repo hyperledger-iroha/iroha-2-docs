@@ -41,6 +41,7 @@ runtime validation by upgrading the executor.
 | `CanModifyTriggerMetadata` | Trigger | Modify trigger metadata. |
 | `CanUpgradeExecutor` | Executor | Upgrade the runtime executor. |
 | `CanRegisterSmartContractCode` | Smart contract | Register smart contract code. |
+| `CanUseFeeSponsor` | Nexus | Charge Nexus fees to a specified sponsor account. |
 
 ## Ownership
 

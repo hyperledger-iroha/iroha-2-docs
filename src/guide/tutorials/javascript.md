@@ -1,16 +1,20 @@
 # JavaScript and TypeScript
 
-The current JavaScript SDK is published as `@iroha/iroha-js`. It is an
-experimental Node.js-first SDK for Torii, Norito, signing, and offline
-envelope workflows.
+The current JavaScript SDK is published as `@iroha/iroha-js`. It is the
+Node.js-first SDK for Torii, Norito builders, signing, pagination, Connect
+previews, and offline-envelope workflows.
 
 ## Install
 
 ```bash
 npm install @iroha/iroha-js
+npm run build:native
 ```
 
-The package is ESM-only. From CommonJS, use dynamic `import()`.
+The native build wraps `cargo build -p iroha_js_host` and records the
+platform-specific checksum used at SDK startup. Run it after installing the
+Rust toolchain from the upstream workspace. The package is ESM-only; from
+CommonJS, use dynamic `import()`.
 
 ## Working from Source
 
@@ -23,8 +27,8 @@ npm run build:native
 npm run build:dist
 ```
 
-The native module is optional. If it is unavailable, the SDK falls back to the
-pure JavaScript path.
+Set `IROHA_JS_NATIVE_DIR` only for tests that need to point at an alternate
+`native/` directory. Normal applications should use the packaged native build.
 
 ## Quickstart
 
@@ -49,13 +53,18 @@ import { generateKeyPair } from "@iroha/iroha-js/crypto";
 import { buildOfflineEnvelope } from "@iroha/iroha-js/offline";
 ```
 
+For browser-only Connect bootstrap, use `@iroha/iroha-js/connect-browser`
+instead of importing the Node-first `ToriiClient` surface.
+
 ## Current Coverage
 
-The preview SDK focuses on:
+The SDK focuses on:
 
-- Torii HTTP helpers
-- Norito encode and decode helpers
+- Torii HTTP and WebSocket helpers
+- Norito transaction and instruction builders
 - Ed25519 signing and key generation
+- pagination and retry helpers
+- Connect browser bootstrap helpers
 - offline envelope tooling
 
 ## Upstream References

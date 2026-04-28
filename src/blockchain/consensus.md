@@ -23,12 +23,67 @@ The reasoning behind this algorithm is simple: if someone had some evil
 peers and connected them to the existing network, if they tried to fake
 data, some good™ peers would not get the same (evil™) world state. If
 that's the case, the evil™ peers would not be allowed to participate in
-consensus, and you would eventually produce a block using only good™ peers.
+consensus, and you would eventually produce a block using only good™
+peers.
 
 As a natural consequence, if any changes to the world state are made
 without the use of ISI, the good™ peers cannot know of them. They won't be
 able to reproduce the hash of the world state, and thus consensus will
 fail. The same thing happens if the peers have different instructions.
+
+## Multilane consensus
+
+Iroha's multilane consensus path is implemented through Nexus lane and
+dataspace configuration. It does not start a separate consensus instance
+for each lane. Sumeragi still finalizes one ordered block stream; lanes
+describe how transactions are routed, scheduled, accounted for, and stored
+inside that stream.
+
+The runtime configuration builds three pieces of lane state:
+
+- `lane_catalog`: the configured lanes, each with a numeric `LaneId`,
+  alias, dataspace, visibility, storage profile, proof scheme, and
+  metadata.
+- `dataspace_catalog`: the configured dataspaces, each with a numeric
+  `DataSpaceId` and a fault-tolerance value used for relay committee
+  sizing.
+- `routing_policy`: the default lane/dataspace pair and ordered routing
+  rules that can match accounts or instruction paths.
+
+When a transaction enters the queue, the lane router resolves it to a
+`RoutingDecision { lane_id, dataspace_id }`. In single-lane mode this is
+always lane `0` and the universal dataspace. In Nexus mode, the configured
+router applies dataspace-scoped rules, settlement routing, account rules,
+explicit routing rules, and finally the default route. The resolved lane
+and dataspace must exist in their catalogs, and the lane must be bound to
+the resolved dataspace; otherwise the transaction is rejected before it is
+queued.
+
+The queue keeps this routing decision with the transaction hash so that
+later stages do not have to infer it again. Proposal construction then uses
+the lane metadata in two ways:
+
+- It interleaves transactions by lane so one lane does not dominate the
+  block just because its transactions were queued first.
+- It applies per-lane transaction execution unit (TEU) limits. Transactions
+  that would exceed a lane's configured capacity are deferred and requeued,
+  except that the first overweight transaction for a lane can be admitted
+  to avoid livelock.
+
+During reliable broadcast, Sumeragi aggregates the proposed payload by lane
+and dataspace. The recorded totals include transaction count, broadcast
+chunks, payload bytes, and TEU. After commit, those totals become the lane
+and dataspace commitment snapshots exposed through Sumeragi status. If a
+block contains lane settlement receipts, block processing also creates lane
+settlement commitments and relay envelopes that bind the block header,
+commit certificate, data-availability commitment hash, settlement proof,
+and lane payload size.
+
+Kura uses the derived lane configuration for storage layout. Each lane
+receives deterministic storage names such as `blocks/lane_000_core` and
+`merge_ledger/lane_000_core_merge.log`; lane lifecycle changes can
+provision, retire, or relabel those segments without changing the global
+block order.
 
 [^1]:
     For prospective wizards, the

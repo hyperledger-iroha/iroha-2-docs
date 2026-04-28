@@ -1,0 +1,368 @@
+{
+  "source": {
+    "kind": "local-snapshot",
+    "repo": "../iroha",
+    "branch": "i23-features",
+    "commit": "6be123546b7c",
+    "dirty": true,
+    "generated_at": "2026-04-28",
+    "basis": [
+      "SDK READMEs, in-tree tests, fixtures, and module layout in ../iroha.",
+      "Uncommitted genesis, schema, and Python SDK changes were present when this snapshot was generated."
+    ],
+    "dirty_files": [
+      "crates/iroha_data_model/src/events/mod.rs",
+      "crates/iroha_genesis/src/lib.rs",
+      "crates/iroha_kagami/src/genesis/sign.rs",
+      "crates/iroha_kagami/src/schema.rs",
+      "docs/source/references/peer.template.toml",
+      "python/iroha_python/DESIGN.md",
+      "python/iroha_python/README.md",
+      "python/iroha_python/iroha_python_rs/Cargo.toml",
+      "python/iroha_python/iroha_python_rs/src/lib.rs",
+      "python/iroha_python/src/iroha_python/__init__.py",
+      "python/iroha_python/src/iroha_python/crypto.py",
+      "python/iroha_python/tests/crypto_algorithms_test.py",
+      "python/iroha_torii_client/__pycache__/__init__.cpython-311.pyc",
+      "python/iroha_torii_client/__pycache__/client.cpython-311.pyc",
+      "python/norito_py/src/iroha_norito.egg-info/SOURCES.txt"
+    ]
+  },
+  "included_sdks": [
+    {
+      "name": "Rust"
+    },
+    {
+      "name": "Python"
+    },
+    {
+      "name": "JavaScript / TypeScript"
+    },
+    {
+      "name": "Kotlin / Android"
+    },
+    {
+      "name": "Java / Android"
+    },
+    {
+      "name": "Swift"
+    },
+    {
+      "name": "C# / .NET"
+    }
+  ],
+  "stories": [
+    {
+      "name": "Account address and I105 rendering",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Canonical Torii request signing",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Norito payload encoding and fixture parity",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Torii read, query, and RPC clients",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Transaction build, sign, submit, and status polling",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Core ledger flow builders",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Event, SSE, and subscription streams",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Multisig and policy TTL helpers",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Offline V2 and wallet readiness",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        }
+      ]
+    },
+    {
+      "name": "SoraFS and gateway helpers",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "RWA/NFT explorer and instruction helpers",
+      "results": [
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "Live testnet smoke lane",
+      "results": [
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "no-data"
+        },
+        {
+          "status": "ok"
+        }
+      ]
+    }
+  ]
+}

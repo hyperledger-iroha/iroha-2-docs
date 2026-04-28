@@ -9,14 +9,13 @@ contact us via [Telegram](https://t.me/hyperledgeriroha).
 Check that the client config points to the peer's Torii address:
 
 ```toml
-[torii]
-api_url = "http://127.0.0.1:8080"
+torii_url = "http://127.0.0.1:8080/"
 ```
 
 For CLI checks, pass the same file explicitly:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger domain list all
+cargo run --bin iroha -- --config ./localnet/client.toml ledger domain list all
 ```
 
 If the peer runs in Docker or Kubernetes, use the host or service address that
@@ -39,7 +38,7 @@ Use `--output-format text` while debugging CLI commands so errors are easier
 to read:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml --output-format text ledger transaction ping --msg "hello"
+cargo run --bin iroha -- --config ./localnet/client.toml --output-format text ledger transaction ping --msg "hello"
 ```
 
 ## Queries return empty results
@@ -54,7 +53,7 @@ Empty query results do not always mean the query failed. Check:
 For domain checks, start with the broadest query:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger domain list all
+cargo run --bin iroha -- --config ./localnet/client.toml ledger domain list all
 ```
 
 ## Event or block streams stop early
@@ -63,8 +62,8 @@ Block and event stream examples rely on Torii streaming endpoints. Verify the
 peer is still running, then test with a timeout:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger blocks 1 --timeout 30s
-cargo run --bin iroha -- --config ./defaults/client.toml ledger events block
+cargo run --bin iroha -- --config ./localnet/client.toml ledger blocks 1 --timeout 30s
+cargo run --bin iroha -- --config ./localnet/client.toml ledger events block
 ```
 
 For HTTP integrations, compare your endpoint paths with the current

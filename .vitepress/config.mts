@@ -61,6 +61,10 @@ function sidebarStart(): DefaultTheme.SidebarItem[] {
           link: '/get-started/sora-nexus-dataspaces',
         },
         {
+          text: 'Sponsor Private Dataspace Fees',
+          link: '/get-started/private-dataspace-fee-sponsor',
+        },
+        {
           text: 'Iroha 3 vs. Iroha 2',
           link: '/get-started/iroha-2',
         },
@@ -95,6 +99,14 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
         {
           text: 'Swift / iOS',
           link: '/guide/tutorials/swift',
+        },
+        {
+          text: 'Sample Apps',
+          link: '/guide/tutorials/sample-apps',
+        },
+        {
+          text: 'Embed Kaigi',
+          link: '/guide/tutorials/kaigi',
         },
         {
           text: 'Compatibility Matrix',
@@ -156,6 +168,10 @@ function sidebarChain(): DefaultTheme.SidebarItem[] {
         {
           text: 'Iroha 3 Overview',
           link: '/blockchain/iroha-explained',
+        },
+        {
+          text: 'SORA Nexus Services',
+          link: '/blockchain/sora-nexus-services',
         },
         {
           text: 'World, WSV, and Kura',
@@ -244,6 +260,10 @@ function sidebarChain(): DefaultTheme.SidebarItem[] {
           text: 'Consensus',
           link: '/blockchain/consensus',
         },
+        {
+          text: 'FastPQ',
+          link: '/blockchain/fastpq',
+        },
       ],
     },
   ]
@@ -265,6 +285,10 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
         {
           text: 'Torii API',
           link: '/reference/torii-endpoints.md',
+        },
+        {
+          text: 'Norito',
+          link: '/reference/norito.md',
         },
         {
           text: 'Compatibility Matrix',

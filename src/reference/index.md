@@ -8,6 +8,7 @@ Start here for:
 - [Working with Iroha binaries](/reference/binaries.md)
 - [Genesis reference](/reference/genesis.md)
 - [Torii endpoints](/reference/torii-endpoints.md)
+- [Norito](/reference/norito.md)
 - [Compatibility matrix](/reference/compatibility-matrix.md)
 
 For the broader upstream documentation map, see:

@@ -19,6 +19,15 @@ The transaction payload used to create an account is `NewAccount`. It carries
 the same identity, metadata, label, UAID, and opaque ID fields used by the
 registered account.
 
+`uaid` complements the canonical `AccountId`; it does not replace it. Use it
+when Nexus services need a stable user or organization handle across
+dataspaces, privacy-preserving enrollment, or service capability lookup. The
+runtime keeps a one-to-one UAID-to-account index, requires opaque identifiers
+to be attached through a UAID, and rejects duplicate or colliding opaque
+identifiers. See
+[FHE and UAID](/blockchain/sora-nexus-services.md#fhe-and-uaid) for the Nexus
+service-layer flow.
+
 ## Account controllers
 
 The controller defines how the account authorizes actions. The default client

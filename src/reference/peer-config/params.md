@@ -12,61 +12,62 @@ import ParamTable from './ParamTable.vue';
 
 ## Root-Level {#root}
 
-### `chain_id` <Badge text="required" /> {#param-chain-id}
+### `chain` <Badge text="required" /> {#param-chain-id}
 
 Chain ID that must be included in each transaction. Used to prevent replay attacks.
 
 A replay attack is an attempt to submit a valid transaction to a different
-network than the one it was intended for. Because the `chain_id` is part of
+network than the one it was intended for. Because the `chain` is part of
 the signed transaction payload, a transaction signed for one chain is rejected
 by peers that use another chain ID.
 
-<param-table type=string env=CHAIN_ID />
+<param-table type=string env=CHAIN />
 
 ::: code-group
 
 ```toml [Config File]
-chain_id = "00000000-0000-0000-0000-000000000000"
+chain = "00000000-0000-0000-0000-000000000000"
 ```
 
 ```shell [Environment]
-CHAIN_ID="00000000-0000-0000-0000-000000000000"
+CHAIN="00000000-0000-0000-0000-000000000000"
 ```
 
 :::
 
 ### `public_key` <Badge text="required" /> {#param-public-key}
 
-Public key of the peer.
+Public key of the peer. Consensus validator peers must use BLS-Normal keys.
 
 <param-table type="public-key" env="PUBLIC_KEY" />
 
 ::: code-group
 
 ```toml [Config File]
-public_key = "ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9"
+public_key = "ea01309060D021340617E9554CCBC2CF3CC3DB922A9BA323ABDF7C271FCC6EF69BE7A8DEBCA7D9E96C0F0089ABA22CDAADE4A2"
 ```
 
 ```shell [Environment]
-PUBLIC_KEY="ed0120FAFCB2B27444221717F6FCBF900D5BE95273B1B0904B08C736B32A19F16AC1F9"
+PUBLIC_KEY="ea01309060D021340617E9554CCBC2CF3CC3DB922A9BA323ABDF7C271FCC6EF69BE7A8DEBCA7D9E96C0F0089ABA22CDAADE4A2"
 ```
 
 :::
 
 ### `private_key` <Badge text="required" /> {#param-private-key}
 
-Private key of the peer.
+Private key of the peer. It must match `public_key`; consensus validator peers
+must use BLS-Normal keys.
 
 <param-table type="private-key" env="PRIVATE_KEY" />
 
 ::: code-group
 
 ```toml [Config File]
-private_key = "8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F84F"
+private_key = "8926201CA347641228C3B79AA43839DEDC85FA51C0E8B9B6A00F6B0D6B0423E902973F"
 ```
 
 ```shell [Environment]
-PRIVATE_KEY="8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F84F"
+PRIVATE_KEY="8926201CA347641228C3B79AA43839DEDC85FA51C0E8B9B6A00F6B0D6B0423E902973F"
 ```
 
 :::
@@ -75,10 +76,15 @@ PRIVATE_KEY="8026208F4C15E5D664DA3F13778801D23D4E89B76E94C1B94B389544168B6CB894F
 
 List of predefined trusted peers.
 
+Consensus validators must use BLS-Normal peer keys. For each validator, also
+provide a matching [`trusted_peers_pop`](#param-trusted-peers-pop) entry.
+
 <param-table env="TRUSTED_PEERS">
 <template #type>
 
-Array of strings in format `PUBLIC_KEY@ADDRESS`
+Array of peer strings. Use `PUBLIC_KEY@ADDRESS` when the P2P address is known;
+bare `PUBLIC_KEY` is also accepted and lets the peer address be discovered from
+gossip.
 
 </template>
 </param-table>
@@ -87,16 +93,48 @@ Array of strings in format `PUBLIC_KEY@ADDRESS`
 
 ```toml [Config File]
 trusted_peers = [
-    "ed01201C61FAF8FE94E253B93114240394F79A607B7FA55F9E5A41EBEC74B88055768B@127.0.0.1:1337",
-    "ed0120CC25624D62896D3A0BFD8940F928DC2ABF27CC57CEFEB442AA96D9081AAE58A1@127.0.0.1:1338",
-    "ed0120FACA9E8AA83225CB4D16D67F27DD4F93FC30FFA11ADC1F5C88FD5495ECC91020@127.0.0.1:1339",
-    "ed01208E351A70B6A603ED285D666B8D689B680865913BA03CE29FB7D13A166C4E7F1F@127.0.0.1:1340",
+    "ea01309060D021340617E9554CCBC2CF3CC3DB922A9BA323ABDF7C271FCC6EF69BE7A8DEBCA7D9E96C0F0089ABA22CDAADE4A2@127.0.0.1:1337",
+    "ea0130A7E9D016D723F72942FCF4B988FB599EA0E092F73C8B68E69F4E8B3FE542A3F7E48AD6CD15F3EB484E45F79399071F77@127.0.0.1:1338",
 ]
 ```
 
 ```shell [Environment]
 # as JSON
-TRUSTED_PEERS='["ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB61850B1DB10@irohad2:1339","ed01209897952D14BDFAEA780087C38FF3EB800CB20B882748FC95A575ADB9CD2CB21D@irohad1:1338","ed0120CACF3A84B8DC8710CE9D6B968EE95EC7EE4C93C85858F026F3B4417F569592CE@irohad3:1340"]'
+TRUSTED_PEERS='[
+  "ea01309060D021340617E9554CCBC2CF3CC3DB922A9BA323ABDF7C271FCC6EF69BE7A8DEBCA7D9E96C0F0089ABA22CDAADE4A2@127.0.0.1:1337",
+  "ea0130A7E9D016D723F72942FCF4B988FB599EA0E092F73C8B68E69F4E8B3FE542A3F7E48AD6CD15F3EB484E45F79399071F77@127.0.0.1:1338"
+]'
+```
+
+:::
+
+### `trusted_peers_pop` {#param-trusted-peers-pop}
+
+BLS proof-of-possession entries for validator trusted peers.
+
+<param-table env="TRUSTED_PEERS_POP">
+<template #type>
+
+Array of objects with `public_key` and `pop_hex` fields
+
+</template>
+</param-table>
+
+::: code-group
+
+```toml [Config File]
+trusted_peers_pop = [
+  { public_key = "ea01309060D021340617E9554CCBC2CF3CC3DB922A9BA323ABDF7C271FCC6EF69BE7A8DEBCA7D9E96C0F0089ABA22CDAADE4A2", pop_hex = "8515da750f81182aaba5c22fc9f03a01e81ed85e4495a2ca6b29a71c0c8549537e31e79cddf6ff285b9e22d0d9dc17ce0f46e7d0cf78b2ef9feab50c849a1ea8e1e4f07e966f6113faa8a999317545d9f111b8e08a7273913710b43a20b19c08" },
+  { public_key = "ea0130A7E9D016D723F72942FCF4B988FB599EA0E092F73C8B68E69F4E8B3FE542A3F7E48AD6CD15F3EB484E45F79399071F77", pop_hex = "a14eb180f0d78c55d2c034e91ccf691378e9c3ceed8e0b81d3e4b7c215c0dbb633bb9f1c5063911c31af4610016c164015f0f93db3c7df6a2ad0c39338fe7695b976a59fd13797615f229fbd77276a8bb2842e4e44fadcafdb7b37f4a143b913" },
+]
+```
+
+```shell [Environment]
+# as JSON
+TRUSTED_PEERS_POP='[
+  {"public_key":"ea01309060D021340617E9554CCBC2CF3CC3DB922A9BA323ABDF7C271FCC6EF69BE7A8DEBCA7D9E96C0F0089ABA22CDAADE4A2","pop_hex":"0x8515da750f81182aaba5c22fc9f03a01e81ed85e4495a2ca6b29a71c0c8549537e31e79cddf6ff285b9e22d0d9dc17ce0f46e7d0cf78b2ef9feab50c849a1ea8e1e4f07e966f6113faa8a999317545d9f111b8e08a7273913710b43a20b19c08"},
+  {"public_key":"ea0130A7E9D016D723F72942FCF4B988FB599EA0E092F73C8B68E69F4E8B3FE542A3F7E48AD6CD15F3EB484E45F79399071F77","pop_hex":"0xa14eb180f0d78c55d2c034e91ccf691378e9c3ceed8e0b81d3e4b7c215c0dbb633bb9f1c5063911c31af4610016c164015f0f93db3c7df6a2ad0c39338fe7695b976a59fd13797615f229fbd77276a8bb2842e4e44fadcafdb7b37f4a143b913"}
+]'
 ```
 
 :::
@@ -105,7 +143,8 @@ TRUSTED_PEERS='["ed01204EE2FCD53E1730AF142D1E23951198678295047F9314B4006B0CB6185
 
 ### `genesis.file` {#param-genesis-file}
 
-File path to the SCALE-encoded genesis block.
+File path to the signed genesis block payload generated by `kagami genesis sign`.
+Generated profiles commonly write this as a Norito `.nrt` file.
 
 <param-table type="file-path" env="GENESIS" />
 
@@ -113,11 +152,11 @@ File path to the SCALE-encoded genesis block.
 
 ```toml [Config File]
 [genesis]
-file = "./genesis.scale"
+file = "./genesis.signed.nrt"
 ```
 
 ```shell [Environment]
-GENESIS="./genesis.scale"
+GENESIS="./genesis.signed.nrt"
 ```
 
 :::
@@ -253,13 +292,13 @@ transaction_gossip_period_ms = 5_000
 
 Duration of time after which connection with peer is terminated if peer is idle.
 
-<param-table type=millis default-value=60_000 default-note="1 minute" />
+<param-table type=millis default-value=300_000 default-note="5 minutes" />
 
 ::: code-group
 
 ```toml [Config File]
 [network]
-idle_timeout_ms = 60_000
+idle_timeout_ms = 300_000
 ```
 
 :::
@@ -300,7 +339,7 @@ Number (of bytes)
 </template>
 <template #default-value>
 
-`16_777_216` ($16 \cdot 2^{20}$, or 16 MiB)
+`64_000_000` (64 million bytes)
 
 </template>
 </param-table>
@@ -309,7 +348,7 @@ Number (of bytes)
 
 ```toml [Config File]
 [torii]
-max_content_len = 16_777_216
+max_content_len = 64_000_000
 ```
 
 :::
@@ -504,17 +543,17 @@ At most N last blocks will be stored in memory.
 
 Older blocks will be dropped from memory and loaded from the disk if they are needed.
 
-<param-table type=number default-value=128 env=KURA_BLOCKS_IN_MEMORY />
+<param-table type=number default-value=1024 env=KURA_BLOCKS_IN_MEMORY />
 
 ::: code-group
 
 ```toml [Config File]
 [kura]
-blocks_in_memory = 256
+blocks_in_memory = 1024
 ```
 
 ```shell [Environment]
-KURA_BLOCKS_IN_MEMORY=256
+KURA_BLOCKS_IN_MEMORY=1024
 ```
 
 :::

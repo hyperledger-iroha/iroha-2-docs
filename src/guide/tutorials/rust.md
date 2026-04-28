@@ -22,10 +22,10 @@ cd iroha
 cargo build --workspace
 ```
 
-Run the reference client against the default local network:
+Run the reference client against a generated local network:
 
 ```bash
-cargo run --bin iroha -- --config ./defaults/client.toml ledger domain list all
+cargo run --bin iroha -- --config ./localnet/client.toml ledger domain list all
 ```
 
 ## Using the Rust Client Crate

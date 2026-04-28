@@ -1,7 +1,7 @@
 # Swift and iOS
 
 The Apple-platform SDK in the upstream workspace is `IrohaSwift`. It targets
-both Iroha 2-era flows and the current Iroha 3 / Sora Nexus Torii surfaces.
+Iroha 2-era flows and the current Iroha 3 / Sora Nexus Torii surfaces.
 
 ## Swift Package Manager
 
@@ -26,6 +26,9 @@ targets: [
 
 When working inside the monorepo, use the local path dependency instead.
 
+`IrohaSwift` requires the native `dist/NoritoBridge.xcframework`. SwiftPM and
+the CocoaPods lint flow fail fast when that bridge is missing.
+
 ## Quickstart
 
 ```swift
@@ -44,10 +47,11 @@ The Swift SDK already includes:
 
 - Torii HTTP helpers
 - Norito envelope encoding
-- Ed25519 signing via CryptoKit
+- Ed25519 and ML-DSA signing helpers
 - offline allowance helpers
 - runtime capability and event helpers
 - subscription and explorer helpers
+- Connect, pending-transaction, and Norito RPC helpers
 
 ## Upstream References
 

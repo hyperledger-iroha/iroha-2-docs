@@ -19,8 +19,8 @@ docker cp target/x86_64-unknown-linux-musl/release/irohad <container>:/usr/local
 docker restart <container>
 ```
 
-Use `docker ps` to confirm the container name. In the default stack the peer
-containers are generated from `defaults/docker-compose.yml`.
+Use `docker ps` to confirm the container name. In the generated stack the peer
+containers are defined by `./localnet/docker-compose.yml`.
 
 ## Recommit Genesis in a Disposable Network
 
@@ -29,9 +29,9 @@ network, stop the stack, remove generated state, regenerate or replace the
 signed genesis bundle, and start again:
 
 ```bash
-docker compose -f defaults/docker-compose.yml down
+docker compose -f ./localnet/docker-compose.yml down
 cargo run --bin kagami -- localnet --build-line iroha3 --peers 4 --out-dir ./localnet
-cargo run --bin kagami -- docker --peers 4 --config-dir ./localnet --image hyperledger/iroha:dev --out-file ./localnet/docker-compose.yml
+cargo run --bin kagami -- docker --peers 4 --config-dir ./localnet --image hyperledger/iroha:dev --out-file ./localnet/docker-compose.yml --force
 docker compose -f ./localnet/docker-compose.yml up
 ```
 

@@ -2,33 +2,34 @@
 import MigrationSnapshotModeTable from './MigrationSnapshotModeTable.vue'
 </script>
 
-# Migrate Configuration
+# Migrate Peer Configuration
 
-...from `2.0.0-pre-rc.20` to the new format.
+Use this page when moving an older Iroha 2 deployment from the pre-RC JSON
+configuration and daemon-side genesis submission flow to the current TOML
+configuration used by the Iroha 2 and Iroha 3 build lines.
 
-::: danger
+Current peers expect:
 
-This is an unstable document, Work in Progress.
+- `irohad`, `iroha2d`, or `iroha3d` with `--config`
+- TOML configuration files, optionally composed with `extends`
+- a signed genesis block referenced by `genesis.file`
+- on-chain parameters set through genesis instructions or transactions rather
+  than local peer config
 
-:::
-
-Do the following:
-
-- Update CLI and ENVs
-- Use TOML for the config file
-- Update parameters
-- [Sign genesis with Kagami](../genesis.md)
+For a new local network, prefer `kagami localnet`. Use this page for existing
+deployments that still have old environment variables, JSON config files, or
+unsigned `genesis.json` startup flows.
 
 ## CLI and Environment
 
-Here, the **After** column contains _all_ new supported environment
-variables. Environment variables aren't mentioned in the **Before** column
-were removed.
+Here, the **After** column lists the current environment variable when a direct
+replacement exists. Environment variables that are not mentioned in the
+**After** column were removed or moved to on-chain configuration.
 
 |                              Before | After                                                              |
 | ----------------------------------: |--------------------------------------------------------------------|
 |                `IROHA2_CONFIG_PATH` | removed, use [`--config`](../irohad-cli#arg-config) instead        |
-|               `IROHA2_GENESIS_PATH` | [`GENESIS_FILE`](params#param-genesis-file)                        |
+|               `IROHA2_GENESIS_PATH` | [`GENESIS`](params#param-genesis-file)                             |
 |                  `IROHA_PUBLIC_KEY` | [`PUBLIC_KEY`](params#param-public-key)                            |
 |                 `IROHA_PRIVATE_KEY` | [`PRIVATE_KEY`](params#param-private-key)                          |
 |                    `TORII_P2P_ADDR` | [`P2P_ADDRESS`](params#param-network-address)                      |
@@ -50,7 +51,7 @@ were removed.
 
 New mandatory parameters:
 
-- [`chain_id`](params#param-chain-id)
+- [`chain`](params#param-chain-id)
 - [`network.public_address`](params#param-network-public-address)
 
 List of all old parameters:
@@ -66,7 +67,9 @@ List of all old parameters:
     [`network.block_gossip_period_ms`](params#param-network-block-gossip-period-ms)
 - ~~`DISABLE_PANIC_TERMINAL_COLORS`~~: removed
 - `GENESIS`: see [Genesis Params](params#genesis)
-  - `ACCOUNT_PRIVATE_KEY`: removed (must be used to sign the genesis block now)
+  - `ACCOUNT_PRIVATE_KEY`: removed; use it with
+    [`kagami genesis sign`](../genesis.md#sign-the-manifest), then distribute
+    the signed `.nrt` block
   - `ACCOUNT_PUBLIC_KEY`: became
     [`genesis.public_key`](params#param-genesis-public-key)
 - `KURA`: see [Kura Params](params#kura)
@@ -146,7 +149,7 @@ List of all old parameters:
 export IROHA2_CONFIG=./config.json
 export IROHA2_GENESIS=./genesis.json
 
-iroha --submit-genesis
+iroha --config ./config.json
 ```
 
 ```json [Configuration file]
@@ -180,16 +183,23 @@ iroha --submit-genesis
 ::: code-group
 
 ```shell [CLI]
-iroha --submit-genesis --config ./iroha.toml
+cargo run -p iroha_kagami -- genesis sign ./genesis.json \
+  --private-key "038AE16B219DA35AA036335ED0A43C28A2CC737150112C78A7B8034B9D99C9023F4E3E98571B55514EDC5CCF7E53CA7509D89B2868E62921180A6F57C2F4E255" \
+  --out-file ./genesis.signed.nrt
+
+irohad --config ./iroha.toml
 ```
 
 ```toml [Configuration file]
-chain_id = "000"
-public_key = "ed01201C61FAF8FE94E253B93114240394F79A607B7FA55F9E5A41EBEC74B88055768B"
-private_key = { algorithm = "ed25519", payload = "282ED9F3CF92811C3818DBC4AE594ED59DC1A2F78E4241E31924E101D6B1FB831C61FAF8FE94E253B93114240394F79A607B7FA55F9E5A41EBEC74B88055768B" }
+chain = "00000000-0000-0000-0000-000000000000"
+public_key = "ea01309060D021340617E9554CCBC2CF3CC3DB922A9BA323ABDF7C271FCC6EF69BE7A8DEBCA7D9E96C0F0089ABA22CDAADE4A2"
+private_key = "8926201CA347641228C3B79AA43839DEDC85FA51C0E8B9B6A00F6B0D6B0423E902973F"
+trusted_peers = []
+trusted_peers_pop = []
 
 [network]
 address = "127.0.0.1:1337"
+public_address = "127.0.0.1:1337"
 
 [torii]
 address = "127.0.0.1:8080"
@@ -199,8 +209,7 @@ store_dir = "./storage"
 
 [genesis]
 public_key = "ed01203F4E3E98571B55514EDC5CCF7E53CA7509D89B2868E62921180A6F57C2F4E255"
-private_key = { algorithm = "ed25519", payload = "038AE16B219DA35AA036335ED0A43C28A2CC737150112C78A7B8034B9D99C9023F4E3E98571B55514EDC5CCF7E53CA7509D89B2868E62921180A6F57C2F4E255" }
-file = "./genesis.json"
+file = "./genesis.signed.nrt"
 ```
 
 :::

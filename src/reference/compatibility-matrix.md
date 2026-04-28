@@ -1,17 +1,19 @@
 # Compatibility Matrix
 
-The compatibility matrix provides a live view of cross-SDK scenario coverage for
-the current Iroha 3 docs set.
+The compatibility matrix shows cross-SDK scenario coverage for the current
+Iroha 3 docs set. By default, the page loads the bundled snapshot generated
+from the local sibling `../iroha` checkout.
 
 The matrix consists of:
 
 - **Stories** in the first column
 - **SDKs** across the remaining columns
-- **Status symbols** for pass, fail, and missing data
+- **Status symbols** for covered, failed, and missing data
 
 <CompatibilityMatrixTable />
 
 ::: info
-This page requires `VITE_COMPAT_MATRIX_URL` to point at a compatible backend
-service. If the variable is not set, the table cannot load live results.
+Set `VITE_COMPAT_MATRIX_URL` only to override the bundled snapshot with a
+compatible live backend. Without that variable, the page loads
+`src/public/compat-matrix.json`.
 :::

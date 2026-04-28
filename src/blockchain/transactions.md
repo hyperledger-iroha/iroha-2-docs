@@ -15,6 +15,11 @@ For privacy-preserving asset movement, see
 transactions use shielded asset notes, commitments, nullifiers, and
 zero-knowledge proofs instead of public account-to-account balance changes.
 
+For proof evidence over selected transparent execution effects, see
+[FastPQ](./fastpq.md). FastPQ consumes execution witnesses after normal
+transaction execution and builds deterministic proof batches for supported
+state transitions.
+
 Here is an example of creating a new transaction with the `Grant`
 instruction. In this transaction, Mouse is granting Alice the specified
 role (`role_id`). Check
