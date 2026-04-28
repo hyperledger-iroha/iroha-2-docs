@@ -54,16 +54,16 @@ to include snippets into documentation:
 **Input**
 
 ```md
-<<<@/snippets/lorem.rs
+<<<@/example_code/lorem.rs
 
-<<<@/snippets/lorem.rs#ipsum
+<<<@/example_code/lorem.rs#ipsum
 ```
 
 **Output**
 
-<<<@/snippets/lorem.rs
+<<<@/example_code/lorem.rs
 
-<<<@/snippets/lorem.rs#ipsum
+<<<@/example_code/lorem.rs#ipsum
 
 Note that we included only the `#ipsum` code region, not the entire file.
 This feature is essential when it comes to including code from real source
@@ -139,4 +139,6 @@ Let's add a code snippet from Iroha JavaScript SDK. For example, this one:
 
    **Output**
 
-   <<<@/snippets/js-sdk-1-client-install.ts
+   ```ts
+   // Example snippet content fetched into src/snippets/js-sdk-1-client-install.ts
+   ```

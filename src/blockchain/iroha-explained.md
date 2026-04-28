@@ -1,28 +1,42 @@
 # Iroha Explained
 
-To understand how Iroha operates, let's draw parallels between a blockchain
-and a computer. If the blockchain is the computer, then in this metaphor of
-ours the client binary (for example: [`iroha`](/get-started/operate-iroha-2-via-cli.md))
-is the keyboard, the blockchain is the hard drive, and the Iroha peer
-software is the processor. Like a processor, Iroha accepts portable
-instructions that modify what's written to the blockchain, allow certain
-users to use the network, and lock others out.
+Iroha 3 is the Nexus-oriented track of the Hyperledger Iroha workspace. It
+shares the same core components as Iroha 2 but adds the Nexus execution model
+for data spaces and multi-lane routing.
 
-Any operation that is run on-chain is written in terms of
-[Iroha Special Instructions (ISI)](/blockchain/instructions.md), and
-there is no other way of modifying the world state.
+## Core Building Blocks
 
-Each interaction with the blockchain is done via a _transaction_. A
-transaction is a collection of _instructions_, which are either glued
-together in sequence or compiled into what we affectionately call a
-[WASM](/blockchain/wasm.md) blob. You need these instructions to
-register an account, remove an account, add X amount of Y currency, and so
-on.
+- **`irohad`** runs peers
+- **Torii** is the client and operator gateway
+- **Sumeragi** handles consensus
+- **Norito** is the canonical binary format
+- **IVM** runs portable smart contracts and bytecode
+- **Kagami** prepares keys, genesis, profiles, and localnets
 
-To read the information encoded in the blocks of a blockchain (the current
-world state), you use [queries](/blockchain/queries.md). Queries are
-submitted like instructions, but they're not tracked and recorded in
-blocks, so they're much more lightweight. If you use queries as part of
-complicated logic (e.g. inside WASM), they have a non-negligible impact on
-the size of the blocks. Queries that are only used to get information leave
-no trace in the blockchain.
+## Execution Model
+
+Every change to world state still happens through transactions. Transactions
+carry instructions or IVM bytecode, and Torii is the main way clients submit
+them or observe their effects.
+
+What changes in Iroha 3 is the deployment shape:
+
+- Nexus-aware configurations can define multiple lanes
+- data spaces isolate workloads while staying part of the same ledger model
+- routing policy decides which lane and dataspace handle a class of work
+
+## What Operators Notice First
+
+Compared with the older single-lane documentation set, operators will notice
+these changes most quickly:
+
+- richer status and telemetry endpoints
+- explicit genesis `consensus_mode` and PoP-aware topology
+- SORA Nexus profiles under `defaults/nexus/`
+- more CLI coverage for consensus and operator diagnostics
+
+## Read Next
+
+- [Launch Iroha 3](/get-started/launch-iroha-2.md)
+- [Genesis reference](/reference/genesis.md)
+- [Torii endpoints](/reference/torii-endpoints.md)

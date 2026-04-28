@@ -16,18 +16,18 @@ function nav(): DefaultTheme.NavItem[] {
       activeMatch: '/get-started/',
     },
     {
-      text: 'Build on Iroha',
+      text: 'SDKs',
       link: '/guide/tutorials/',
       activeMatch: '/guide/',
     },
     {
-      text: 'Iroha Explained',
+      text: 'Architecture',
       link: '/blockchain/iroha-explained',
       activeMatch: '/blockchain/',
     },
     {
       text: 'Reference',
-      link: '/reference/torii-endpoints',
+      link: '/reference/',
       activeMatch: '^/reference/',
     },
     {
@@ -45,24 +45,20 @@ function sidebarStart(): DefaultTheme.SidebarItem[] {
       link: '/get-started/',
       items: [
         {
-          text: 'Install Iroha',
+          text: 'Install Iroha 3',
           link: '/get-started/install-iroha-2',
         },
         {
-          text: 'Launch Iroha',
+          text: 'Launch Iroha 3',
           link: '/get-started/launch-iroha-2',
         },
         {
-          text: 'Operate Iroha via CLI',
+          text: 'Operate Iroha 3 via CLI',
           link: '/get-started/operate-iroha-2-via-cli',
         },
         {
-          text: 'Iroha 2 vs. Iroha 1',
+          text: 'Iroha 3 vs. Iroha 2',
           link: '/get-started/iroha-2',
-        },
-        {
-          text: 'Join Iroha 2 Public Testnet',
-          link: 'https://wiki.sora.org/running-a-sora-testnet-node.html',
         },
       ],
     },
@@ -76,22 +72,25 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       link: '/guide/tutorials/',
       collapsed: false,
       items: [
-        /* a common lang-agnostic section will go here */
         {
           text: 'Rust',
           link: '/guide/tutorials/rust',
         },
         {
-          text: 'Python 3',
+          text: 'Python',
           link: '/guide/tutorials/python',
         },
         {
-          text: 'Kotlin/Java',
+          text: 'JavaScript / TypeScript',
+          link: '/guide/tutorials/javascript',
+        },
+        {
+          text: 'Android / Kotlin / Java',
           link: '/guide/tutorials/kotlin-java',
         },
         {
-          text: 'JavaScript',
-          link: '/guide/tutorials/javascript',
+          text: 'Swift / iOS',
+          link: '/guide/tutorials/swift',
         },
         {
           text: 'Compatibility Matrix',
@@ -100,199 +99,35 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       ],
     },
     {
-      text: 'Configuration and Management',
+      text: 'Operator Quick Links',
       collapsed: false,
       items: [
         {
-          text: 'Configure Iroha',
-          collapsed: true,
-          items: [
-            {
-              text: 'Client Configuration',
-              link: '/guide/configure/client-configuration',
-            },
-            {
-              text: 'Genesis Block',
-              link: '/guide/configure/genesis',
-            },
-            {
-              text: 'Metadata and Store assets',
-              link: '/guide/configure/metadata-and-store-assets',
-            },
-          ],
+          text: 'Genesis',
+          link: '/reference/genesis.md',
         },
         {
-          text: 'Keys for Network Deployment',
-          link: '/guide/configure/keys-for-network-deployment.md',
+          text: 'Torii Endpoints',
+          link: '/reference/torii-endpoints.md',
         },
         {
-          text: 'Peer Management',
-          link: '/guide/configure/peer-management',
-        },
-        {
-          text: 'Public and Private Blockchains',
-          link: '/guide/configure/modes',
+          text: 'Binaries',
+          link: '/reference/binaries.md',
         },
       ],
     },
-    {
-      text: 'Security',
-      link: '/guide/security/',
-      collapsed: false,
-      items: [
-        {
-          text: 'Security Principles',
-          link: '/guide/security/security-principles.md',
-        },
-        {
-          text: 'Operational Security',
-          link: '/guide/security/operational-security.md',
-        },
-        {
-          text: 'Password Security',
-          link: '/guide/security/password-security.md',
-        },
-        {
-          text: 'Public Key Cryptography',
-          collapsed: true,
-          link: '/guide/security/public-key-cryptography.md',
-          items: [
-            {
-              text: 'Generating Cryptographic Keys',
-              link: '/guide/security/generating-cryptographic-keys.md',
-            },
-            {
-              text: 'Storing Cryptographic Keys',
-              link: '/guide/security/storing-cryptographic-keys.md',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      text: 'Advanced Use Cases',
-      collapsed: false,
-      items: [
-        {
-          text: 'Iroha On Bare Metal',
-          link: '/guide/advanced/running-iroha-on-bare-metal',
-        },
-        {
-          text: 'Hot Reload Iroha',
-          link: '/guide/advanced/hot-reload',
-        },
-        {
-          text: 'Monitor Iroha Performance',
-          link: '/guide/advanced/metrics',
-        },
-      ],
-    },
-    /*    {
-      text: 'Reports',
-      collapsed: true,
-      items: [
-        {
-          text: 'CSD/RTGS linkages via on-chain scripting',
-          link: '/guide/reports/csd-rtgs',
-        },
-      ],
-    },
-*/
   ]
 }
 
 function sidebarChain(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: 'Iroha Explained',
+      text: 'Architecture',
       link: '/blockchain/iroha-explained',
       items: [
         {
-          text: 'Overview',
-          items: [
-            {
-              text: 'Transactions',
-              link: '/blockchain/transactions',
-            },
-            {
-              text: 'Consensus',
-              link: '/blockchain/consensus',
-            },
-            {
-              text: 'Data Model',
-              link: '/blockchain/data-model',
-            },
-          ],
-        },
-        {
-          text: 'Entities',
-          items: [
-            {
-              text: 'Assets',
-              link: '/blockchain/assets',
-            },
-            /*
-            {
-              text: 'Accounts',
-              link: '/blockchain/accounts',
-            },
-            {
-              text: 'Domains',
-              link: '/blockchain/domains',
-            },
-            */
-            {
-              text: 'Metadata',
-              link: '/blockchain/metadata',
-            },
-            {
-              text: 'Events',
-              link: '/blockchain/events',
-            },
-            {
-              text: 'Filters',
-              link: '/blockchain/filters',
-            },
-            {
-              text: 'Triggers',
-              link: '/blockchain/triggers',
-              items: [
-                {
-                  text: 'Event Triggers by Example',
-                  link: '/blockchain/trigger-examples',
-                },
-              ],
-            },
-            {
-              text: 'Queries',
-              link: '/blockchain/queries',
-            },
-            {
-              text: 'Permissions',
-              link: '/blockchain/permissions',
-            },
-            {
-              text: 'World',
-              link: '/blockchain/world',
-            },
-          ],
-        },
-        {
-          text: 'Operations',
-          items: [
-            {
-              text: 'Instructions',
-              link: '/blockchain/instructions',
-            },
-            {
-              text: 'Expressions',
-              link: '/blockchain/expressions',
-            },
-            {
-              text: 'Web Assembly',
-              link: '/blockchain/wasm',
-            },
-          ],
+          text: 'Iroha 3 Overview',
+          link: '/blockchain/iroha-explained',
         },
       ],
     },
@@ -305,55 +140,23 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
       text: 'Reference',
       items: [
         {
-          text: 'Glossary',
-          link: '/reference/glossary.md',
-        },
-        {
-          text: 'Naming Conventions',
-          link: '/reference/naming.md',
-        },
-        {
-          text: 'Data Model Schema',
-          link: '/reference/data-model-schema',
-        },
-        {
-          text: 'Instructions',
-          link: '/reference/instructions',
-        },
-        {
-          text: 'Queries',
-          link: '/reference/queries.md',
-        },
-        {
-          text: 'Permissions',
-          link: '/reference/permissions.md',
+          text: 'Overview',
+          link: '/reference/',
         },
         {
           text: 'Binaries',
           link: '/reference/binaries.md',
         },
         {
-          text: 'irohad CLI',
-          link: '/reference/irohad-cli.md',
-        },
-        {
-          text: 'Torii HTTP API',
+          text: 'Torii API',
           link: '/reference/torii-endpoints.md',
         },
         {
-          text: 'Foreign Function Interfaces',
-          link: '/reference/ffi',
+          text: 'Compatibility Matrix',
+          link: '/reference/compatibility-matrix.md',
         },
         {
-          text: 'Peer Configuration',
-          link: '/reference/peer-config/index.md',
-          items: [
-            { text: 'Parameters', link: '/reference/peer-config/params.md' },
-            { text: 'Migration from pre-rc.20', link: '/reference/peer-config/migration.md' },
-          ],
-        },
-        {
-          text: 'Genesis Block',
+          text: 'Genesis',
           link: '/reference/genesis.md',
         },
       ],
@@ -401,9 +204,9 @@ export default defineConfig({
   base: BASE,
   srcDir: 'src',
   srcExclude: ['snippets/*.md'],
-  title: "Hyperledger Iroha 2 Docs | World's Most Advanced Blockchain Framework",
+  title: 'Hyperledger Iroha 3 Docs',
   description:
-    'Documentation for Hyperledger Iroha 2 offering step-by-step guides for SDKs and outlining the main differences between Iroha versions.',
+    'Documentation for Hyperledger Iroha 3 covering quickstart flows, SDK entry points, Torii, genesis, and operator tooling.',
   lang: 'en-US',
   vite: {
     plugins: [ViteUnoCSS('../uno.config.ts'), ViteSvgLoader()],
@@ -447,7 +250,7 @@ export default defineConfig({
 
   themeConfig: {
     logo: '/icon.svg',
-    siteTitle: 'Iroha 2',
+    siteTitle: 'Iroha 3',
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/hyperledger-iroha/iroha-2-docs' },

@@ -2,12 +2,12 @@
 layout: home
 
 hero:
-  name: Hyperledger Iroha 2
+  name: Hyperledger Iroha 3
   text: Documentation
-  tagline: World's Most Advanced Blockchain Framework
+  tagline: Deterministic blockchain platform for SORA Nexus, SDKs, and operator workflows
   image:
     src: /icon.svg
-    alt: Hyperledger Iroha 2 logo
+    alt: Hyperledger Iroha 3 logo
   #actions:
   #- theme: alt
   #  text: View on GitHub
@@ -18,30 +18,30 @@ features:
      dark: /start.svg
      light: /start-light.svg
     title: Get Started
-    details: Install and build Iroha, follow a step-by-step tutorial to start working with Iroha
+    details: Build the current workspace, launch a local network, and start using the Iroha 3 CLI
     link: /get-started/
   - icon:
      dark: /build.svg
      light: /build-light.svg
-    title: Build on Iroha
-    details: Discover how to develop a product on Iroha using popular programming languages
+    title: SDKs
+    details: Find the current Rust, Python, JavaScript, Android, and Swift entry points
     link: /guide/tutorials/
   - icon:
      dark: /explained.svg
      light: /explained-light.svg
-    title: Iroha Explained
-    details: Learn about Iroha functionality in great detail and understand the underlying principles
+    title: Architecture
+    details: Understand Torii, Sumeragi, Norito, IVM, and the Nexus data-space model
     link: /blockchain/iroha-explained
   - icon:
      dark: /reference.svg
      light: /reference-light.svg
     title: Reference
-    details: Consult reference documentation for extensive information about available functionality
-    link: /reference/torii-endpoints
+    details: Consult the current binary, genesis, Torii, and compatibility reference pages
+    link: /reference/
   # - title: Cookbook # (TBA)
 
 footer: true
 ---
 
 <hr style="margin-top: 3rem;">
-<p style="font-weight: 200; font-size: 0.875rem;">The Hyperledger Iroha project is part of the <a href="https://www.lfdecentralizedtrust.org/projects/tag/ledger-technology" target="_blank">LF Decentralized Trust</a> | Learn more about the features and use cases at <a href="https://iroha.tech/" target="_blank">iroha.tech</a></p>
+<p style="font-weight: 200; font-size: 0.875rem;">Hyperledger Iroha is part of <a href="https://www.lfdecentralizedtrust.org/projects/tag/ledger-technology" target="_blank">LF Decentralized Trust</a>. Learn more at <a href="https://iroha.tech/" target="_blank">iroha.tech</a>.</p>

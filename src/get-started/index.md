@@ -1,50 +1,51 @@
-# Iroha 2
+# Iroha 3
 
-Iroha 2 is a fully-featured [blockchain ledger](/reference/glossary.md#blockchain-ledgers). With Iroha 2 you can:
-- Create and manage custom [fungible assets](/reference/glossary.md#fungible-assets), such as currencies, gold, etc.
-- Create and manage [non-fungible](/reference/glossary.md#non-fungible-assets) assets, such as digital art, intellectual property, etc.
-- Manage user accounts with a domain hierarchy and multi-signature transactions.
-- Use efficient portable smart contracts implemented with [WebAssembly](/blockchain/wasm.md) and [Iroha Special Instructions](/blockchain/instructions.md).
-- Use both permissioned and permissionless blockchain deployments.
+Iroha 3 is the Nexus-oriented deployment track shipped from the main
+Hyperledger Iroha workspace. It keeps the same core building blocks as Iroha 2
+while adding the Nexus model for data spaces, multi-lane execution, and
+SORA-specific deployment profiles.
 
-## Get Started
+At a high level, Iroha 3 combines:
 
-If you are just starting with Iroha 2, begin with the following step-by-step tutorials:
-1. [Install Iroha 2](/get-started/install-iroha-2.md): install prerequisites and clone the GitHub repository.
-2. [Launch Iroha 2](/get-started/launch-iroha-2.md): install prerequisites and establish an instance of Iroha network.
-3. [Operate Iroha 2 via CLI](/get-started/operate-iroha-2-via-cli.md): learn how to [setup](operate-iroha-2-via-cli.md#_1-set-up-iroha-client-cli) and [configure](operate-iroha-2-via-cli.md#_2-configure-iroha-client-cli) Iroha Client, and perform necessary basic operations on the network (e.g., [registering domains](operate-iroha-2-via-cli.md#_3-register-a-domain) and [accounts](operate-iroha-2-via-cli.md#_4-register-an-account), [registering and minting assets](operate-iroha-2-via-cli.md#_6-register-and-mint-assets), etc.).
+- deterministic execution and storage
+- the Iroha Virtual Machine (IVM) for portable smart contracts
+- Norito as the canonical wire format
+- Torii for client, operator, and app-facing APIs
+- Sumeragi consensus with operator telemetry and status endpoints
 
-If you would like to operate Iroha 2 using a different programming language, Iroha provides SDKs and language-specific tutorials for the following languages:
-- [Python](/guide/tutorials/python.md)
+## Quickstart
+
+If you are starting from scratch, follow these pages in order:
+
+1. [Install Iroha 3](/get-started/install-iroha-2.md)
+2. [Launch Iroha 3](/get-started/launch-iroha-2.md)
+3. [Operate Iroha 3 via CLI](/get-started/operate-iroha-2-via-cli.md)
+
+If you are migrating an existing deployment or mental model, read
+[Iroha 3 vs. Iroha 2](/get-started/iroha-2.md) first.
+
+## SDKs
+
+The current SDK entry points documented in this site are:
+
 - [Rust](/guide/tutorials/rust.md)
-- [Kotlin/Java](/guide/tutorials/kotlin-java.md)
-- [JavaScript (TypeScript)](/guide/tutorials/javascript.md)
+- [Python](/guide/tutorials/python.md)
+- [JavaScript / TypeScript](/guide/tutorials/javascript.md)
+- [Android, Kotlin, and Java](/guide/tutorials/kotlin-java.md)
+- [Swift and iOS](/guide/tutorials/swift.md)
 
-::: tip
+## Operator References
 
-The current version of Iroha covered in this documentation is Iroha 2. If you have previously worked with Iroha 1, you may want to start with the [Iroha 2 vs. Iroha 1](/get-started/iroha-2.md) comparison that will help you understand the improvements and new features of Iroha 2.
+The pages you will use most often while running a network are:
 
-:::
-
-## Explore In-Depth
-
-Once you have learned the basics, we suggest exploring the following sections:
-- [Security](/guide/security/index.md): find out about [core security principles](/guide/security/security-principles.md) and [operational security measures](/guide/security/operational-security.md) that are necessary to ensure the safety and validity of data and assets. This section also covers [cryptographic keys](/guide/security/public-key-cryptography.md), [how to generate them](/guide/security/generating-cryptographic-keys.md), and [how to store them securely](/guide/security/storing-cryptographic-keys.md).
-- Iroha Explained: learn [how Iroha works](../blockchain/iroha-explained.md) and find information on key Iroha concepts, including entities, operations, and features, such as [Iroha Special Instructions](/blockchain/instructions.md), [triggers](/blockchain/triggers.md), [queries](/blockchain/queries.md).
-- Configuration and Management: discover ways to configure the Iroha network , including [genesis blocks and accounts](/guide/configure/genesis.md), [client configuration](/guide/configure/client-configuration.md), and [public and private modes](/guide/configure/modes.md).
-
-<!-- TODO: add head topics for all sections, then add the links here; review the order (?) -->
+- [Working with Iroha binaries](/reference/binaries.md)
+- [Genesis reference](/reference/genesis.md)
+- [Torii endpoints](/reference/torii-endpoints.md)
+- [Compatibility matrix](/reference/compatibility-matrix.md)
 
 ## Learn More
 
-For more information on Iroha, see the following:
-- [Iroha 2 Whitepaper](https://github.com/hyperledger-iroha/iroha/tree/main/docs/source/iroha_2_whitepaper.md)
-- [Hyperledger Foundation Wiki: Hyperledger Iroha > Iroha 2](https://wiki.hyperledger.org/display/iroha/Iroha+2)
-
-For more information on Iroha 1, see the official [Hyperledger Iroha documentation](https://iroha.readthedocs.io/en/develop/index.html).
-
-::: tip
-
-If you want to contribute to Hyperledger Iroha, see the [Contributing Guide](https://github.com/hyperledger-iroha/iroha/blob/main/CONTRIBUTING.md).
-
-:::
+- [Main Iroha repository](https://github.com/hyperledger-iroha/iroha)
+- [Workspace docs index](https://github.com/hyperledger-iroha/iroha/blob/main/docs/README.md)
+- [Iroha 3 whitepaper](https://github.com/hyperledger-iroha/iroha/blob/main/docs/source/iroha_3_whitepaper.md)
+- [Iroha 2 whitepaper](https://github.com/hyperledger-iroha/iroha/blob/main/docs/source/iroha_2_whitepaper.md)

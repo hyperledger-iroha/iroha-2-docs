@@ -1,44 +1,30 @@
-# Introduction
+# SDK Tutorials
 
-Welcome to the Hyperledger Iroha 2 tutorial. This document is designed to
-help you get started with Iroha 2, regardless of your knowledge of
-Hyperledger technology, coding experience or familiarity with blockchains.
+These pages summarize the current Iroha 3 client entry points shipped from the
+main workspace. The SDK surface is evolving quickly, so this section focuses on
+the canonical package names, installation paths, and minimal starting points
+from the upstream repository.
 
-## Preamble
+## Recommended Order
 
-This tutorial is suitable for both experienced developers, prospective
-users, and people casually curious about blockchain technology. The level
-of detail is sufficient so that you wouldn't need any supplementary guide.
-However, should you want to learn more, we have more detailed documentation
-in the works.
-
-In this guide, we shall
-
-- walk you through starting an Iroha network, either with docker
-  (recommended) or using one of the provided scripts;
-- introduce you to the client libraries;
-- take a small detour into the basic concepts of Iroha special
-  instructions, and how they interact with the world state.
-
-## Navigation
-
-We invite you to follow the tutorial in this order:
-
-0. If you are already familiar with Hyperledger Iroha, read about
-   [the differences](/get-started/iroha-2.md) between the two versions of Iroha.
-1. [Install Iroha 2](/get-started/install-iroha-2.md).
-2. Follow one of the language-specific guides to learn how to set up and
-   configure Iroha 2, register a domain and an account, register and mint
-   assets, and visualize outputs:
-   - [Python](/guide/tutorials/python.md)
+1. [Install Iroha 3](/get-started/install-iroha-2.md)
+2. [Launch Iroha 3](/get-started/launch-iroha-2.md)
+3. Pick an SDK:
    - [Rust](/guide/tutorials/rust.md)
-   - [Kotlin/Java](/guide/tutorials/kotlin-java.md)
-   - [Javascript (TypeScript)](/guide/tutorials/javascript.md)
+   - [Python](/guide/tutorials/python.md)
+   - [JavaScript / TypeScript](/guide/tutorials/javascript.md)
+   - [Android, Kotlin, and Java](/guide/tutorials/kotlin-java.md)
+   - [Swift and iOS](/guide/tutorials/swift.md)
 
-## Tutorial Updates
+## Source of Truth
 
-The current iteration of the Iroha 2 tutorial is a constant work in
-progress. We are updating the tutorial with each release to reflect the
-state of Iroha and the newly added features. While we do our best to keep
-this tutorial up to date, it can go out of sync by a few days or maybe a
-week.
+All SDK pages here are derived from the current upstream workspace:
+
+- `crates/iroha`
+- `python/iroha_python`
+- `javascript/iroha_js`
+- `java/iroha_android`
+- `IrohaSwift`
+
+When in doubt, prefer the README and package metadata in those directories over
+older Iroha 2-era examples.

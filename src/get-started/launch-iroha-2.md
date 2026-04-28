@@ -1,52 +1,64 @@
-# Launch Iroha 2
+# Launch Iroha 3
 
-This tutorial explains how to launch an Iroha 2 network.
+This page walks through the current local-network flow for Iroha 3 using the
+default workspace assets from the upstream repository.
 
-## 1. Prerequisites
+## 1. Local Multi-Peer Network with Docker
 
-To launch an instance of the Iroha 2 network, install the following first:
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+The simplest way to start a network is the provided four-peer compose file:
 
-## 2. Launch Iroha Network
+```bash
+docker compose -f defaults/docker-compose.yml up
+```
 
-1. In your terminal, navigate to the root directory of your local [`iroha`](https://github.com/hyperledger-iroha/iroha) repository:
+The default stack exposes:
 
-   ```bash
-   $ cd ~/Git/iroha
-   ```
+- peer P2P ports `1337` to `1340`
+- Torii HTTP ports `8080` to `8083`
+- a ready-made client config at `defaults/client.toml`
 
-2. Run the `docker compose` command with the `docker-compose.yml` network configuration file specified to deploy a network of four containerized peers: <!-- TODO: consider explaining what network configuration file are, where to find them and how to customize them -->
+The compose file signs the bundled genesis manifest with `kagami` before
+starting the first peer, so you do not need to prepare a signed genesis block
+manually for the default smoke test.
 
-   ```bash
-   $ docker compose -f defaults/docker-compose.yml up
-   ```
+## 2. Verify That the Network Is Up
 
-   Depending on your setup, this command will either pull an image from [Docker Hub](https://hub.docker.com/r/hyperledger/iroha2/tags) or build the container locally.
-   
-   Once the process completes, you will see an output similar to the following:
+Check the status endpoint on the first peer:
 
-   <<< @/get-started/launch-iroha.docker-compose-output.ansi
+```bash
+curl http://127.0.0.1:8080/status
+```
 
-After deploying the network, you can interact with it using the [Iroha Client CLI](./operate-iroha-2-via-cli.md).
+The default health checks also use:
 
-::: tip
+```bash
+curl http://127.0.0.1:8080/status/blocks
+```
 
-You can monitor blockchain events in the terminal where the network runs.
+You can immediately point the CLI at the bundled client config:
 
-:::
+```bash
+cargo run --bin iroha -- --config ./defaults/client.toml ledger domain list all
+```
 
-### Docker Options
+## 3. Nexus Profile
 
-The following options are also available for local compilation:
+The repository also ships a SORA Nexus-oriented config profile under
+`defaults/nexus/`.
 
-- To test Iroha code quickly, use the `docker-compose.single.yml` network configuration file, which starts a container with a single peer.
-- To test Iroha code in normal conditions, use the `docker-compose.local.yml` network configuration file, which starts four connected containers with peers.
+To run a native peer with the Nexus profile:
 
-::: tip Note
+```bash
+./target/release/irohad --sora --config ./defaults/nexus/config.toml
+```
 
-There is ongoing work to make our configurations for Docker even more customizable with the help of [Swarm](https://github.com/hyperledger-iroha/iroha/tree/main/crates/iroha_swarm).
+Use `defaults/nexus/client.toml` for CLI access to that profile.
 
-<!-- Check: a reference about future releases or work in progress -->
+## 4. Stop the Local Network
 
-:::
+```bash
+docker compose -f defaults/docker-compose.yml down
+```
+
+After the network is running, continue with
+[Operate Iroha 3 via CLI](/get-started/operate-iroha-2-via-cli.md).
