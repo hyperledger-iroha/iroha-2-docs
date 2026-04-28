@@ -13,3 +13,4 @@ dist
 
 # Local IDE settings.
 .idea
+.vercel
