@@ -137,7 +137,7 @@ families are not all enabled on every network profile.
 | `/v1/connect/*`, `/v1/vpn/*` | Iroha Connect sessions, WebSocket transport, VPN sessions, profiles, and receipts |
 | `/v1/app-api/*`, `/v1/api/*`, `/v1/content/*` | App API bindings and bundle/CID-backed content routing |
 | `/v1/operator/*`, `/v1/mcp` | Operator authentication and native MCP JSON-RPC bridge |
-| `/v1/offline/*`, `/v1/repo/*`, `/v1/space-directory/*`, `/v1/ram-lfe/*` | Offline readiness, repository agreements, dataspace manifests, and RAM LFE helpers |
+| `/v1/offline/*`, `/v1/repo/*`, `/v1/space-directory/*`, `/v1/ram-lfe/*` | Offline readiness, repository agreements, dataspace manifests, and [RAM-LFE helpers](/blockchain/ram-lfe.md#torii-routes) |
 | `/v1/kaigi/*`, `/v1/webhooks/*`, `/v1/notify/*`, `/v1/telemetry/*` | Collaboration, webhook, push notification, and live telemetry integrations |
 
 ## ISO 20022 Bridge
