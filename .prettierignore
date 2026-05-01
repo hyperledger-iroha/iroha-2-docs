@@ -1,0 +1,5 @@
+.vitepress/dist
+.vitepress/cache
+.vercel
+/src/snippets
+/src/example_code
