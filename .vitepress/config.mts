@@ -325,6 +325,10 @@ function sidebarChain(): DefaultTheme.SidebarItem[] {
           link: '/blockchain/anonymous-transactions',
         },
         {
+          text: 'RAM-LFE',
+          link: '/blockchain/ram-lfe',
+        },
+        {
           text: 'Instructions',
           link: '/blockchain/instructions',
         },

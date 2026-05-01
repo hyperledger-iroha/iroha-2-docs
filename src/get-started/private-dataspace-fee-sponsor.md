@@ -194,7 +194,8 @@ Use phone numbers and email addresses as private identifier claims, not public
 aliases. The FHE-backed flow keeps raw identifiers out of account aliases,
 transaction metadata, and world state:
 
-1. the operator registers a RAM-LFE/FHE program policy for phone and email
+1. the operator registers a
+   [RAM-LFE/FHE program policy](/blockchain/ram-lfe.md) for phone and email
 2. the operator registers active identifier policies such as `phone#team` and
    `email#team`
 3. the wallet normalizes the phone or email locally
