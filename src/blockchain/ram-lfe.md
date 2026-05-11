@@ -1,8 +1,9 @@
 # RAM-LFE
 
-RAM-LFE is Iroha's generic hidden-function layer for programs whose public
-policy is on-chain but whose evaluator logic, secret, or raw input should not
-be written to world state. It is used by SORA Nexus identifier flows, such as
+RAM-LFE stands for Random-Access Machine Laconic Function Evaluation. In
+Iroha, it is the generic hidden-function layer for programs whose public policy
+is on-chain but whose evaluator logic, secret, or raw input should not be
+written to world state. It is used by SORA Nexus identifier flows, such as
 private phone or email lookup, and can also be exposed as a generic Torii
 program-execution helper when a node profile enables the app-facing routes.
 
