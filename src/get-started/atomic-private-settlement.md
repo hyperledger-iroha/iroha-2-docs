@@ -39,6 +39,17 @@ public. A dataspace that hosts only one CBDC may also make the asset
 inferable from the route even though no literal asset identifier is
 published.
 
+Each fixed encrypted output publishes a `recipient` identifier derived from
+its authorized one-time output view key. The three identifiers in one leg must
+be distinct; the complete Prepare barrier and receipt extend that check across
+all legs. Before voting Prepare, each committee validator also rejects an
+identifier already present in finalized WSV. Global finalization enforces the
+same rule across finalized bundle history with a deterministic recipient index.
+The index is excluded from snapshot payloads and rebuilt from canonical
+encrypted outputs during restore, so persisted duplicates fail closed. This is
+a one-time identifier and replay boundary, not a guarantee that a malicious
+sender or network observer cannot correlate traffic before publication.
+
 ## Deployment requirements
 
 Before activation, operators need all of the following:
@@ -54,7 +65,8 @@ Before activation, operators need all of the following:
    distinct auditor signing and hybrid-encryption keys, a key epoch, height
    validity, and an approval threshold
 6. enough private sidecar storage for the configured retention period
-7. a neutral sponsor account able to submit the final public carrier
+7. a neutral sponsor account able to submit the public Prepare-lock and
+   finalization/abort carriers, and to fund their ordinary transaction fees
 
 An auditor may also operate a validator, but must use separate consensus,
 auditor-signing, and auditor-encryption keys. Keep retired decryption keys
@@ -67,6 +79,16 @@ exact ordered lane/dataspace roster and active lane incarnation from consensus
 state, requires the resolved height to match, and verifies the four BLS keys
 and proofs of possession. Upload, Prepare, and final receipt admission all use
 that same historical authority.
+
+The Prepare barrier, final commit bundle, and receipt share one compact
+two-level authority catalog. Its `rosters` contain route-free validator
+identities and aligned BLS proofs of possession, deduplicated in canonical
+first-use order. `leg_roster_indices[i]` selects the roster for manifest leg
+`i`. A phase certificate's `authority_catalog_index` remains the logical
+manifest-leg ordinal, not the roster index. Before authority-digest or QC
+verification, validators combine that manifest leg's exact route and active
+lane incarnation with the selected roster to reconstruct the route-bound
+`PrivateSettlementCommitteeAuthorityV1`.
 
 ## Configure admission
 
@@ -143,28 +165,44 @@ For each canonical leg, the coordinator then performs this sequence:
 
 1. Upload the provisional encrypted material to all four validators and
    obtain a canonical exact 3-of-4 availability certificate.
-2. Have an authorized auditor fetch and decrypt its capsule, recompute the
-   public bindings, apply local policy, and submit an approval.
+2. Have an authorized auditor fetch its capsule with the authenticated `POST`
+   request described below, decrypt it, recompute the public bindings, apply
+   local policy, and submit an approval. Capsule access after a policy rotation
+   is retention-only: a current successor may authorize an eligible historical
+   read, but it cannot add an approval to a leg prepared under the old policy.
 3. Request Prepare votes from the four validators. Each validator
    independently verifies and durably stages the delta before voting.
    Persist the canonical 3-of-4 Prepare certificate on every staged
    responder.
 4. After every leg has a Prepare certificate, build the immutable complete
-   Prepare barrier. Request and persist canonical 3-of-4 Commit
-   certificates. If the coordinator restarts, query participant nodes for
-   their locally durable Prepare and Commit certificates, select a canonical
-   quorum-equivalent certificate, and re-fan it out before continuing; never
-   reconstruct a certificate from an unauthenticated local cache.
-5. Have the manifest sponsor sign and submit exactly one global carrier.
-   The carrier contains one `FinalizeAtomicPrivateSettlementV1` instruction
-   and the exact complete certified bundle. Coordinator and WSV preflight
+   Prepare barrier.
+5. Have the manifest sponsor sign and submit one
+   `RegisterAtomicPrivateSettlementPrepareV1` control carrier. Wait until the
+   exact transaction reaches global, state-resolved `Applied` finality. A
+   later block height or cache-only status is not sufficient. Global consensus
+   then holds one bundle row plus opaque pool-head, nullifier, output, and
+   one-time-recipient reservations; no confidential financial transition has
+   been applied. Registration must finalize strictly before manifest expiry;
+   admission reserves at least one successor block for the financial carrier.
+6. Only after that registration is final, request and persist canonical
+   3-of-4 Commit certificates. If the coordinator restarts, query participant
+   nodes for their locally durable Prepare and Commit certificates, select a
+   canonical quorum-equivalent certificate, and re-fan it out before
+   continuing; never reconstruct a certificate from an unauthenticated local
+   cache. Every Commit voter independently requires the exact replicated WSV
+   reservation set. The lock binds the certified Prepare bodies and authority
+   indices, so another independently valid 3-of-4 signer subset is accepted
+   without replacing the aggregate bytes originally stored in WSV.
+7. Have the manifest sponsor sign and submit the finalization carrier. It
+   contains one `FinalizeAtomicPrivateSettlementV1` instruction and the exact
+   complete certified bundle. Coordinator and WSV preflight
    measure the complete boxed finalization instruction, including registered
    instruction framing. Torii and the core one-shot carrier binding enforce
    `max_carrier_bytes` over the exact canonical sponsor-signed transaction,
    including authority, metadata, fee intent, and signature. Torii rejects a
    carrier before its authority context, at or after the last ingress height
    that could reach finality by expiry, or beyond the governed expiry span.
-6. Query the public bundle status and receipt until global finality. Treat
+8. Query the public bundle status and receipt until global finality. Treat
    local sidecar state as provisional until it reconciles that immutable
    global terminal record.
 
@@ -176,7 +214,18 @@ The Rust client exposes this flow through methods including
 `recover_or_prepare_private_settlement_bundle_v1` and
 `recover_or_commit_private_settlement_bundle_v1`. Committee and auditor calls
 require explicit role credentials; they do not reuse the ordinary account
-signer.
+signer. Between Prepare and Commit, use
+`register_private_settlement_prepare_and_wait_v1`; it submits the exact
+registration transaction and accepts only state-resolved global `Applied`
+finality.
+
+Both the Prepare-lock registration and finalization are ordinary fee-admitted
+transactions. V1 binds the same manifest fee intent to each carrier, so a
+fee-enabled deployment charges it independently for each accepted transaction.
+The private reimbursement commitment should cover the deployment's agreed
+two-carrier fee envelope. Reimbursement is created only by successful global
+finalization; if the bundle is aborted or expires after registration, the
+sponsor bears any already charged registration or abort fee.
 
 ## Rotate an auditor policy safely
 
@@ -191,12 +240,19 @@ that same route/pool at the rotation's activation height; the instruction
 rejects that boundary.
 
 The public pool projection retains the complete superseded policy-revision
-lineage. A receipt finalized before rotation therefore remains valid after
-restart, and replaying that exact receipt remains idempotent. The lineage does
-not authorize unfinished work: any old-policy bundle that crosses the
-activation boundary fails closed before global state changes. Retain every old
-decryption key needed to open stored capsules, or complete a governed and
-tested capsule rewrap before destroying it.
+lineage. A receipt finalized before rotation therefore remains valid as
+historical evidence after restart, while replaying that exact receipt is
+rejected deterministically without state mutation. The lineage does not
+authorize unfinished work: any old-policy bundle that crosses the activation
+boundary fails closed before global state changes. A successor
+policy can authorize a retained historical capsule read only when it belongs to
+the same policy lineage with a later governance revision and key epoch, and the
+authenticated current signing key maps to the same stable auditor identity in
+the historical policy and wrapped-DEK roster. The capsule remains encrypted to
+the historical auditor key: retain that exact historical decryption key to open
+it, or complete a governed and tested capsule rewrap before destroying the key.
+This retention access does not let the rotated/current policy add an approval
+under the old prepared policy.
 
 ## Torii route family
 
@@ -214,9 +270,9 @@ behavior.
 | Recover phase QCs  | `GET /v1/nexus/private-settlements/legs/{payload_digest}/phase-certificates` | manifest sponsor            |
 | Leg status         | `GET /v1/nexus/private-settlements/legs/{payload_digest}/status`           | canonical account signature |
 | Committee proof    | `GET /v1/nexus/private-settlements/legs/{payload_digest}/committee-proof`  | exact roster validator      |
-| Audit capsule      | `GET /v1/nexus/private-settlements/legs/{payload_digest}/audit-capsule`    | governed auditor            |
+| Audit capsule      | `POST /v1/nexus/private-settlements/legs/{payload_digest}/audit-capsule`   | governed auditor            |
 | Auditor approval   | `POST /v1/nexus/private-settlements/legs/{payload_digest}/audit-approvals` | governed auditor            |
-| Submit final/abort | `POST /v1/nexus/private-settlements/bundles`                               | manifest sponsor            |
+| Submit registration/final/abort | `POST /v1/nexus/private-settlements/bundles`                  | manifest sponsor            |
 | Bundle status      | `GET /v1/nexus/private-settlements/bundles/{bundle_id}`                    | public                      |
 | Receipt or abort   | `GET /v1/nexus/private-settlements/bundles/{bundle_id}/receipt`            | public                      |
 
@@ -225,8 +281,23 @@ In particular, ordinary leg status does not reveal approval counts or the
 governed auditor threshold. Restricted reads intentionally collapse missing,
 unauthorized, and retention-expired material into the same unavailable
 response class.
-The submit route accepts exactly one direct sponsor-signed finalization or
-abort instruction. Its `202` response contains the bundle ID, observed
+
+The audit-capsule operation is a read-only, identity-bound `POST`, not a
+`GET`. Its signed Norito JSON request body is exactly
+`{"audit_policy": <PrivateSettlementAuditPolicyV1>}`: the complete current
+governed policy is evidence for authorization, not client-supplied authority.
+The node binds the capsule's historical `audit_policy` to the governance
+revision effective at the manifest's `authority_context_height`, binds the
+requested current or successor policy to the revision effective at the
+node-authoritative read height, and maps the authenticated signing key through
+the stable auditor identity shared by both policies. The authenticated response
+echoes the historical `audit_policy` and the exact policy used for access as
+`access_audit_policy`, and the responder attestation binds both. Clients must
+require `access_audit_policy` to equal the policy sent in the request.
+
+The submit route accepts exactly one direct sponsor-signed Prepare-lock
+registration, finalization, or abort instruction. Its `202` response contains
+the bundle ID, observed
 admission height, and carrier hash only; it does not claim a queued abort is
 already final. The SDKs require both identifiers to be canonical checksummed
 Norito `Hash` JSON literals and the height to be an exact unsigned 64-bit
@@ -246,18 +317,22 @@ JSON field names from resurfacing through cause-aware logs.
 Missing or stale auditor approvals, fewer than three validator votes, wrong
 roots or epochs, duplicate nullifiers, substituted proofs or capsules,
 noncanonical leg order, expired bundles, and mismatched reimbursement terms
-all fail before global mutation. Commit certificates never mutate private
-state.
+all fail before confidential financial mutation. Prepare registration may
+install only its exact opaque replicated reservation set. Commit certificates
+never mutate WSV, and every root, nullifier, commitment, ciphertext, receipt,
+and reservation release is applied together by the finalization transaction or
+not at all.
 
 Validators fsync sidecars, staged deltas, and phase certificates before
-acknowledging them. On restart they rebuild reservations from canonical
-durable records, then reconcile immutable global receipts, abort markers,
-or expiry. The supervised reconciler also runs terminal retention pruning at
-the synchronously observed authoritative height even when there is no terminal
-candidate to reconcile, and it fails closed on a pruning error. Only an
-authoritative global terminal record releases staged locks. Replaying an
-identical finalized receipt is idempotent; a conflicting replay fails
-deterministically.
+acknowledging them. The globally replicated Prepare reservation survives
+restart and is removed atomically by finalization or abort, or deterministically
+at block start after expiry. On restart, participant committees also rebuild
+their local reservations from canonical durable records, then reconcile
+immutable global receipts, abort markers, or expiry. The supervised reconciler
+runs terminal retention pruning at the synchronously observed authoritative
+height even when there is no terminal candidate to reconcile, and it fails
+closed on a pruning error. Exact finalized-receipt replay and conflicting
+replay are both rejected deterministically without financial state mutation.
 
 Reservation identity includes the complete route. Pool heads use
 `(route, pool_id, epoch, root)`, nullifiers use
